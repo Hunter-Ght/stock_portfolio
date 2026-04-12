@@ -7,6 +7,7 @@ from typing import List, Optional
 from importers.base import Position
 from importers.ibkr import IBKRImporter, parse_ibkr_csv, extract_cash_from_ibkr
 from importers.schwab import SchwabImporter, preprocess_schwab_csv
+from importers.firstrade import FirstradeImporter, parse_firstrade_excel
 from services.portfolio import (
     add_positions, add_cash, remove_position,
     remove_broker_positions, load_positions,
@@ -19,16 +20,16 @@ def render_import_panel():
     st.sidebar.markdown("---")
     st.sidebar.markdown("## 📥 导入持仓")
 
-    # CSV 上传
+    # 文件上传
     uploaded_file = st.sidebar.file_uploader(
-        "上传 CSV 文件",
-        type=['csv'],
-        help="支持 IBKR (TWS Export / Flex Query) 和 Schwab Positions 导出的 CSV 文件",
+        "上传持仓文件",
+        type=['csv', 'xlsx'],
+        help="支持 IBKR / Schwab 的 csv, 以及 Firstrade 的 xlsx 文件",
         key="csv_uploader",
     )
 
     if uploaded_file is not None:
-        _handle_csv_upload(uploaded_file)
+        _handle_file_upload(uploaded_file)
 
     st.sidebar.markdown("---")
 
@@ -49,26 +50,30 @@ def render_import_panel():
     _render_manage_section()
 
 
-def _handle_csv_upload(uploaded_file):
-    """处理 CSV 上传"""
+def _handle_file_upload(uploaded_file):
+    """处理上传的文件"""
     try:
         content = uploaded_file.read()
         uploaded_file.seek(0)
+        filename = uploaded_file.name.lower()
 
         broker_choice = st.sidebar.radio(
             "选择券商",
-            ["🔍 自动检测", "🟠 IBKR (盈透)", "🔵 Schwab (嘉信)"],
+            ["🔍 自动检测", "🟠 IBKR (盈透)", "🔵 Schwab (嘉信)", "🟢 Firstrade"],
             key="broker_choice",
         )
 
         if broker_choice == "🟠 IBKR (盈透)":
-            df = parse_ibkr_csv(content)
+            df = parse_ibkr_csv(content.decode('utf-8', errors='ignore'))
             importer = IBKRImporter()
         elif broker_choice == "🔵 Schwab (嘉信)":
-            df = preprocess_schwab_csv(content)
+            df = preprocess_schwab_csv(content.decode('utf-8', errors='ignore'))
             importer = SchwabImporter()
+        elif broker_choice == "🟢 Firstrade":
+            df = parse_firstrade_excel(content)
+            importer = FirstradeImporter()
         else:
-            df, importer = _auto_detect(content)
+            df, importer = _auto_detect(content, filename)
 
         if df is None or importer is None:
             st.sidebar.error("❌ 无法识别 CSV 格式，请手动选择券商。")
@@ -141,14 +146,20 @@ def _handle_csv_upload(uploaded_file):
         st.sidebar.error(f"❌ 解析文件时出错: {str(e)}")
 
 
-def _auto_detect(content) -> tuple:
-    """自动检测 CSV 格式"""
+def _auto_detect(content: bytes, filename: str) -> tuple:
+    """自动检测文件格式"""
     import io
 
-    if isinstance(content, bytes):
-        text = content.decode('utf-8', errors='ignore')
-    else:
-        text = content
+    if filename.endswith('.xlsx'):
+        try:
+            df = parse_firstrade_excel(content)
+            if FirstradeImporter.detect(df):
+                return df, FirstradeImporter()
+        except Exception:
+            pass
+        return None, None
+
+    text = content.decode('utf-8', errors='ignore')
 
     try:
         df = parse_ibkr_csv(text)
@@ -179,7 +190,7 @@ def _auto_detect(content) -> tuple:
 def _render_cash_form():
     """现金余额输入表单"""
     with st.sidebar.form("cash_form", clear_on_submit=False):
-        broker = st.selectbox("券商", ["IBKR", "Schwab", "其他"], key="cash_broker")
+        broker = st.selectbox("券商", ["IBKR", "Schwab", "Firstrade", "其他"], key="cash_broker")
         amount = st.number_input(
             "现金余额 ($)",
             min_value=0.0,
@@ -202,7 +213,7 @@ def _render_cash_form():
 def _render_manual_add_form():
     """手动添加持仓表单"""
     with st.sidebar.form("manual_add_form", clear_on_submit=True):
-        broker = st.selectbox("券商", ["IBKR", "Schwab", "其他"], key="manual_broker")
+        broker = st.selectbox("券商", ["IBKR", "Schwab", "Firstrade", "其他"], key="manual_broker")
         symbol = st.text_input("股票代码", placeholder="例: AAPL", key="manual_symbol")
         quantity = st.number_input("数量", min_value=0.0, step=1.0, key="manual_qty")
         avg_cost = st.number_input("买入均价 ($)", min_value=0.0, step=0.01, key="manual_cost")
