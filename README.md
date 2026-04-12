@@ -11,7 +11,7 @@
 ## ✨ 功能特性
 
 - 📊 **完整总览** - 显示总市值、总成本、总盈亏、今日涨跌
-- 🏦 **多券商支持** - 同时支持 IBKR（盈透）和 Schwab（嘉信），按券商分组展示
+- 🏦 **多券商支持** - 同时支持 IBKR（盈透）、Schwab（嘉信）和 Firstrade（第一证券），按券商分组展示
 - 🔄 **实时行情** - 一键从 Yahoo Finance 刷新最新价格
 - 📈 **丰富图表** - 持仓占比饼图、资产树图、盈亏柱状图
 - 📋 **可交互表格** - 支持筛选、排序，绿色盈利红色亏损一目了然
@@ -30,7 +30,7 @@ cd local_account
 pip install -r requirements.txt
 ```
 
-依赖只有四个包：`streamlit` `pandas` `yfinance` `plotly`
+依赖只有几个核心包：`streamlit` `pandas` `yfinance` `plotly` `openpyxl`
 
 ### 2. 启动 Dashboard
 
@@ -180,6 +180,27 @@ MSFT,MICROSOFT CORP,50,"$420.55","$21027.50","$18000.00","$3027.50",16.82%
 > ⚠️ **特殊格式说明**：Schwab 导出的数值会带有 `="$178.72"` 这种格式，Dashboard 内置了清洗逻辑，会自动处理，你无需手动修改。
 
 **现金提取说明**：嘉信现在支持 `Individual Positions` 导出格式，会有一行 `Cash & Cash Investments`，Dashboard 会自动识别并提取现金余额。
+
+---
+
+### 🟢 Firstrade (第一证券) 导出数据
+
+Firstrade 导出非常直接，支持 Excel 格式：
+
+1. 登录 [firstrade.com](https://www.firstrade.com)
+2. 点击 **账户 (Accounts)** → **持仓 (Positions)**
+3. 点击页面右上角的 **导出 (Export)** 按钮
+4. 系统会下载一个 `.xlsx` 格式的文件
+
+**支持的字段说明：**
+Dashboard 会自动识别以下列名：
+- `Symbol` (股票代码)
+- `Quantity` (持仓数量)
+- `Unit Cost` / `Adj. Unit Cost` (买入均价)
+- `Last Price` / `Price` (当前价格)
+- `Market Value` (当前市值)
+
+> 💡 **提示**：Firstrade 导出的是 Excel 文件，导入时请确保上传原始的 `.xlsx` 文件，无需手动转为 CSV。
 
 ---
 
