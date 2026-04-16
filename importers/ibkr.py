@@ -58,8 +58,12 @@ class IBKRImporter(BaseImporter):
             'Unrealized P&L',
         ],
         'currency': [
-            'Currency', 'currency',
+            'CurrencyPrimary', 'Currency', 'currency',
             'Trading Currency', 'Curr',
+        ],
+        'fx_rate': [
+            'FXRateToBase', 'fxratetobase',
+            'FX Rate', 'Exchange Rate',
         ],
     }
 
@@ -78,11 +82,19 @@ class IBKRImporter(BaseImporter):
             market_value = clean_numeric_string(row.get('market_value', 0))
             unrealized_pnl = clean_numeric_string(row.get('unrealized_pnl', 0))
 
+            # 汇率处理
+            fx_rate = clean_numeric_string(row.get('fx_rate', 1.0))
+            if fx_rate <= 0:
+                fx_rate = 1.0
+
             # 如果没有均价但有市值，反算均价
             if avg_cost == 0 and market_value != 0 and quantity != 0:
                 if unrealized_pnl != 0:
                     cost_basis = market_value - unrealized_pnl
                     avg_cost = cost_basis / quantity
+
+            # 从行中提取货币，如果是 HKD 且存在 FXRateToBase 则直接赋值
+            currency = str(row.get('currency', 'USD')).strip() or 'USD'
 
             pos = Position(
                 broker=self.BROKER_NAME,
@@ -91,7 +103,8 @@ class IBKRImporter(BaseImporter):
                 quantity=quantity,
                 avg_cost=avg_cost,
                 current_price=current_price,
-                currency=str(row.get('currency', 'USD')).strip() or 'USD',
+                currency=currency,
+                fx_rate=fx_rate,
             )
             pos.compute_derived()
             return pos

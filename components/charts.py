@@ -25,27 +25,6 @@ DARK_COLORS = [
 ]
 
 
-def _get_text_color():
-    """根据主题获取合适的文字颜色"""
-    import streamlit as st
-    is_light = st.session_state.get('theme', 'dark') == 'light'
-    return '#1e293b' if is_light else '#e0e0e0'
-
-
-def _get_grid_color():
-    """根据主题获取合适的网格颜色"""
-    import streamlit as st
-    is_light = st.session_state.get('theme', 'dark') == 'light'
-    return 'rgba(0,0,0,0.05)' if is_light else 'rgba(255,255,255,0.05)'
-
-
-def _get_zeroline_color():
-    """根据主题获取合适的零线颜色"""
-    import streamlit as st
-    is_light = st.session_state.get('theme', 'dark') == 'light'
-    return 'rgba(0,0,0,0.2)' if is_light else 'rgba(255,255,255,0.2)'
-
-
 def _get_colors():
     """根据主题获取颜色序列"""
     import streamlit as st
@@ -113,8 +92,6 @@ def render_allocation_pie(positions: List[Position]):
     import pandas as pd
     df = pd.DataFrame(items)
     colors = _get_colors()
-    text_color = _get_text_color()
-
     fig = px.pie(
         df,
         values='market_value',
@@ -131,16 +108,13 @@ def render_allocation_pie(positions: List[Position]):
     )
 
     fig.update_layout(
-        paper_bgcolor='rgba(0,0,0,0)',
-        plot_bgcolor='rgba(0,0,0,0)',
-        font=dict(color=text_color, family='Inter, sans-serif'),
         legend=dict(
             orientation='v',
             yanchor='middle',
             y=0.5,
             xanchor='left',
             x=1.05,
-            font=dict(size=11, color=text_color),
+            font=dict(size=11),
         ),
         margin=dict(l=20, r=20, t=30, b=20),
         height=450,
@@ -158,8 +132,6 @@ def render_treemap(positions: List[Position]):
 
     import pandas as pd
     df = pd.DataFrame(items)
-    text_color = _get_text_color()
-
     fig = px.treemap(
         df,
         path=['type', 'name'],
@@ -183,17 +155,12 @@ def render_treemap(positions: List[Position]):
     )
 
     fig.update_layout(
-        paper_bgcolor='rgba(0,0,0,0)',
-        plot_bgcolor='rgba(0,0,0,0)',
-        font=dict(color=text_color, family='Inter, sans-serif'),
         margin=dict(l=10, r=10, t=30, b=10),
         height=420,
         coloraxis_colorbar=dict(
             title='盈亏%',
             tickformat='.0f',
             ticksuffix='%',
-            tickfont=dict(color=text_color),
-            titlefont=dict(color=text_color),
         ),
     )
 
@@ -212,9 +179,6 @@ def render_pnl_bar(positions: List[Position]):
     import pandas as pd
     df = pd.DataFrame(items)
     df = df.sort_values('pnl', ascending=True)
-    text_color = _get_text_color()
-    grid_color = _get_grid_color()
-    zero_color = _get_zeroline_color()
 
     colors = ['#ef4444' if v < 0 else '#22c55e' for v in df['pnl']]
 
@@ -227,7 +191,7 @@ def render_pnl_bar(positions: List[Position]):
         marker_color=colors,
         text=[f"${v:+,.0f} ({p:+.1f}%)" for v, p in zip(df['pnl'], df['pnl_pct'])],
         textposition='outside',
-        textfont=dict(size=11, color=text_color),
+        textfont=dict(size=11),
         hovertemplate=(
             '<b>%{y}</b><br>'
             '盈亏: $%{x:,.2f}<br>'
@@ -236,19 +200,8 @@ def render_pnl_bar(positions: List[Position]):
     ))
 
     fig.update_layout(
-        paper_bgcolor='rgba(0,0,0,0)',
-        plot_bgcolor='rgba(0,0,0,0)',
-        font=dict(color=text_color, family='Inter, sans-serif'),
         xaxis=dict(
-            gridcolor=grid_color,
-            zerolinecolor=zero_color,
             title='盈亏金额 (USD)',
-            title_font=dict(color=text_color),
-            tickfont=dict(color=text_color),
-        ),
-        yaxis=dict(
-            gridcolor=grid_color,
-            tickfont=dict(color=text_color),
         ),
         margin=dict(l=10, r=130, t=30, b=40),
         height=max(300, len(items) * 35 + 80),
@@ -262,8 +215,6 @@ def render_broker_allocation_donut(summary: dict):
     broker_data = summary.get('broker_summary', {})
     if not broker_data:
         return
-
-    text_color = _get_text_color()
     brokers = list(broker_data.keys())
     values = [broker_data[b]['market_value'] for b in brokers]
 
@@ -280,18 +231,11 @@ def render_broker_allocation_donut(summary: dict):
         hole=0.55,
         marker=dict(colors=colors),
         textinfo='label+percent',
-        textfont=dict(size=14, color=text_color),
+        textfont=dict(size=14),
         hovertemplate='<b>%{label}</b><br>总资产: $%{value:,.2f}<br>占比: %{percent}<extra></extra>',
     )])
 
-    # 注释文字颜色需要根据主题调整
-    is_light = st.session_state.get('theme', 'dark') == 'light'
-    ann_color = '#64748b' if is_light else '#aaa'
-
     fig.update_layout(
-        paper_bgcolor='rgba(0,0,0,0)',
-        plot_bgcolor='rgba(0,0,0,0)',
-        font=dict(color=text_color, family='Inter, sans-serif'),
         showlegend=True,
         legend=dict(
             orientation='h',
@@ -299,7 +243,6 @@ def render_broker_allocation_donut(summary: dict):
             y=-0.15,
             xanchor='center',
             x=0.5,
-            font=dict(color=text_color),
         ),
         margin=dict(l=20, r=20, t=20, b=40),
         height=320,
@@ -307,7 +250,6 @@ def render_broker_allocation_donut(summary: dict):
             text='<b>券商占比</b>',
             x=0.5, y=0.5,
             font_size=14,
-            font_color=ann_color,
             showarrow=False,
         )],
     )

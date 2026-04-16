@@ -18,6 +18,7 @@ class Position:
     quantity: float = 0.0       # 持仓数量 (负数 = 空头)
     avg_cost: float = 0.0       # 买入均价
     currency: str = "USD"       # 货币
+    fx_rate: float = 1.0        # 汇率到基础货币(通常为USD)
     asset_type: str = "stock"   # 资产类型: stock, option, cash
 
     # 以下字段由实时行情填充
@@ -44,17 +45,17 @@ class Position:
         return bool(re.match(r'^[A-Z]+\s+\d{6}[CP]\d{8}$', self.symbol))
 
     def compute_derived(self):
-        """根据当前价格计算衍生字段"""
+        """根据当前价格计算衍生字段，应用汇率"""
         if self.asset_type == "cash":
             # 现金: 没有盈亏概念
-            self.market_value = self.quantity
-            self.cost_basis = self.quantity
+            self.market_value = self.quantity * self.fx_rate
+            self.cost_basis = self.quantity * self.fx_rate
             self.unrealized_pnl = 0.0
             self.unrealized_pnl_pct = 0.0
             return
 
-        self.cost_basis = self.quantity * self.avg_cost
-        self.market_value = self.quantity * self.current_price
+        self.cost_basis = self.quantity * self.avg_cost * self.fx_rate
+        self.market_value = self.quantity * self.current_price * self.fx_rate
 
         if self.quantity > 0:
             # 多头: 盈亏 = 市值 - 成本
