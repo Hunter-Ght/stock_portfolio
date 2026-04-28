@@ -3,11 +3,13 @@
 """
 import streamlit as st
 import pandas as pd
+from datetime import datetime
 from typing import List, Optional
 from importers.base import Position
 from importers.ibkr import IBKRImporter, parse_ibkr_csv, extract_cash_from_ibkr
 from importers.schwab import SchwabImporter, preprocess_schwab_csv
 from importers.firstrade import FirstradeImporter, parse_firstrade_excel
+from services.ibkr_flex import IBKRFlexError, download_ibkr_flex_report
 from services.portfolio import (
     add_positions, add_cash, remove_position,
     remove_broker_positions, load_positions,
@@ -19,6 +21,10 @@ def render_import_panel():
 
     st.sidebar.markdown("---")
     st.sidebar.markdown("## 📥 导入持仓")
+
+    _render_ibkr_flex_import()
+
+    st.sidebar.markdown("**或上传券商导出的文件**")
 
     # 文件上传
     uploaded_file = st.sidebar.file_uploader(
@@ -50,6 +56,66 @@ def render_import_panel():
     _render_manage_section()
 
 
+def _render_ibkr_flex_import():
+    """从 IBKR Flex Web Service 下载报表并导入。"""
+    st.sidebar.caption("IBKR Flex Query 可从 .env 读取 Query ID 和 token 后自动下载。")
+
+    if "ibkr_flex_status" in st.session_state:
+        st.sidebar.success(st.session_state["ibkr_flex_status"])
+        del st.session_state["ibkr_flex_status"]
+
+    if st.sidebar.button("🟠 下载并导入 IBKR Flex Query", use_container_width=True):
+        try:
+            with st.spinner("正在从 IBKR 下载 Flex Query 报表..."):
+                content = download_ibkr_flex_report()
+                positions, cash_positions = _parse_ibkr_content(content)
+
+            if not positions and not cash_positions:
+                st.sidebar.warning("IBKR 报表下载成功，但没有解析出有效持仓。请确认 Flex Query 输出格式为 CSV，并包含 Open Positions。")
+                return
+
+            add_positions(positions + cash_positions, replace_broker=True)
+            st.session_state["ibkr_flex_report"] = content
+            st.session_state["ibkr_flex_report_name"] = (
+                f"ibkr-flex-{datetime.now().strftime('%Y%m%d-%H%M%S')}.csv"
+            )
+            if 'prices_updated' in st.session_state:
+                del st.session_state['prices_updated']
+
+            status = f"已从 IBKR 导入 {len(positions)} 个持仓"
+            if cash_positions:
+                status += "，现金余额已同步"
+            st.session_state["ibkr_flex_status"] = status
+            st.rerun()
+        except IBKRFlexError as e:
+            st.sidebar.error(f"IBKR Flex 下载失败: {str(e)}")
+        except Exception as e:
+            st.sidebar.error(f"IBKR Flex 导入失败: {str(e)}")
+
+    if "ibkr_flex_report" in st.session_state:
+        st.sidebar.download_button(
+            "下载刚才的 IBKR 原始报表",
+            data=st.session_state["ibkr_flex_report"],
+            file_name=st.session_state.get("ibkr_flex_report_name", "ibkr-flex.csv"),
+            mime="text/csv",
+            use_container_width=True,
+        )
+
+
+def _parse_ibkr_content(content: bytes):
+    """复用原有 IBKR CSV 解析逻辑。"""
+    df = parse_ibkr_csv(content)
+    positions = IBKRImporter().parse(df)
+
+    cash_positions = []
+    try:
+        cash_positions = extract_cash_from_ibkr(content)
+    except Exception:
+        pass
+
+    return positions, cash_positions
+
+
 def _handle_file_upload(uploaded_file):
     """处理上传的文件"""
     try:
@@ -64,7 +130,7 @@ def _handle_file_upload(uploaded_file):
         )
 
         if broker_choice == "🟠 IBKR (盈透)":
-            df = parse_ibkr_csv(content.decode('utf-8', errors='ignore'))
+            df = parse_ibkr_csv(content)
             importer = IBKRImporter()
         elif broker_choice == "🔵 Schwab (嘉信)":
             df = preprocess_schwab_csv(content.decode('utf-8', errors='ignore'))
