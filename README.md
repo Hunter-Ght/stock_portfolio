@@ -18,7 +18,7 @@
 - 🌓 **主题切换** - 支持深色/浅色主题一键切换
 - 🎯 **期权识别** - 自动识别期权策略组合（价差、跨式等）
 - 💵 **现金支持** - 导入时自动提取现金余额，完整展示净资产
-- 🔎 **个股工作台** - 读取本地 JSON 研究报告，按“持仓 + 关注”展示个股分析、价格区间和页面内提醒
+- 🔎 **个股工作台** - 读取本地 JSON/Markdown 研究报告，按“持仓 + 关注”展示个股分析、价格区间、手工备注和页面内提醒
 - 📁 **本地存储** - 数据保存在本地 JSON 文件，隐私安全
 
 ## 🚀 快速开始
@@ -40,6 +40,17 @@ streamlit run app.py
 ```
 
 浏览器会自动打开 `http://localhost:8501`，即可看到 Dashboard。
+
+### 3. 可选：配置券商列表
+
+左侧手动录入和现金录入的券商下拉列表可以通过 `.env` 配置：
+
+```env
+PORTFOLIO_BROKERS=IBKR,Schwab,Firstrade,Robinhood,Tradeup,Manual
+DEFAULT_BROKER=Robinhood
+```
+
+如果不配置，会使用默认值 `IBKR, Schwab, Firstrade, Manual`。手动录入后，下一次继续录入会默认使用上一次选择的券商。
 
 ## 🔎 个股工作台
 
@@ -70,6 +81,8 @@ data/research_reports/2026-05-12_CRCL_xiaoyan_shufen.md
 
 JSON 负责结构化数据，Markdown 负责完整阅读版正文。两者同名时，工作台会自动把 Markdown 作为“完整报告”展示。
 
+如果程序已经在运行，更新了 `.json` 或 `.md` 文件后，可以在个股工作台顶部点击 **刷新分析文件**，页面会重新扫描本地研究报告目录并读取最新文件。
+
 ### 股票池规则
 
 工作台只维护两个股票池：
@@ -78,6 +91,31 @@ JSON 负责结构化数据，Markdown 负责完整阅读版正文。两者同名
 - **关注**：来自 `data/watchlist.json`
 
 是否已有分析只是 ticker 的状态字段。如果某个 JSON 报告对应的 ticker 不在持仓或关注列表中，它会出现在“未归档分析”里，可以一键加入关注。
+
+持仓池的股票直接复用“持仓追踪”页中“股票 & ETF 持仓”的口径；如果某个正股被识别为 covered call 等组合腿，它不会在两个页面里出现不同口径。
+
+### 表格、备注和提醒
+
+持仓池和关注池表格会展示：
+
+- `Ticker`、`来源`、`当前价`、`最新分析`、`动作`
+- `xiaoyan总分`、`shufen总分`
+- `买入区`、`减仓区`、`失效价`、`Hard Stop`
+- `提醒`、`备注`
+
+`当前价` 会根据分析价格区间自动上色：
+
+- 当前价 `<= 买入区` 上限：红色加粗
+- 当前价 `>= 减仓区` 下限：绿色加粗
+- 如果两个条件同时命中，绿色优先
+
+`提醒` 列会根据当前价和 `price_plan` 触发提示：
+
+- 进入或接近买入区、加仓区、减仓区
+- 当前价 `<= invalid_price`：显示 `跌破失效价`
+- 当前价 `<= hard_stop`：显示 `跌破 Hard Stop`，并优先于失效价提示
+
+手工备注保存在 `data/stock_notes.json`，不会写回持仓文件，也不会修改 AI 分析 JSON/Markdown。备注为空时会删除该 ticker 的备注。持仓池和关注池表格会自动展开显示全部行，不在表格内部滚动。
 
 ### JSON 最小字段
 
@@ -97,6 +135,7 @@ JSON 负责结构化数据，Markdown 负责完整阅读版正文。两者同名
       "action": "buy_on_pullback",
       "conclusion": "等回撤 / 小仓试错 / 不追高",
       "scores": {"total_score": 63},
+      "shufen_scores": {"total_score": 68},
       "price_plan": {
         "current_price": 121.1,
         "buy_zone": [105, 115],
@@ -329,7 +368,7 @@ Dashboard 会自动识别以下列名：
 ## ⚙️ 常见问题
 
 **Q: 数据存在哪里？安全吗？**
-> A: 所有持仓数据保存在项目目录下 `data/portfolio.json` 文件，完全在你的本地电脑，不会上传到任何服务器，隐私安全。
+> A: 所有持仓、关注列表、备注和研究报告都保存在项目目录下的 `data/` 文件夹，完全在你的本地电脑，不会上传到任何服务器，隐私安全。
 
 **Q: 行情数据从哪里来？延时吗？**
 > A: 行情来自 Yahoo Finance，免费使用。美股盘后/节假日显示的是最后交易日收盘价，满足个人投资者需求。
@@ -346,14 +385,32 @@ Dashboard 会自动识别以下列名：
 **Q: 如何删除错误导入的数据？**
 > A: 左侧边栏底部 🗂️ 管理持仓，可以删除整个券商的所有持仓，也可以删除单个持仓。
 
+**Q: 哪些文件不建议上传 GitHub？**
+> A: 不建议上传 `.env`、`data/portfolio.json`、`data/watchlist.json`、`data/stock_notes.json`、`data/alert_config.json`，以及包含个人持仓或交易计划的真实研究报告 JSON/Markdown。`tests/` 目录建议上传，它用于防止功能回归。
+
+**Q: 更新研究报告文件后页面没变化怎么办？**
+> A: 在个股工作台顶部点击 **刷新分析文件**。如果仍未变化，确认文件名符合 `YYYY-MM-DD_TICKER_skill1_skill2.json` / `.md`，并且 JSON 至少包含 `meta.generated_at`、`ticker_analysis[].ticker`、`scores.total_score` 和 `price_plan.current_price`。
+
+## 🧪 测试
+
+项目内的 `tests/` 目录建议纳入版本控制。它覆盖券商配置、页面入口、个股工作台股票池、分析文件读取、备注、价格颜色和提醒规则。
+
+运行测试：
+
+```bash
+python -m unittest tests.test_config tests.test_app_static tests.test_stock_workbench_services -v
+```
+
 ## 📁 项目结构
 
 ```
-local_account/
-├── app.py                 # 主入口
+stock_portfolio/
+├── app.py                 # Streamlit 导航入口
 ├── requirements.txt       # 依赖
+├── .env.example           # 可选配置示例
 ├── pages/
-│   └── stock_analysis.py  # 个股工作台页面
+│   ├── holdings_tracker.py # 持仓追踪页面
+│   └── stock_analysis.py   # 个股工作台页面
 ├── components/            # UI 组件
 │   ├── overview.py       # 总览
 │   ├── charts.py         # 图表
@@ -363,18 +420,23 @@ local_account/
 ├── importers/             # 导入器
 │   ├── base.py           # 基类
 │   ├── ibkr.py           # IBKR 导入
-│   └── schwab.py         # Schwab 导入
+│   ├── schwab.py         # Schwab 导入
+│   └── firstrade.py      # Firstrade 导入
 ├── services/              # 业务逻辑
 │   ├── portfolio.py      # 投资组合管理
 │   ├── market_data.py    # 行情获取
 │   ├── spread_detector.py # 期权策略检测
+│   ├── config.py         # .env 配置读取
 │   ├── research_store.py # 本地研究报告读取
 │   ├── alert_engine.py   # 价格区间提醒
+│   ├── stock_notes.py    # 个股手工备注
 │   └── watchlist.py      # 关注列表与提醒配置
+├── tests/                 # 回归测试
 ├── utils/                 # 工具函数
 ├── data/                  # 数据存储
 │   ├── portfolio.json    # 持仓数据
 │   ├── watchlist.json    # 关注列表
+│   ├── stock_notes.json  # 个股备注
 │   ├── alert_config.json # 提醒配置
 │   └── research_reports/ # 可选：本地研究报告
 └── README.md             # 你正在看的这个文件
