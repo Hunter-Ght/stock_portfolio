@@ -1,0 +1,362 @@
+{
+  "meta": {
+    "schema_version": "1.1.0",
+    "report_id": "2026-05-12_VKTX_xiaoyan_shufen",
+    "generated_at": "2026-05-12T22:00:00-07:00",
+    "timezone": "America/Los_Angeles",
+    "skill_used": [
+      "xiaoyan",
+      "shufen"
+    ],
+    "analysis_mode": "single",
+    "tickers": [
+      "VKTX"
+    ],
+    "theme": "obesity_metabolic_biotech_glp1_gip_vk2735",
+    "base_currency": "USD",
+    "asset_type": "single_stock",
+    "data_freshness": {
+      "market_data_date": "2026-05-12",
+      "news_data_window": "latest available as of 2026-05-12",
+      "option_data_status": "missing"
+    },
+    "source_files": [
+      "research_export_skill_v1_1.md",
+      "Shufen式美股产业资金流重定价选股_SKILL(1).md",
+      "xiaoyan_us_equity_trading_skill(1).md"
+    ],
+    "notes": [
+      "Full analysis remains in same-name Markdown file.",
+      "Alert preferences should be managed separately by platform alert_config.json.",
+      "Options structure is missing; do not use call wall, put wall, gamma flip, or IV-based execution."
+    ]
+  },
+  "market_context": {
+    "risk_regime": "Risk On but high dispersion by ticker",
+    "macro_score": 7,
+    "equity_risk_budget": "cautious_to_balanced",
+    "liquidity_risk": "medium",
+    "rate_risk": "high",
+    "hedge_required": true,
+    "recommended_hedges": [
+      "cash",
+      "index_put_spread",
+      "reduce_overlapping_theme_beta_if_overexposed"
+    ],
+    "major_macro_risks": [
+      "oral tolerability",
+      "Phase 3 failure",
+      "competition from Lilly and Novo",
+      "manufacturing scale-up",
+      "cash burn",
+      "dilution"
+    ]
+  },
+  "portfolio_context": {
+    "theme": "obesity_metabolic_biotech_glp1_gip_vk2735",
+    "theme_exposure_limit_pct": 6,
+    "cash_buffer_required_pct": 20,
+    "max_single_position_pct": 2.5,
+    "allow_short_term_options": false
+  },
+  "ticker_analysis": [
+    {
+      "ticker": "VKTX",
+      "company": "Viking Therapeutics, Inc.",
+      "exchange": "NASDAQ",
+      "sector": "obesity_metabolic_biotech_glp1_gip_vk2735",
+      "industry_chain": "obesity_metabolic_biotech_glp1_gip_vk2735",
+      "archetype": "single_stock",
+      "portfolio_layer": "high_convexity",
+      "action": "small_probe",
+      "conclusion": "小仓试错 / 肥胖药高弹性期权 / 等数据和 Phase 3",
+      "summary_card": {
+        "one_line": "VKTX 是 GLP-1/GIP 肥胖药高弹性期权，目标价空间大，但 oral VK2735 dropout 和 Phase 3 执行风险仍压制估值。",
+        "primary_action": "小仓试错",
+        "why_now": "SC VK2735 Phase 3 VANQUISH 已推进，oral Phase 3 预计 Q4 2026，ECO 2026 更新显示 13 周 oral trial 有持续减重。",
+        "biggest_risk": "GLP-1 竞争极强、oral tolerability/dropout、研发费用上升、无商业收入和融资/合作不确定性。",
+        "next_check": "VANQUISH Phase 3、maintenance dosing Q3 数据、oral Phase 3 设计、FDA EOP2、cash burn 和大药企合作。"
+      },
+      "main_thesis": "Viking has one of the highest-profile independent obesity pipelines through VK2735, with both subcutaneous and oral dual GLP-1/GIP co-agonist formulations.",
+      "bear_thesis": "VKTX has no commercial product, heavy R&D spend, intense competition from Lilly/Novo and others, and oral tolerability/dropout concerns after Phase 2 data.",
+      "scores": {
+        "total_score": 60,
+        "macro_liquidity": 7,
+        "market_narrative_risk_budget": 6,
+        "industry_strength": 12,
+        "fundamental_quality": 12,
+        "financial_quality_management": 6,
+        "valuation_gap": 5,
+        "technical_options": 3,
+        "position_fit": 2
+      },
+      "shufen_scores": {
+        "total_score": 76,
+        "macro_risk_budget": 6,
+        "industry_capital_source": 12,
+        "institutional_flow": 11,
+        "catalyst_window": 12,
+        "verifiable_fundamentals": 9,
+        "second_repricing_path": 10,
+        "valuation_gap": 3,
+        "balance_sheet_risk": 2
+      },
+      "probability": {
+        "win_rate_low": 0.46,
+        "win_rate_high": 0.54,
+        "base_win_rate": 0.5,
+        "confidence": "medium"
+      },
+      "price_plan": {
+        "current_price": 31.32,
+        "buy_zone": [
+          28.0,
+          32.0
+        ],
+        "add_zone": [
+          22.0,
+          26.0
+        ],
+        "trim_zone": [
+          55.0,
+          70.0
+        ],
+        "bull_target": [
+          95.0,
+          125.0
+        ],
+        "base_target": 95.5,
+        "bear_price": 24.0,
+        "invalid_price": 22.0,
+        "hard_stop": 19.0,
+        "currency": "USD",
+        "price_updated_at": "2026-05-12"
+      },
+      "risk_reward": {
+        "upside_pct": 204.92,
+        "downside_pct": 23.37,
+        "risk_reward_ratio": 8.77,
+        "expected_value": 0.908,
+        "ev_formula": "win_rate * upside_pct - (1 - win_rate) * downside_pct",
+        "base_target_used": 95.5,
+        "bear_price_used": 24.0,
+        "win_rate_used": 0.5
+      },
+      "positioning": {
+        "initial_position_pct": 0.75,
+        "max_position_pct": 2.5,
+        "add_position_pct": 1.0,
+        "position_type": "obesity_metabolic_biotech_glp1_gip_vk2735",
+        "preferred_instrument": "stock",
+        "allowed_instruments": [
+          "stock",
+          "call_spread"
+        ],
+        "avoid_instruments": [
+          "short_term_calls",
+          "naked_calls",
+          "gamma_trade"
+        ],
+        "use_trailing_stop": true,
+        "hedge_required": true,
+        "max_portfolio_loss_pct": 1.2
+      },
+      "trade_rules": {
+        "entry_conditions": [
+          "Price is within 28.0-32.0 buy zone",
+          "Market regime is not Risk Off",
+          "Core thesis remains valid",
+          "No major new negative financing, regulatory, earnings, clinical, or order event"
+        ],
+        "add_conditions": [
+          "Price enters 22.0-26.0 add zone and thesis remains valid",
+          "Key validation metrics improve",
+          "No severe dilution or execution deterioration"
+        ],
+        "trim_conditions": [
+          "Price reaches 55.0-70.0 trim zone",
+          "Fundamentals have not been upgraded enough to justify valuation",
+          "Catalyst risk/reward deteriorates"
+        ],
+        "exit_conditions": [
+          "Price breaks below 22.0 and fails to reclaim",
+          "Thesis becomes invalid",
+          "Liquidity or data quality deteriorates materially"
+        ]
+      },
+      "catalysts": [
+        {
+          "event": "VANQUISH-1",
+          "expected_window": "next_1_to_2_quarters",
+          "importance": "high",
+          "type": "validation"
+        },
+        {
+          "event": "VANQUISH-2",
+          "expected_window": "next_1_to_2_quarters",
+          "importance": "high",
+          "type": "validation"
+        },
+        {
+          "event": "oral VK2735 Phase 3 design",
+          "expected_window": "next_1_to_2_quarters",
+          "importance": "high",
+          "type": "validation"
+        },
+        {
+          "event": "maintenance dosing data",
+          "expected_window": "next_1_to_2_quarters",
+          "importance": "high",
+          "type": "validation"
+        },
+        {
+          "event": "dropout rate",
+          "expected_window": "next_1_to_2_quarters",
+          "importance": "high",
+          "type": "validation"
+        }
+      ],
+      "validation_metrics": [
+        "VANQUISH-1",
+        "VANQUISH-2",
+        "oral VK2735 Phase 3 design",
+        "maintenance dosing data",
+        "dropout rate",
+        "GI adverse events",
+        "cash",
+        "R&D expense",
+        "FDA feedback",
+        "partnership/M&A interest"
+      ],
+      "failure_conditions": [
+        "oral tolerability",
+        "Phase 3 failure",
+        "competition from Lilly and Novo",
+        "manufacturing scale-up",
+        "cash burn",
+        "dilution",
+        "obesity valuation reset"
+      ],
+      "data_quality": {
+        "financials_status": "verified_or_recent",
+        "news_status": "verified_or_recent",
+        "market_price_status": "verified",
+        "options_status": "missing",
+        "export_status": "complete",
+        "data_gaps": [
+          "Phase 3 oral protocol pending",
+          "maintenance dosing data pending",
+          "latest cash runway detail",
+          "full option chain",
+          "call wall",
+          "put wall",
+          "gamma flip",
+          "ATM IV"
+        ],
+        "do_not_use_for": [
+          "call_wall_trade",
+          "gamma_squeeze_trade",
+          "short_term_options_trade"
+        ]
+      },
+      "decision_engine": {
+        "buy_trigger": "price >= 28.0 and price <= 32.0 and market_regime != 'Risk Off'",
+        "add_trigger": "price <= 26.0 and thesis_status == 'valid'",
+        "trim_trigger": "price >= 55.0",
+        "exit_trigger": "price < 22.0 or thesis_status == 'invalid'",
+        "alert_priority": "high",
+        "review_frequency": "weekly",
+        "next_review_trigger": "price_zone_hit_or_key_validation_event"
+      },
+      "last_decision": {
+        "decision": "small_probe",
+        "reason": "VKTX 是 GLP-1/GIP 肥胖药高弹性期权，目标价空间大，但 oral VK2735 dropout 和 Phase 3 执行风险仍压制估值。",
+        "updated_at": "2026-05-12",
+        "decision_owner": "assistant"
+      }
+    }
+  ],
+  "portfolio_summary": {
+    "top_candidates": [
+      "VKTX"
+    ],
+    "watchlist": [
+      "VKTX"
+    ],
+    "avoid_list": [],
+    "ranking": [
+      {
+        "rank": 1,
+        "ticker": "VKTX",
+        "total_score": 60,
+        "shufen_score": 76,
+        "action": "small_probe"
+      }
+    ],
+    "cash_required_pct": 20,
+    "max_single_position_pct": 2.5,
+    "suggested_allocation": [
+      {
+        "ticker": "VKTX",
+        "target_position_pct": 0.75,
+        "max_position_pct": 2.5
+      }
+    ]
+  },
+  "risk_controls": {
+    "max_single_stock_pct": 2.5,
+    "max_loss_per_position_pct": 1.2,
+    "cash_buffer_pct": 20,
+    "hedge_required": true,
+    "reduce_risk_if": [
+      "oral tolerability",
+      "Phase 3 failure",
+      "competition from Lilly and Novo",
+      "manufacturing scale-up",
+      "cash burn",
+      "dilution"
+    ],
+    "alert_preferences_note": "User alert switches are not stored in this report. Platform should manage them separately in alert_config.json."
+  },
+  "next_validation": [
+    {
+      "ticker": "VKTX",
+      "date_or_window": "next key earnings/clinical/order update",
+      "metrics_to_check": [
+        "VANQUISH-1",
+        "VANQUISH-2",
+        "oral VK2735 Phase 3 design",
+        "maintenance dosing data",
+        "dropout rate",
+        "GI adverse events",
+        "cash",
+        "R&D expense",
+        "FDA feedback",
+        "partnership/M&A interest"
+      ],
+      "decision_after_validation": "Upgrade, hold, trim, or exit based on validation metrics and price zone."
+    }
+  ],
+  "export_validation": {
+    "json_valid": true,
+    "required_fields_present": true,
+    "enum_values_valid": true,
+    "price_fields_valid": true,
+    "risk_rules_present": true,
+    "data_gaps_marked": true,
+    "ticker_analysis_is_array": true,
+    "tickers_are_uppercase": true,
+    "price_ranges_are_arrays": true,
+    "summary_card_present": true,
+    "analysis_text_embedded": false,
+    "alert_preferences_external": true,
+    "missing_required_fields": [],
+    "warnings": [
+      "Phase 3 oral protocol pending",
+      "maintenance dosing data pending",
+      "latest cash runway detail",
+      "full option chain",
+      "call wall"
+    ]
+  }
+}

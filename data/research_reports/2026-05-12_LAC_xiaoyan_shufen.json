@@ -1,0 +1,495 @@
+{
+  "meta": {
+    "schema_version": "1.1.0",
+    "report_id": "2026-05-12_LAC_xiaoyan_shufen",
+    "generated_at": "2026-05-12T18:40:00-07:00",
+    "timezone": "America/Los_Angeles",
+    "skill_used": [
+      "xiaoyan",
+      "shufen"
+    ],
+    "analysis_mode": "single",
+    "tickers": [
+      "LAC"
+    ],
+    "theme": "us_lithium_thacker_pass_critical_minerals",
+    "base_currency": "USD",
+    "data_freshness": {
+      "market_data_date": "2026-05-12",
+      "financial_data_date": "FY2025 reported; Q1 2026 pending/near-term",
+      "news_data_window": "last_30_to_90_days",
+      "option_data_status": "missing"
+    },
+    "source_files": [
+      "research_export_skill_v1_1.md",
+      "Shufen式美股产业资金流重定价选股_SKILL(1).md",
+      "xiaoyan_us_equity_trading_skill(1).md"
+    ],
+    "notes": [
+      "LAC is a pre-revenue lithium project developer focused on Thacker Pass, not a mature mining cash-flow company.",
+      "DOE loan and GM offtake reduce but do not eliminate financing, construction, commodity price, and dilution risk.",
+      "Full analysis should remain in same-name Markdown file.",
+      "Alert preferences should be managed separately by platform alert_config.json.",
+      "Options structure is missing; do not use call wall, put wall, gamma flip, or IV-based execution."
+    ]
+  },
+  "market_context": {
+    "risk_regime": "Risk On but lithium cycle remains weak",
+    "macro_score": 6,
+    "equity_risk_budget": "cautious",
+    "liquidity_risk": "medium",
+    "credit_risk": "medium_high",
+    "rate_risk": "high",
+    "inflation_risk": "medium",
+    "vix_state": "elevated_but_not_stress",
+    "hedge_required": true,
+    "recommended_hedges": [
+      "cash",
+      "index_put_spread",
+      "reduce_lithium_or_EV_beta_if_overexposed"
+    ],
+    "risk_on_allowed": true,
+    "high_beta_allowed": "small_position_only",
+    "major_macro_risks": [
+      "lithium carbonate price weakness",
+      "Chinese lithium oversupply",
+      "EV demand slowdown",
+      "US critical minerals policy changes",
+      "Thacker Pass capex overrun",
+      "DOE loan draw or financing delays",
+      "future equity dilution",
+      "environmental community and water rights risk"
+    ],
+    "macro_invalid_conditions": [
+      "lithium prices break lower",
+      "Thacker Pass construction timeline slips",
+      "large dilutive equity issuance",
+      "DOE or GM funding path worsens",
+      "risk assets de-rate pre-revenue project companies"
+    ]
+  },
+  "portfolio_context": {
+    "theme": "us_lithium_thacker_pass_critical_minerals",
+    "theme_exposure_limit_pct": 4,
+    "current_theme_exposure_pct": null,
+    "cash_buffer_required_pct": 20,
+    "max_single_position_pct": 2,
+    "max_high_beta_position_pct": 1.5,
+    "allow_short_term_options": false,
+    "position_layer_rules": {
+      "stabilizer": "not_applicable",
+      "core_attack": "0%-2%",
+      "high_convexity": "0%-1.5%",
+      "lottery": "0%-0.5%",
+      "hedge": "as_needed",
+      "cash": "dynamic"
+    }
+  },
+  "ticker_analysis": [
+    {
+      "ticker": "LAC",
+      "company": "Lithium Americas Corp.",
+      "exchange": "NYSE",
+      "sector": "Materials / Lithium",
+      "industry_chain": "us_lithium_thacker_pass_critical_minerals",
+      "archetype": "pre_revenue_project_option",
+      "portfolio_layer": "watchlist",
+      "action": "watch",
+      "conclusion": "观察 / 小仓等回撤 / 只买施工兑现和锂价修复",
+      "summary_card": {
+        "one_line": "LAC 是美国锂资源稀缺项目期权，但仍无收入且现价接近均价目标。",
+        "primary_action": "观察等回撤",
+        "why_now": "Thacker Pass 获 DOE/GM/Orion 支持并进入建设兑现期，但锂价低迷和 pre-revenue 风险仍重。",
+        "biggest_risk": "锂价低位、capex 超支、DOE/GM 资金结构、施工延迟和未来摊薄。",
+        "next_check": "Q1/Q2 财报、2026 capex、engineering/procurement/construction 进度、DOE draw、GM offtake 和锂价。"
+      },
+      "main_thesis": "Lithium Americas offers strategic upside from Thacker Pass, a rare US domestic lithium project backed by DOE financing, GM offtake, and critical-minerals policy support.",
+      "bear_thesis": "The company remains pre-revenue, lithium prices are weak, project construction and ramp risks are high, and current price already sits close to average analyst target.",
+      "market_narrative": {
+        "bull_case": "DOE loan, GM offtake, Orion funding, construction progress, US critical minerals policy, and a lithium price recovery can re-rate LAC as a strategic North American lithium asset.",
+        "bear_case": "Lithium oversupply, low carbonate prices, capex overruns, clay processing risk, dilution, and no near-term cash flow can keep LAC capped.",
+        "current_market_story": "Market is trading LAC as a strategic US lithium project option with policy support but weak lithium-cycle fundamentals.",
+        "counter_narrative": "Strategic value is real, but without lithium price recovery and construction execution, average target upside is limited.",
+        "narrative_confidence": "medium",
+        "price_in_status": "mostly_priced_in",
+        "second_repricing_path": "Construction progress, capex control, DOE loan drawdowns, GM support, mechanical completion credibility, Phase 2 financing/offtake, and lithium price recovery could drive a second rerating."
+      },
+      "scores": {
+        "macro_liquidity": 6,
+        "market_narrative_risk_budget": 6,
+        "industry_strength": 10,
+        "fundamental_quality": 10,
+        "financial_quality_management": 3,
+        "valuation_gap": 3,
+        "technical_options": 4,
+        "position_fit": 2,
+        "total_score": 44
+      },
+      "shufen_scores": {
+        "macro_risk_budget": 5,
+        "industry_capital_source": 11,
+        "institutional_flow": 10,
+        "catalyst_window": 10,
+        "verifiable_fundamentals": 8,
+        "second_repricing_path": 8,
+        "valuation_gap": 1,
+        "balance_sheet_risk": 2,
+        "total_score": 55
+      },
+      "probability": {
+        "win_rate_low": 0.45,
+        "win_rate_high": 0.52,
+        "base_win_rate": 0.5,
+        "confidence": "medium_low",
+        "confidence_reason": "Thacker Pass is strategic and funded, but LAC remains pre-revenue with weak base-case target upside and lithium-cycle risk."
+      },
+      "price_plan": {
+        "current_price": 5.57,
+        "buy_zone": [
+          4.8,
+          5.2
+        ],
+        "add_zone": [
+          4.0,
+          4.5
+        ],
+        "trim_zone": [
+          6.8,
+          8.0
+        ],
+        "bull_target": [
+          8.0,
+          10.0
+        ],
+        "base_target": 5.71,
+        "bear_price": 4.4,
+        "invalid_price": 4.0,
+        "hard_stop": 3.5,
+        "currency": "USD",
+        "price_updated_at": "2026-05-12"
+      },
+      "risk_reward": {
+        "upside_pct": 2.51,
+        "downside_pct": 21.01,
+        "risk_reward_ratio": 0.12,
+        "expected_value": -0.092,
+        "ev_formula": "win_rate * upside_pct - (1 - win_rate) * downside_pct",
+        "base_target_used": 5.71,
+        "bear_price_used": 4.4,
+        "win_rate_used": 0.5,
+        "note": "At current price, base-case risk/reward is weak because the stock is close to average target. Pullback to 4.8-5.2 is needed for reassessment."
+      },
+      "positioning": {
+        "initial_position_pct": 0.5,
+        "max_position_pct": 2,
+        "add_position_pct": 0.5,
+        "position_type": "pre_revenue_project_option",
+        "preferred_instrument": "stock",
+        "allowed_instruments": [
+          "stock",
+          "long_dated_call_spread"
+        ],
+        "avoid_instruments": [
+          "short_term_calls",
+          "naked_calls",
+          "gamma_trade"
+        ],
+        "use_trailing_stop": true,
+        "hedge_required": true,
+        "max_portfolio_loss_pct": 0.6
+      },
+      "trade_rules": {
+        "entry_conditions": [
+          "Price enters 4.8-5.2 buy zone",
+          "Market regime is not Risk Off",
+          "Lithium prices are not breaking lower",
+          "Thacker Pass construction progress has not deteriorated",
+          "DOE loan draw and capex path remain normal",
+          "No new large dilutive equity financing"
+        ],
+        "add_conditions": [
+          "Price enters 4.0-4.5 add zone and thesis remains valid",
+          "Engineering procurement and construction continue on plan",
+          "2026 capex remains within guidance",
+          "DOE loan draws proceed smoothly",
+          "GM offtake and JV show no negative update",
+          "Lithium prices begin sustained recovery",
+          "Late 2027 mechanical completion becomes more credible",
+          "Cash runway is sufficient for construction pace"
+        ],
+        "trim_conditions": [
+          "Price reaches 6.8-8.0 without lithium price or construction milestone improvement",
+          "Average analyst target is not revised higher",
+          "Lithium prices weaken again",
+          "Capex or cash burn exceeds expectations",
+          "ATM or equity financing pressure rises",
+          "Project controversy or community permitting risk intensifies"
+        ],
+        "exit_conditions": [
+          "Price breaks below 4.0 and fails to reclaim",
+          "Late 2027 mechanical completion target is delayed",
+          "DOE loan draw or GM/Orion funding faces material negative development",
+          "Project capex overruns materially",
+          "Lithium price remains below project economics for an extended period",
+          "Large dilutive financing occurs",
+          "Environmental community or legal event delays construction"
+        ]
+      },
+      "catalysts": [
+        {
+          "event": "Q1 2026 earnings and construction update",
+          "expected_window": "2026-May",
+          "importance": "high",
+          "type": "earnings",
+          "watch_items": [
+            "cash balance",
+            "net loss",
+            "construction spending",
+            "DOE loan draw",
+            "capex guidance",
+            "construction progress",
+            "mechanical completion target"
+          ]
+        },
+        {
+          "event": "Thacker Pass construction progress",
+          "expected_window": "2026-2027",
+          "importance": "high",
+          "type": "capacity_ramp",
+          "watch_items": [
+            "engineering completion",
+            "procurement completion",
+            "site workforce",
+            "workhours",
+            "major equipment delivery",
+            "plant construction",
+            "late 2027 mechanical completion"
+          ]
+        },
+        {
+          "event": "Lithium price cycle recovery",
+          "expected_window": "2026-2028",
+          "importance": "high",
+          "type": "commodity",
+          "watch_items": [
+            "lithium carbonate price",
+            "lithium hydroxide price",
+            "Chinese supply cuts",
+            "EV demand",
+            "battery inventory",
+            "long-term contract pricing"
+          ]
+        },
+        {
+          "event": "GM offtake and Phase 2 optionality",
+          "expected_window": "2026-2028",
+          "importance": "medium",
+          "type": "customer_win",
+          "watch_items": [
+            "Phase 1 20-year offtake",
+            "Phase 2 offtake",
+            "GM funding support",
+            "additional customers",
+            "Phase 2 financing",
+            "project economics"
+          ]
+        }
+      ],
+      "validation_metrics": [
+        "lithium carbonate price",
+        "lithium hydroxide price",
+        "Thacker Pass engineering completion",
+        "procurement completion",
+        "construction workforce",
+        "workhours",
+        "2026 capex",
+        "cash burn",
+        "cash and equivalents",
+        "DOE loan draw",
+        "GM offtake status",
+        "Orion funding status",
+        "mechanical completion target",
+        "Phase 1 capex",
+        "expected operating cost",
+        "equity dilution",
+        "community legal or environmental updates"
+      ],
+      "failure_conditions": [
+        "Breaks below 4.0 and cannot reclaim",
+        "Lithium price remains depressed or breaks lower",
+        "Thacker Pass mechanical completion target slips",
+        "Capex overrun becomes material",
+        "DOE loan draw or GM funding structure worsens",
+        "Large equity dilution occurs",
+        "Construction is delayed by environmental or community legal issues",
+        "Project economics are impaired by lower long-term lithium assumptions"
+      ],
+      "risk_exposures": {
+        "market_beta": "high",
+        "sector_beta": "high",
+        "interest_rate_sensitivity": "high",
+        "usd_sensitivity": "medium",
+        "commodity_sensitivity": "very_high",
+        "policy_sensitivity": "high",
+        "liquidity_risk": "medium",
+        "valuation_risk": "high",
+        "earnings_event_risk": "medium_high",
+        "dilution_risk": "high",
+        "single_name_risk": "very_high",
+        "correlation_tags": [
+          "lithium",
+          "critical_minerals",
+          "EV_battery_supply_chain",
+          "Thacker_Pass",
+          "DOE_loan",
+          "GM_offtake",
+          "pre_revenue",
+          "project_finance",
+          "construction_risk"
+        ]
+      },
+      "data_quality": {
+        "financials_status": "partial",
+        "news_status": "verified",
+        "market_price_status": "verified",
+        "options_status": "missing",
+        "institutional_flow_status": "partial",
+        "export_status": "complete",
+        "data_gaps": [
+          "option_chain_missing",
+          "call_wall_missing",
+          "put_wall_missing",
+          "gamma_flip_missing",
+          "atm_iv_missing",
+          "Q1_2026_formal_financial_detail_pending",
+          "2026_capex_actual_burn_rate_missing",
+          "latest_lithium_carbonate_hydroxide_forward_curve_missing",
+          "project_level_contingency_usage_missing",
+          "Phase_1_unit_cost_opex_latest_estimate_missing",
+          "future_equity_dilution_plan_missing",
+          "commissioning_and_ramp_probability_distribution_missing"
+        ],
+        "confidence_penalty": [
+          "option_structure_unavailable",
+          "pre_revenue_business_model",
+          "lithium_price_cycle_weakness",
+          "construction_and_capex_risk",
+          "future_dilution_risk",
+          "current_price_near_consensus_target"
+        ],
+        "do_not_use_for": [
+          "call_wall_trade",
+          "gamma_squeeze_trade",
+          "short_term_options_trade",
+          "mature_mining_cashflow_analysis"
+        ]
+      },
+      "decision_engine": {
+        "buy_trigger": "price >= 4.8 and price <= 5.2 and market_regime != 'Risk Off'",
+        "add_trigger": "price <= 4.5 and thesis_status == 'valid'",
+        "trim_trigger": "price >= 6.8 and no_lithium_or_construction_upgrade == true",
+        "exit_trigger": "price < 4.0 or thesis_status == 'invalid'",
+        "alert_priority": "medium",
+        "review_frequency": "weekly",
+        "next_review_trigger": "price_zone_hit_or_Q1_earnings_or_Thacker_Pass_construction_update"
+      },
+      "last_decision": {
+        "decision": "watch",
+        "reason": "Thacker Pass is strategically important and construction is progressing, but LAC remains pre-revenue and current price is close to average target, creating weak new-entry risk/reward.",
+        "updated_at": "2026-05-12",
+        "decision_owner": "assistant"
+      }
+    }
+  ],
+  "portfolio_summary": {
+    "top_candidates": [],
+    "watchlist": [
+      "LAC"
+    ],
+    "avoid_list": [],
+    "ranking": [
+      {
+        "rank": 1,
+        "ticker": "LAC",
+        "total_score": 44,
+        "shufen_score": 55,
+        "action": "watch"
+      }
+    ],
+    "theme_exposure_limit_pct": 4,
+    "cash_required_pct": 20,
+    "max_single_position_pct": 2,
+    "suggested_allocation": [
+      {
+        "ticker": "LAC",
+        "target_position_pct": 0.5,
+        "max_position_pct": 2
+      }
+    ]
+  },
+  "risk_controls": {
+    "max_theme_exposure_pct": 4,
+    "max_single_stock_pct": 2,
+    "max_high_beta_total_pct": 3,
+    "max_loss_per_position_pct": 0.6,
+    "cash_buffer_pct": 20,
+    "hedge_required": true,
+    "hedge_tools": [
+      "cash",
+      "index_put_spread",
+      "reduce_lithium_or_EV_beta_if_overexposed"
+    ],
+    "reduce_risk_if": [
+      "market_regime == 'Risk Off'",
+      "lithium_prices_break_lower",
+      "Thacker_Pass_timeline_slips",
+      "capex_overrun_emerges",
+      "DOE_or_GM_funding_negative_update",
+      "large_equity_dilution"
+    ],
+    "alert_preferences_note": "User alert switches are not stored in this report. Platform should manage them separately in alert_config.json."
+  },
+  "next_validation": [
+    {
+      "ticker": "LAC",
+      "date_or_window": "Q1 2026 earnings and 2026 construction updates",
+      "metrics_to_check": [
+        "cash balance",
+        "net loss",
+        "construction spending",
+        "2026 capex guidance",
+        "DOE loan draw",
+        "GM offtake/JV updates",
+        "engineering progress",
+        "procurement progress",
+        "site workforce",
+        "mechanical completion target",
+        "lithium carbonate price",
+        "equity dilution"
+      ],
+      "decision_after_validation": "If construction stays on schedule, capex remains controlled, DOE/GM funding proceeds, and lithium prices recover, reassess pullback entries. If capex/dilution or timeline risk worsens, keep as watch or avoid."
+    }
+  ],
+  "export_validation": {
+    "json_valid": true,
+    "required_fields_present": true,
+    "enum_values_valid": true,
+    "price_fields_valid": true,
+    "risk_rules_present": true,
+    "data_gaps_marked": true,
+    "ticker_analysis_is_array": true,
+    "tickers_are_uppercase": true,
+    "price_ranges_are_arrays": true,
+    "summary_card_present": true,
+    "analysis_text_embedded": false,
+    "alert_preferences_external": true,
+    "missing_required_fields": [],
+    "warnings": [
+      "LAC is pre-revenue and should not be analyzed like a mature mining cash-flow company",
+      "Current price is close to consensus target, limiting base-case upside",
+      "DOE loan and GM offtake reduce but do not eliminate project, capex, lithium-price, and dilution risk",
+      "Options data missing; do not use options structure for execution",
+      "Full markdown analysis should remain in same-name .md file"
+    ]
+  }
+}

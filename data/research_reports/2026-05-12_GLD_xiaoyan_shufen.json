@@ -1,0 +1,439 @@
+{
+  "meta": {
+    "schema_version": "1.1.0",
+    "report_id": "2026-05-12_GLD_xiaoyan_shufen",
+    "generated_at": "2026-05-12T12:45:00-07:00",
+    "timezone": "America/Los_Angeles",
+    "skill_used": [
+      "xiaoyan",
+      "shufen"
+    ],
+    "analysis_mode": "single",
+    "tickers": [
+      "GLD"
+    ],
+    "theme": "gold_precious_metals_macro_hedge",
+    "base_currency": "USD",
+    "data_freshness": {
+      "market_data_date": "2026-05-12",
+      "financial_data_date": "not_applicable_etf",
+      "news_data_window": "last_30_to_90_days",
+      "option_data_status": "missing"
+    },
+    "source_files": [
+      "research_export_skill_v1_1.md",
+      "Shufen式美股产业资金流重定价选股_SKILL(1).md",
+      "xiaoyan_us_equity_trading_skill(1).md"
+    ],
+    "notes": [
+      "GLD is a physically backed gold ETF, not an operating company.",
+      "Do not use PE, EPS, revenue growth, FCF, or management execution fields as if GLD were a common stock.",
+      "Full analysis should remain in same-name Markdown file.",
+      "Alert preferences should be managed separately by platform alert_config.json.",
+      "Options structure is missing; do not use call wall, put wall, gamma flip, or IV-based execution."
+    ]
+  },
+  "market_context": {
+    "risk_regime": "Risk On but high volatility",
+    "macro_score": 10,
+    "equity_risk_budget": "balanced",
+    "liquidity_risk": "medium",
+    "credit_risk": "low",
+    "rate_risk": "high",
+    "inflation_risk": "high",
+    "vix_state": "elevated_but_not_stress",
+    "hedge_required": true,
+    "recommended_hedges": [
+      "cash",
+      "GLD",
+      "index_put_spread"
+    ],
+    "risk_on_allowed": true,
+    "high_beta_allowed": "small_position_only",
+    "major_macro_risks": [
+      "10Y real yield breakout",
+      "US dollar strength",
+      "oil-driven inflation shock",
+      "geopolitical risk reversal",
+      "liquidity selloff forcing gold liquidation"
+    ],
+    "macro_invalid_conditions": [
+      "real yields trend higher",
+      "US dollar breaks out",
+      "gold ETF flows turn sharply negative",
+      "geopolitical and inflation risk premiums collapse"
+    ]
+  },
+  "portfolio_context": {
+    "theme": "gold_precious_metals_macro_hedge",
+    "theme_exposure_limit_pct": 10,
+    "current_theme_exposure_pct": null,
+    "cash_buffer_required_pct": 20,
+    "max_single_position_pct": 8,
+    "max_high_beta_position_pct": 0,
+    "allow_short_term_options": false,
+    "position_layer_rules": {
+      "stabilizer": "3%-8%",
+      "core_attack": "not_applicable",
+      "high_convexity": "not_applicable",
+      "lottery": "not_applicable",
+      "hedge": "3%-8%",
+      "cash": "dynamic"
+    }
+  },
+  "ticker_analysis": [
+    {
+      "ticker": "GLD",
+      "company": "SPDR Gold Shares",
+      "exchange": "NYSE Arca",
+      "sector": "Commodity ETF",
+      "industry_chain": "gold_precious_metals_macro_hedge",
+      "archetype": "policy_budget_driven",
+      "portfolio_layer": "hedge",
+      "action": "buy_on_pullback",
+      "conclusion": "等回撤 / 组合保险分批 / 持有不追高",
+      "summary_card": {
+        "one_line": "GLD 是黄金现货 ETF，对冲价值强，但短线高位追买赔率一般。",
+        "primary_action": "等回撤",
+        "why_now": "黄金 ETF 资金回流、通胀和地缘风险支撑长期逻辑，但高实际利率和拥挤交易压制短线赔率。",
+        "biggest_risk": "美元和实际利率继续上行，黄金作为无息资产被压估值。",
+        "next_check": "检查美国 CPI/PPI、10Y 实际利率、美元指数、黄金 ETF 净流入和央行买金。"
+      },
+      "main_thesis": "GLD provides liquid physically backed gold exposure that benefits from sticky inflation, geopolitical risk, central bank and ETF demand, fiscal concerns, and portfolio hedging needs.",
+      "bear_thesis": "Gold is non-yielding and vulnerable to rising real yields, a stronger dollar, crowded positioning, and a reversal in geopolitical or inflation risk premium.",
+      "market_narrative": {
+        "bull_case": "Inflation stickiness, geopolitical shocks, central bank reserve diversification, ETF inflows, and concerns over fiscal and dollar credibility support gold allocation.",
+        "bear_case": "Higher real yields and a stronger dollar pressure gold; recent gains may already price in much of the safe-haven and inflation-hedge narrative.",
+        "current_market_story": "Market is trading GLD as a macro hedge and real-asset allocation vehicle rather than an equity growth asset.",
+        "counter_narrative": "If inflation risk fades or real yields rise, gold may de-rate despite strong long-term narratives.",
+        "narrative_confidence": "high",
+        "price_in_status": "partially_priced_in",
+        "second_repricing_path": "Sustained ETF inflows, central bank buying, falling real yields, weaker dollar, or higher fiscal/geopolitical risk could push gold to a new allocation regime."
+      },
+      "scores": {
+        "macro_liquidity": 10,
+        "market_narrative_risk_budget": 8,
+        "industry_strength": 13,
+        "fundamental_quality": 16,
+        "financial_quality_management": 13,
+        "valuation_gap": 5,
+        "technical_options": 5,
+        "position_fit": 4,
+        "total_score": 74
+      },
+      "shufen_scores": {
+        "macro_risk_budget": 8,
+        "industry_capital_source": 14,
+        "institutional_flow": 15,
+        "catalyst_window": 11,
+        "verifiable_fundamentals": 12,
+        "second_repricing_path": 9,
+        "valuation_gap": 2,
+        "balance_sheet_risk": 5,
+        "total_score": 76
+      },
+      "probability": {
+        "win_rate_low": 0.58,
+        "win_rate_high": 0.64,
+        "base_win_rate": 0.61,
+        "confidence": "medium_high",
+        "confidence_reason": "GLD has strong macro and flow support, but current price is elevated and vulnerable to real-yield and dollar shocks."
+      },
+      "price_plan": {
+        "current_price": 432.02,
+        "buy_zone": [
+          410,
+          420
+        ],
+        "add_zone": [
+          385,
+          400
+        ],
+        "trim_zone": [
+          475,
+          500
+        ],
+        "bull_target": [
+          475,
+          500
+        ],
+        "base_target": 455,
+        "bear_price": 365,
+        "invalid_price": 365,
+        "hard_stop": 350,
+        "currency": "USD",
+        "price_updated_at": "2026-05-12"
+      },
+      "risk_reward": {
+        "upside_pct": 9.95,
+        "downside_pct": 15.51,
+        "risk_reward_ratio": 0.64,
+        "expected_value": 0.0002,
+        "ev_formula": "win_rate * upside_pct - (1 - win_rate) * downside_pct",
+        "base_target_used": 475,
+        "bear_price_used": 365,
+        "win_rate_used": 0.61,
+        "note": "At current price, risk/reward is not attractive for fresh aggressive buying. At a 400 entry with 475 target and 365 invalid zone, risk/reward improves to roughly 2.1:1."
+      },
+      "positioning": {
+        "initial_position_pct": 0,
+        "max_position_pct": 8,
+        "add_position_pct": 2,
+        "position_type": "hedge",
+        "preferred_instrument": "stock",
+        "allowed_instruments": [
+          "stock",
+          "call_spread",
+          "put_spread"
+        ],
+        "avoid_instruments": [
+          "short_term_calls",
+          "naked_calls",
+          "gamma_trade"
+        ],
+        "use_trailing_stop": false,
+        "hedge_required": false,
+        "max_portfolio_loss_pct": 0.75
+      },
+      "trade_rules": {
+        "entry_conditions": [
+          "Price enters 410-420 buy zone",
+          "Real yields are not breaking materially higher",
+          "US dollar is not in a strong upside breakout",
+          "Gold ETF flows remain positive or stable",
+          "Inflation, fiscal, or geopolitical hedge thesis remains valid"
+        ],
+        "add_conditions": [
+          "Price enters 385-400 add zone and thesis remains valid",
+          "Real yields peak or turn lower",
+          "Global gold ETF flows remain positive",
+          "Central bank buying and geopolitical risk support gold allocation",
+          "Portfolio needs additional hedge exposure"
+        ],
+        "trim_conditions": [
+          "Price reaches 475-500 and ETF inflows look crowded",
+          "Real yields and the dollar rise together",
+          "Geopolitical risk premium fades",
+          "Portfolio gold exposure exceeds target limit"
+        ],
+        "exit_conditions": [
+          "Price breaks below 365 and fails to reclaim",
+          "Gold ETF flows turn sharply negative",
+          "Real yields trend higher for multiple weeks",
+          "US dollar enters a sustained upside trend",
+          "Portfolio needs liquidity and cash buffer more than gold hedge"
+        ]
+      },
+      "catalysts": [
+        {
+          "event": "US inflation data",
+          "expected_window": "monthly",
+          "importance": "high",
+          "type": "policy",
+          "watch_items": [
+            "CPI",
+            "PPI",
+            "inflation expectations",
+            "Fed reaction function"
+          ]
+        },
+        {
+          "event": "Gold ETF flow updates",
+          "expected_window": "monthly",
+          "importance": "high",
+          "type": "other",
+          "watch_items": [
+            "global gold ETF net flows",
+            "GLD holdings",
+            "AUM",
+            "regional ETF demand"
+          ]
+        },
+        {
+          "event": "Rates and dollar trend",
+          "expected_window": "daily_to_weekly",
+          "importance": "high",
+          "type": "other",
+          "watch_items": [
+            "10Y nominal yield",
+            "10Y real yield",
+            "DXY / broad dollar",
+            "oil price"
+          ]
+        }
+      ],
+      "validation_metrics": [
+        "spot gold price",
+        "GLD NAV",
+        "GLD premium discount",
+        "GLD AUM",
+        "global gold ETF flows",
+        "10Y real yield",
+        "US dollar index",
+        "CPI and inflation expectations",
+        "central bank gold buying",
+        "geopolitical risk indicators"
+      ],
+      "failure_conditions": [
+        "GLD breaks below 365 and cannot reclaim",
+        "Real yields continue trending higher",
+        "US dollar breaks out strongly",
+        "Global gold ETF flows turn sharply negative",
+        "Inflation and geopolitical risk premiums fade",
+        "Gold loses hedge value during risk-off while portfolio needs cash"
+      ],
+      "risk_exposures": {
+        "market_beta": "low",
+        "sector_beta": "medium",
+        "interest_rate_sensitivity": "high",
+        "usd_sensitivity": "high",
+        "commodity_sensitivity": "high",
+        "policy_sensitivity": "medium_high",
+        "liquidity_risk": "low",
+        "valuation_risk": "medium_high",
+        "earnings_event_risk": "not_applicable",
+        "dilution_risk": "not_applicable",
+        "single_name_risk": "low",
+        "correlation_tags": [
+          "gold",
+          "precious_metals",
+          "inflation_hedge",
+          "real_yields",
+          "usd",
+          "geopolitical_risk",
+          "portfolio_hedge"
+        ]
+      },
+      "data_quality": {
+        "financials_status": "not_applicable",
+        "news_status": "verified",
+        "market_price_status": "verified",
+        "options_status": "missing",
+        "institutional_flow_status": "partial",
+        "export_status": "complete",
+        "data_gaps": [
+          "option_chain_missing",
+          "call_wall_missing",
+          "put_wall_missing",
+          "gamma_flip_missing",
+          "atm_iv_missing",
+          "latest_daily_GLD_holdings_change_missing",
+          "latest_full_central_bank_gold_purchase_data_missing"
+        ],
+        "confidence_penalty": [
+          "option_structure_unavailable",
+          "short_term_gold_positioning_uncertain",
+          "gold_is_macro_asset_not_operating_company"
+        ],
+        "do_not_use_for": [
+          "call_wall_trade",
+          "gamma_squeeze_trade",
+          "short_term_options_trade",
+          "equity_PE_valuation"
+        ]
+      },
+      "decision_engine": {
+        "buy_trigger": "price <= 420 and price >= 410 and real_yields_breakout != true",
+        "add_trigger": "price <= 400 and thesis_status == 'valid'",
+        "trim_trigger": "price >= 475 and ETF_flows_overheated == true",
+        "exit_trigger": "price < 365 or thesis_status == 'invalid'",
+        "alert_priority": "medium",
+        "review_frequency": "weekly",
+        "next_review_trigger": "price_zone_hit_or_macro_data_release"
+      },
+      "last_decision": {
+        "decision": "buy_on_pullback",
+        "reason": "GLD remains a useful hedge and macro allocation asset, but current price offers poor fresh-entry risk/reward after a large run.",
+        "updated_at": "2026-05-12",
+        "decision_owner": "assistant"
+      }
+    }
+  ],
+  "portfolio_summary": {
+    "top_candidates": [
+      "GLD"
+    ],
+    "watchlist": [
+      "GLD"
+    ],
+    "avoid_list": [],
+    "ranking": [
+      {
+        "rank": 1,
+        "ticker": "GLD",
+        "total_score": 74,
+        "shufen_score": 76,
+        "action": "buy_on_pullback"
+      }
+    ],
+    "theme_exposure_limit_pct": 10,
+    "cash_required_pct": 20,
+    "max_single_position_pct": 8,
+    "suggested_allocation": [
+      {
+        "ticker": "GLD",
+        "target_position_pct": 3,
+        "max_position_pct": 8
+      }
+    ]
+  },
+  "risk_controls": {
+    "max_theme_exposure_pct": 10,
+    "max_single_stock_pct": 8,
+    "max_high_beta_total_pct": 0,
+    "max_loss_per_position_pct": 0.75,
+    "cash_buffer_pct": 20,
+    "hedge_required": false,
+    "hedge_tools": [
+      "GLD",
+      "cash",
+      "index_put_spread"
+    ],
+    "reduce_risk_if": [
+      "real_yields_trend_higher",
+      "US_dollar_breaks_out",
+      "gold_ETF_flows_turn_negative",
+      "GLD_breaks_invalid_price",
+      "portfolio_cash_need_rises"
+    ],
+    "alert_preferences_note": "User alert switches are not stored in this report. Platform should manage them separately in alert_config.json."
+  },
+  "next_validation": [
+    {
+      "ticker": "GLD",
+      "date_or_window": "weekly / next CPI-PPI release / next WGC ETF flow update",
+      "metrics_to_check": [
+        "GLD price and NAV",
+        "spot gold",
+        "10Y real yield",
+        "US dollar index",
+        "global gold ETF net flows",
+        "central bank gold purchases",
+        "CPI and PPI",
+        "oil price and geopolitical risk"
+      ],
+      "decision_after_validation": "If GLD enters 410-420 while ETF flows and macro hedge thesis remain intact, initiate or add hedge allocation. If real yields and USD break higher while ETF flows reverse, keep GLD as watch or trim existing exposure."
+    }
+  ],
+  "export_validation": {
+    "json_valid": true,
+    "required_fields_present": true,
+    "enum_values_valid": true,
+    "price_fields_valid": true,
+    "risk_rules_present": true,
+    "data_gaps_marked": true,
+    "ticker_analysis_is_array": true,
+    "tickers_are_uppercase": true,
+    "price_ranges_are_arrays": true,
+    "summary_card_present": true,
+    "analysis_text_embedded": false,
+    "alert_preferences_external": true,
+    "missing_required_fields": [],
+    "warnings": [
+      "GLD is an ETF and commodity exposure, not an operating company",
+      "Options data missing; do not use options structure for execution",
+      "Risk/reward at current price is below threshold; buy_on_pullback is the primary action",
+      "Full markdown analysis should remain in same-name .md file"
+    ]
+  }
+}

@@ -1,0 +1,444 @@
+{
+  "meta": {
+    "schema_version": "1.1.0",
+    "report_id": "2026-05-12_ALNY_xiaoyan_shufen",
+    "generated_at": "2026-05-12T12:55:00-07:00",
+    "timezone": "America/Los_Angeles",
+    "skill_used": [
+      "xiaoyan",
+      "shufen"
+    ],
+    "analysis_mode": "single",
+    "tickers": [
+      "ALNY"
+    ],
+    "theme": "commercial_stage_rnai_biotech",
+    "base_currency": "USD",
+    "data_freshness": {
+      "market_data_date": "2026-05-12",
+      "financial_data_date": "2026-Q1 reported 2026-04-30",
+      "news_data_window": "last_30_to_90_days",
+      "option_data_status": "missing"
+    },
+    "source_files": [
+      "research_export_skill_v1_1.md",
+      "Shufen式美股产业资金流重定价选股_SKILL(1).md",
+      "xiaoyan_us_equity_trading_skill(1).md"
+    ],
+    "notes": [
+      "ALNY is a commercial-stage RNAi biotech platform, not an early-stage binary biotech.",
+      "Clinical, regulatory, reimbursement, and competition risks remain material.",
+      "Full analysis should remain in same-name Markdown file.",
+      "Alert preferences should be managed separately by platform alert_config.json.",
+      "Options structure is missing; do not use call wall, put wall, gamma flip, or IV-based execution."
+    ]
+  },
+  "market_context": {
+    "risk_regime": "Risk On but high volatility",
+    "macro_score": 8,
+    "equity_risk_budget": "balanced",
+    "liquidity_risk": "medium",
+    "credit_risk": "low",
+    "rate_risk": "medium_high",
+    "inflation_risk": "medium_high",
+    "vix_state": "elevated_but_not_stress",
+    "hedge_required": true,
+    "recommended_hedges": [
+      "cash",
+      "index_put_spread"
+    ],
+    "risk_on_allowed": true,
+    "high_beta_allowed": "small_position_only",
+    "major_macro_risks": [
+      "10Y yield breakout",
+      "biotech sector risk-off",
+      "drug pricing policy pressure",
+      "clinical readout disappointment",
+      "regulatory or reimbursement setback"
+    ],
+    "macro_invalid_conditions": [
+      "VIX > 25",
+      "biotech ETF breaks down",
+      "drug pricing policy shock",
+      "risk assets enter broad de-risking"
+    ]
+  },
+  "portfolio_context": {
+    "theme": "commercial_stage_rnai_biotech",
+    "theme_exposure_limit_pct": 8,
+    "current_theme_exposure_pct": null,
+    "cash_buffer_required_pct": 20,
+    "max_single_position_pct": 4,
+    "max_high_beta_position_pct": 2,
+    "allow_short_term_options": false,
+    "position_layer_rules": {
+      "stabilizer": "not_applicable",
+      "core_attack": "2%-4%",
+      "high_convexity": "1%-3%",
+      "lottery": "not_applicable",
+      "hedge": "as_needed",
+      "cash": "dynamic"
+    }
+  },
+  "ticker_analysis": [
+    {
+      "ticker": "ALNY",
+      "company": "Alnylam Pharmaceuticals, Inc.",
+      "exchange": "NASDAQ",
+      "sector": "Healthcare",
+      "industry_chain": "commercial_stage_rnai_biotech",
+      "archetype": "profitability_inflection",
+      "portfolio_layer": "core_attack",
+      "action": "buy_now",
+      "conclusion": "可分批买入 / 回撤加仓 / 不用短期期权追事件",
+      "summary_card": {
+        "one_line": "ALNY 已从 RNAi 平台故事股转向 TTR 商业化现金流和盈利拐点股。",
+        "primary_action": "分批买入",
+        "why_now": "Q1 产品收入首次超过 10 亿美元，TTR 收入同比 +153%，且卖方目标价仍明显高于现价。",
+        "biggest_risk": "TTR 竞争、临床失败、药价报销压力和高估值压缩。",
+        "next_check": "Q2 财报验证 AMVUTTRA uptake、TTR revenue、margin、现金和 H2 2026 pipeline readouts。"
+      },
+      "main_thesis": "ALNY is transitioning from an RNAi platform story into a profitable commercial biotech with AMVUTTRA/TTR cash flow, a durable rare disease base, and multiple late-stage pipeline shots.",
+      "bear_thesis": "The stock remains exposed to TTR competition, reimbursement and gross-to-net pressure, clinical readout failures, and valuation compression if growth slows.",
+      "market_narrative": {
+        "bull_case": "AMVUTTRA ATTR-CM launch expands the TTR market, Q1 revenue and profitability validate commercial execution, and pipeline readouts create second repricing optionality.",
+        "bear_case": "TTR uptake may slow, competition from Pfizer and BridgeBio may pressure pricing and share, and pipeline failures could reduce RNAi platform premium.",
+        "current_market_story": "Market is beginning to value ALNY as a profitable RNAi platform with a flagship TTR franchise rather than a single-product biotech.",
+        "counter_narrative": "Strong Q1 may already be reflected in sell-side optimism; biotech event risk and high valuation still require disciplined position sizing.",
+        "narrative_confidence": "high",
+        "price_in_status": "partially_priced_in",
+        "second_repricing_path": "TTR revenue upside, margin expansion, and successful nucresiran/zilebesiran/ALN-2232 readouts could push ALNY toward platform-compounder valuation."
+      },
+      "scores": {
+        "macro_liquidity": 8,
+        "market_narrative_risk_budget": 8,
+        "industry_strength": 13,
+        "fundamental_quality": 18,
+        "financial_quality_management": 12,
+        "valuation_gap": 6,
+        "technical_options": 5,
+        "position_fit": 4,
+        "total_score": 74
+      },
+      "shufen_scores": {
+        "macro_risk_budget": 7,
+        "industry_capital_source": 13,
+        "institutional_flow": 15,
+        "catalyst_window": 13,
+        "verifiable_fundamentals": 14,
+        "second_repricing_path": 12,
+        "valuation_gap": 3,
+        "balance_sheet_risk": 4,
+        "total_score": 81
+      },
+      "probability": {
+        "win_rate_low": 0.6,
+        "win_rate_high": 0.66,
+        "base_win_rate": 0.62,
+        "confidence": "medium_high",
+        "confidence_reason": "Q1 revenue, profitability, guidance, and analyst support are strong, but biotech competition and clinical risks remain material."
+      },
+      "price_plan": {
+        "current_price": 291.32,
+        "buy_zone": [
+          280,
+          300
+        ],
+        "add_zone": [
+          250,
+          270
+        ],
+        "trim_zone": [
+          390,
+          430
+        ],
+        "bull_target": [
+          470,
+          520
+        ],
+        "base_target": 420,
+        "bear_price": 240,
+        "invalid_price": 240,
+        "hard_stop": 220,
+        "currency": "USD",
+        "price_updated_at": "2026-05-12"
+      },
+      "risk_reward": {
+        "upside_pct": 44.17,
+        "downside_pct": 17.62,
+        "risk_reward_ratio": 2.51,
+        "expected_value": 0.207,
+        "ev_formula": "win_rate * upside_pct - (1 - win_rate) * downside_pct",
+        "base_target_used": 420,
+        "bear_price_used": 240,
+        "win_rate_used": 0.62,
+        "note": "At current price, ALNY offers an attractive risk/reward if TTR growth and profitability continue. Position sizing should still account for biotech event risk."
+      },
+      "positioning": {
+        "initial_position_pct": 1.5,
+        "max_position_pct": 4,
+        "add_position_pct": 1,
+        "position_type": "core_equity",
+        "preferred_instrument": "stock",
+        "allowed_instruments": [
+          "stock",
+          "LEAP",
+          "call_spread"
+        ],
+        "avoid_instruments": [
+          "short_term_calls",
+          "naked_calls",
+          "gamma_trade"
+        ],
+        "use_trailing_stop": true,
+        "hedge_required": true,
+        "max_portfolio_loss_pct": 1.0
+      },
+      "trade_rules": {
+        "entry_conditions": [
+          "Price is within 280-300 buy zone",
+          "Market regime is not Risk Off",
+          "Biotech sector is not breaking down",
+          "Q1 earnings revision trend remains positive",
+          "TTR franchise thesis remains valid"
+        ],
+        "add_conditions": [
+          "Price enters 250-270 add zone and thesis remains valid",
+          "Q2 confirms TTR revenue growth",
+          "AMVUTTRA ATTR-CM uptake remains strong",
+          "Non-GAAP operating margin improves or stays on track",
+          "Cash balance and R&D spend remain disciplined",
+          "H2 2026 pipeline readouts progress without negative signals"
+        ],
+        "trim_conditions": [
+          "Price reaches 390-430 without further guidance or pipeline upgrades",
+          "Position becomes too large before a binary clinical readout",
+          "TTR growth materially decelerates",
+          "Competitor data or reimbursement developments pressure AMVUTTRA",
+          "Healthcare policy risk increases"
+        ],
+        "exit_conditions": [
+          "Price breaks below 240 and fails to reclaim",
+          "AMVUTTRA or total TTR guidance is cut",
+          "Key pipeline readout fails and damages platform valuation",
+          "Gross-to-net or reimbursement pressure causes margin deterioration",
+          "Management lowers 2030 targets or financial discipline weakens"
+        ]
+      },
+      "catalysts": [
+        {
+          "event": "Q2 2026 earnings",
+          "expected_window": "2026-Q2 / likely summer 2026",
+          "importance": "high",
+          "type": "earnings",
+          "watch_items": [
+            "AMVUTTRA revenue",
+            "TTR net product revenue",
+            "total product revenue",
+            "gross-to-net deductions",
+            "GAAP and non-GAAP profitability",
+            "cash and marketable securities"
+          ]
+        },
+        {
+          "event": "H2 2026 clinical readouts",
+          "expected_window": "second half of 2026",
+          "importance": "high",
+          "type": "pipeline",
+          "watch_items": [
+            "nucresiran",
+            "zilebesiran",
+            "ALN-2232",
+            "late-stage RNAi programs",
+            "safety and efficacy profile"
+          ]
+        },
+        {
+          "event": "BofA Securities Healthcare Conference",
+          "expected_window": "2026-05-13",
+          "importance": "medium",
+          "type": "investor_day",
+          "watch_items": [
+            "management commentary",
+            "TTR launch update",
+            "pipeline timing",
+            "margin discipline"
+          ]
+        }
+      ],
+      "validation_metrics": [
+        "AMVUTTRA net product revenue",
+        "ONPATTRO net product revenue",
+        "total TTR net product revenue",
+        "total product revenue",
+        "GIVLAARI and OXLUMO rare franchise revenue",
+        "gross-to-net deductions",
+        "GAAP EPS",
+        "non-GAAP operating margin",
+        "cash cash equivalents and marketable securities",
+        "pipeline readout timing",
+        "ATTR-CM uptake and persistence"
+      ],
+      "failure_conditions": [
+        "Breaks below 240 and cannot reclaim",
+        "TTR revenue guidance is cut",
+        "AMVUTTRA ATTR-CM uptake slows materially",
+        "Competitor therapies materially pressure pricing or share",
+        "Key pipeline readout fails and lowers platform valuation",
+        "Reimbursement or drug pricing pressure damages margins"
+      ],
+      "risk_exposures": {
+        "market_beta": "medium",
+        "sector_beta": "high",
+        "interest_rate_sensitivity": "medium",
+        "usd_sensitivity": "medium_low",
+        "commodity_sensitivity": "low",
+        "policy_sensitivity": "high",
+        "liquidity_risk": "low",
+        "valuation_risk": "medium_high",
+        "earnings_event_risk": "high",
+        "dilution_risk": "low",
+        "single_name_risk": "medium_high",
+        "correlation_tags": [
+          "biotech",
+          "commercial_stage_biotech",
+          "RNAi",
+          "TTR",
+          "ATTR_CM",
+          "rare_disease",
+          "clinical_readout_risk"
+        ]
+      },
+      "data_quality": {
+        "financials_status": "verified",
+        "news_status": "verified",
+        "market_price_status": "verified",
+        "options_status": "missing",
+        "institutional_flow_status": "partial",
+        "export_status": "complete",
+        "data_gaps": [
+          "option_chain_missing",
+          "call_wall_missing",
+          "put_wall_missing",
+          "gamma_flip_missing",
+          "atm_iv_missing",
+          "complete_13F_flow_lag",
+          "real_time_prescription_uptake_missing"
+        ],
+        "confidence_penalty": [
+          "option_structure_unavailable",
+          "biotech_event_risk",
+          "competition_and_reimbursement_uncertainty"
+        ],
+        "do_not_use_for": [
+          "call_wall_trade",
+          "gamma_squeeze_trade",
+          "short_term_options_trade"
+        ]
+      },
+      "decision_engine": {
+        "buy_trigger": "price >= 280 and price <= 300 and market_regime != 'Risk Off'",
+        "add_trigger": "price <= 270 and thesis_status == 'valid'",
+        "trim_trigger": "price >= 420 and no_new_guidance_raise == true",
+        "exit_trigger": "price < 240 or thesis_status == 'invalid'",
+        "alert_priority": "high",
+        "review_frequency": "weekly",
+        "next_review_trigger": "price_zone_hit_or_Q2_earnings_or_pipeline_readout"
+      },
+      "last_decision": {
+        "decision": "buy_now",
+        "reason": "ALNY has delivered commercial validation and profitability, with current price materially below consensus target and a favorable base-case risk/reward.",
+        "updated_at": "2026-05-12",
+        "decision_owner": "assistant"
+      }
+    }
+  ],
+  "portfolio_summary": {
+    "top_candidates": [
+      "ALNY"
+    ],
+    "watchlist": [
+      "ALNY"
+    ],
+    "avoid_list": [],
+    "ranking": [
+      {
+        "rank": 1,
+        "ticker": "ALNY",
+        "total_score": 74,
+        "shufen_score": 81,
+        "action": "buy_now"
+      }
+    ],
+    "theme_exposure_limit_pct": 8,
+    "cash_required_pct": 20,
+    "max_single_position_pct": 4,
+    "suggested_allocation": [
+      {
+        "ticker": "ALNY",
+        "target_position_pct": 1.5,
+        "max_position_pct": 4
+      }
+    ]
+  },
+  "risk_controls": {
+    "max_theme_exposure_pct": 8,
+    "max_single_stock_pct": 4,
+    "max_high_beta_total_pct": 4,
+    "max_loss_per_position_pct": 1.0,
+    "cash_buffer_pct": 20,
+    "hedge_required": true,
+    "hedge_tools": [
+      "cash",
+      "index_put_spread"
+    ],
+    "reduce_risk_if": [
+      "market_regime == 'Risk Off'",
+      "biotech_sector_breaks_down",
+      "clinical_readout_risk_increases",
+      "TTR_guidance_cut",
+      "drug_pricing_policy_shock"
+    ],
+    "alert_preferences_note": "User alert switches are not stored in this report. Platform should manage them separately in alert_config.json."
+  },
+  "next_validation": [
+    {
+      "ticker": "ALNY",
+      "date_or_window": "2026-Q2 earnings and H2 2026 pipeline readouts",
+      "metrics_to_check": [
+        "AMVUTTRA revenue",
+        "total TTR revenue",
+        "total product revenue",
+        "gross-to-net deductions",
+        "GAAP EPS",
+        "non-GAAP operating margin",
+        "cash balance",
+        "nucresiran progress",
+        "zilebesiran progress",
+        "ALN-2232 progress"
+      ],
+      "decision_after_validation": "If TTR revenue and margins continue to validate while pipeline timing remains intact, hold or add on pullbacks. If TTR guidance is cut or key readouts fail, downgrade or exit."
+    }
+  ],
+  "export_validation": {
+    "json_valid": true,
+    "required_fields_present": true,
+    "enum_values_valid": true,
+    "price_fields_valid": true,
+    "risk_rules_present": true,
+    "data_gaps_marked": true,
+    "ticker_analysis_is_array": true,
+    "tickers_are_uppercase": true,
+    "price_ranges_are_arrays": true,
+    "summary_card_present": true,
+    "analysis_text_embedded": false,
+    "alert_preferences_external": true,
+    "missing_required_fields": [],
+    "warnings": [
+      "ALNY is a biotech stock with clinical and regulatory event risk",
+      "Options data missing; do not use options structure for execution",
+      "Use position sizing discipline despite attractive analyst target upside",
+      "Full markdown analysis should remain in same-name .md file"
+    ]
+  }
+}

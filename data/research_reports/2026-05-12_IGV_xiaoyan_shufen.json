@@ -1,0 +1,490 @@
+{
+  "meta": {
+    "schema_version": "1.1.0",
+    "report_id": "2026-05-12_IGV_xiaoyan_shufen",
+    "generated_at": "2026-05-12T19:40:00-07:00",
+    "timezone": "America/Los_Angeles",
+    "skill_used": [
+      "xiaoyan",
+      "shufen"
+    ],
+    "analysis_mode": "single",
+    "tickers": [
+      "IGV"
+    ],
+    "theme": "software_etf_ai_cloud_cybersecurity_saas",
+    "base_currency": "USD",
+    "asset_type": "equity_etf",
+    "data_freshness": {
+      "market_data_date": "2026-05-12",
+      "fund_data_date": "2026-05-11/2026-05-12",
+      "news_data_window": "last_90_days",
+      "option_data_status": "missing"
+    },
+    "source_files": [
+      "research_export_skill_v1_1.md",
+      "Shufen式美股产业资金流重定价选股_SKILL(1).md",
+      "xiaoyan_us_equity_trading_skill(1).md"
+    ],
+    "notes": [
+      "IGV is iShares Expanded Tech-Software Sector ETF, not a single-company stock.",
+      "Do not analyze IGV with company-specific EPS/EBITDA; use ETF holdings, concentration, expense ratio, P/E, beta, rates, and software-sector earnings revisions.",
+      "Full analysis should remain in same-name Markdown file.",
+      "Alert preferences should be managed separately by platform alert_config.json.",
+      "Options structure is missing; do not use call wall, put wall, gamma flip, or IV-based execution."
+    ]
+  },
+  "market_context": {
+    "risk_regime": "Risk On but software valuation remains fragile",
+    "macro_score": 8,
+    "equity_risk_budget": "balanced",
+    "liquidity_risk": "low",
+    "credit_risk": "low",
+    "rate_risk": "high",
+    "inflation_risk": "medium",
+    "vix_state": "elevated_but_not_stress",
+    "hedge_required": true,
+    "recommended_hedges": [
+      "cash",
+      "index_put_spread",
+      "reduce_single_name_software_beta_if_overexposed"
+    ],
+    "risk_on_allowed": true,
+    "high_beta_allowed": "small_position_only",
+    "major_macro_risks": [
+      "10Y yield breakout",
+      "software multiple compression",
+      "AI monetization disappointment",
+      "enterprise IT budget optimization",
+      "SaaS seat compression",
+      "cybersecurity or cloud software earnings miss",
+      "top holdings concentration risk"
+    ],
+    "macro_invalid_conditions": [
+      "software earnings revisions turn negative",
+      "10Y yields rise sharply",
+      "IGV breaks below 76 and fails to reclaim",
+      "AI software monetization thesis deteriorates"
+    ]
+  },
+  "portfolio_context": {
+    "theme": "software_etf_ai_cloud_cybersecurity_saas",
+    "theme_exposure_limit_pct": 10,
+    "current_theme_exposure_pct": null,
+    "cash_buffer_required_pct": 20,
+    "max_single_position_pct": 5,
+    "max_high_beta_position_pct": 5,
+    "allow_short_term_options": false,
+    "position_layer_rules": {
+      "stabilizer": "not_applicable",
+      "core_attack": "1%-5%",
+      "high_convexity": "0%-2%",
+      "lottery": "not_applicable",
+      "hedge": "as_needed",
+      "cash": "dynamic"
+    }
+  },
+  "ticker_analysis": [
+    {
+      "ticker": "IGV",
+      "company": "iShares Expanded Tech-Software Sector ETF",
+      "exchange": "Cboe BZX / NYSE Arca",
+      "sector": "Technology / Software ETF",
+      "industry_chain": "software_etf_ai_cloud_cybersecurity_saas",
+      "archetype": "sector_etf_beta",
+      "portfolio_layer": "core_attack",
+      "action": "buy_on_pullback",
+      "conclusion": "分批回撤买 / 软件 ETF 中期修复仓 / 不追单日反弹",
+      "summary_card": {
+        "one_line": "IGV 是软件行业 beta 工具，软件板块回撤后有修复空间，但估值仍高。",
+        "primary_action": "分批回撤买",
+        "why_now": "IGV YTD 明显回撤、价格远低于 52 周高点，AI 软件 monetization 若改善可推动板块修复。",
+        "biggest_risk": "P/E 仍约 36x、前十大约 59%、利率敏感、AI 对软件商业模式的压力仍未完全解除。",
+        "next_check": "软件财报季、10Y 利率、AI product revenue、RPO/ARR、前十大持仓指引和 IGV 是否站回 95-100。"
+      },
+      "main_thesis": "IGV provides diversified but concentrated exposure to leading software, cloud, cybersecurity, AI application, database, and enterprise automation companies after a meaningful 2026 software-sector derating.",
+      "bear_thesis": "Software valuations remain elevated, yields provide little cushion, top holdings are concentrated, and AI monetization must improve to justify multiple recovery.",
+      "market_narrative": {
+        "bull_case": "Software has corrected, top holdings include major AI/cloud/security platforms, and any evidence of AI software monetization or lower rates could drive a sector rerating.",
+        "bear_case": "AI financial benefits have been clearer in hardware than software, and high P/E software can de-rate further if earnings guidance fails to improve.",
+        "current_market_story": "Market is treating IGV as a software-sector recovery vehicle after YTD weakness and AI disruption fears.",
+        "counter_narrative": "Software beta is useful, but IGV is not cheap or defensive; it still needs earnings revisions and lower-rate support.",
+        "narrative_confidence": "medium",
+        "price_in_status": "partially_priced_in",
+        "second_repricing_path": "Top-holding earnings beats, RPO/ARR strength, AI product revenue, lower rates, and a rotation from AI hardware to AI software could push IGV toward 105-112."
+      },
+      "scores": {
+        "macro_liquidity": 8,
+        "market_narrative_risk_budget": 7,
+        "industry_strength": 13,
+        "fundamental_quality": 15,
+        "financial_quality_management": 9,
+        "valuation_gap": 5,
+        "technical_options": 5,
+        "position_fit": 4,
+        "total_score": 66
+      },
+      "shufen_scores": {
+        "macro_risk_budget": 7,
+        "industry_capital_source": 13,
+        "institutional_flow": 14,
+        "catalyst_window": 11,
+        "verifiable_fundamentals": 12,
+        "second_repricing_path": 10,
+        "valuation_gap": 3,
+        "balance_sheet_risk": 4,
+        "total_score": 74
+      },
+      "probability": {
+        "win_rate_low": 0.54,
+        "win_rate_high": 0.6,
+        "base_win_rate": 0.56,
+        "confidence": "medium",
+        "confidence_reason": "IGV offers diversified software exposure after a drawdown, but high P/E, rate sensitivity, and AI monetization uncertainty keep sizing disciplined."
+      },
+      "price_plan": {
+        "current_price": 89.44,
+        "buy_zone": [
+          84,
+          89
+        ],
+        "add_zone": [
+          78,
+          82
+        ],
+        "trim_zone": [
+          105,
+          112
+        ],
+        "bull_target": [
+          115,
+          120
+        ],
+        "base_target": 105.0,
+        "bear_price": 78.0,
+        "invalid_price": 76,
+        "hard_stop": 72,
+        "currency": "USD",
+        "price_updated_at": "2026-05-12"
+      },
+      "risk_reward": {
+        "upside_pct": 17.4,
+        "downside_pct": 12.79,
+        "risk_reward_ratio": 1.36,
+        "expected_value": 0.041,
+        "ev_formula": "win_rate * upside_pct - (1 - win_rate) * downside_pct",
+        "base_target_used": 105.0,
+        "bear_price_used": 78.0,
+        "win_rate_used": 0.56,
+        "note": "Risk/reward is acceptable but not exceptional at current price. Pullback toward 84 improves setup."
+      },
+      "positioning": {
+        "initial_position_pct": 1.5,
+        "max_position_pct": 5,
+        "add_position_pct": 1,
+        "position_type": "sector_etf",
+        "preferred_instrument": "ETF",
+        "allowed_instruments": [
+          "ETF",
+          "call_spread"
+        ],
+        "avoid_instruments": [
+          "short_term_calls",
+          "naked_calls",
+          "gamma_trade",
+          "overlapping_single_name_overexposure"
+        ],
+        "use_trailing_stop": true,
+        "hedge_required": true,
+        "max_portfolio_loss_pct": 1.5
+      },
+      "trade_rules": {
+        "entry_conditions": [
+          "Price is within 84-89 buy zone or below 90 as small starter",
+          "Market regime is not Risk Off",
+          "10Y yield is not rising sharply",
+          "Software mega-cap and platform earnings are not collectively guiding down",
+          "AI software monetization thesis has not deteriorated further",
+          "IGV does not break below 84 on heavy volume"
+        ],
+        "add_conditions": [
+          "Price enters 78-82 add zone and thesis remains valid",
+          "Microsoft Oracle Palantir Salesforce Palo Alto CrowdStrike guidance remains stable",
+          "IGV reclaims 90-95",
+          "10Y yield declines",
+          "RPO ARR cloud backlog or AI product revenue improves",
+          "Software sector starts outperforming semis or broader tech"
+        ],
+        "trim_conditions": [
+          "Price reaches 105-112 without further earnings revision improvement",
+          "10Y yield rises sharply again",
+          "AI software monetization disappoints",
+          "Top 10 holdings experience concentrated downside",
+          "Market rotates from software to hardware value or defensives",
+          "P/E expands while earnings do not"
+        ],
+        "exit_conditions": [
+          "Price breaks below 76 and fails to reclaim",
+          "Software earnings season shows broad guide-downs",
+          "AI pressure on traditional SaaS seat-based models becomes visible",
+          "10Y yield-driven growth de-rating resumes",
+          "IGV breaks near 52-week lows and loses support",
+          "Portfolio software beta becomes excessive"
+        ]
+      },
+      "catalysts": [
+        {
+          "event": "Software earnings season",
+          "expected_window": "quarterly",
+          "importance": "high",
+          "type": "earnings",
+          "watch_items": [
+            "Microsoft Azure and AI monetization",
+            "Oracle cloud backlog",
+            "Palantir commercial growth",
+            "Salesforce AI and margin",
+            "Palo Alto billings and ARR",
+            "CrowdStrike ARR",
+            "Adobe AI monetization",
+            "Intuit guidance"
+          ]
+        },
+        {
+          "event": "Rate and multiple environment",
+          "expected_window": "ongoing",
+          "importance": "high",
+          "type": "macro",
+          "watch_items": [
+            "10Y Treasury yield",
+            "real yields",
+            "growth vs value rotation",
+            "software forward P/E",
+            "earnings revisions"
+          ]
+        },
+        {
+          "event": "AI software monetization proof",
+          "expected_window": "2026",
+          "importance": "high",
+          "type": "product_monetization",
+          "watch_items": [
+            "AI product revenue",
+            "ARR uplift",
+            "RPO",
+            "cloud backlog",
+            "pricing power",
+            "seat expansion",
+            "AI agents adoption"
+          ]
+        },
+        {
+          "event": "ETF technical reclaim",
+          "expected_window": "2026",
+          "importance": "medium",
+          "type": "technical",
+          "watch_items": [
+            "90 reclaim",
+            "95 reclaim",
+            "100 resistance",
+            "relative strength vs QQQ",
+            "volume confirmation"
+          ]
+        }
+      ],
+      "validation_metrics": [
+        "IGV price",
+        "IGV NAV",
+        "premium discount",
+        "expense ratio",
+        "number of holdings",
+        "top 10 concentration",
+        "P/E ratio",
+        "P/B ratio",
+        "3-year beta",
+        "standard deviation",
+        "YTD NAV total return",
+        "software ETF fund flows",
+        "10Y Treasury yield",
+        "weighted earnings revisions",
+        "weighted RPO ARR backlog",
+        "Microsoft Oracle Palantir Salesforce Palo Alto CrowdStrike results"
+      ],
+      "failure_conditions": [
+        "Breaks below 76 and cannot reclaim",
+        "Software earnings revisions turn broadly negative",
+        "10Y yield rises sharply and growth multiples compress",
+        "AI monetization disappoints across major software platforms",
+        "Top holdings suffer concentrated guide-downs",
+        "ETF trades at abnormal discount or liquidity deteriorates"
+      ],
+      "risk_exposures": {
+        "market_beta": "medium_high",
+        "sector_beta": "high",
+        "interest_rate_sensitivity": "high",
+        "usd_sensitivity": "medium",
+        "commodity_sensitivity": "low",
+        "policy_sensitivity": "low",
+        "liquidity_risk": "low",
+        "valuation_risk": "high",
+        "earnings_event_risk": "medium_high",
+        "dilution_risk": "not_applicable",
+        "single_name_risk": "medium",
+        "correlation_tags": [
+          "software",
+          "SaaS",
+          "AI_applications",
+          "cloud",
+          "cybersecurity",
+          "database",
+          "enterprise_automation",
+          "high_PE_growth",
+          "rate_sensitive",
+          "top_holding_concentration"
+        ]
+      },
+      "data_quality": {
+        "financials_status": "not_applicable_for_etf",
+        "fund_data_status": "verified",
+        "holdings_status": "verified_partial",
+        "market_price_status": "verified",
+        "options_status": "missing",
+        "institutional_flow_status": "partial",
+        "export_status": "complete",
+        "data_gaps": [
+          "option_chain_missing",
+          "call_wall_missing",
+          "put_wall_missing",
+          "gamma_flip_missing",
+          "atm_iv_missing",
+          "latest_full_intraday_holdings_weights_missing",
+          "software_subindustry_breakdown_missing",
+          "real_time_premium_discount_missing",
+          "software_ETF_fund_flow_missing",
+          "weighted_forward_PE_EPS_revision_missing",
+          "weighted_RPO_ARR_AI_revenue_change_missing"
+        ],
+        "confidence_penalty": [
+          "option_structure_unavailable",
+          "ETF_not_single_company",
+          "high_PE_software_valuation",
+          "top_10_concentration",
+          "rate_sensitivity",
+          "AI_monetization_uncertainty"
+        ],
+        "do_not_use_for": [
+          "call_wall_trade",
+          "gamma_squeeze_trade",
+          "single_company_fundamental_analysis",
+          "semiconductor_hardware_AI_proxy",
+          "low_volatility_defensive_ETF"
+        ]
+      },
+      "decision_engine": {
+        "buy_trigger": "price >= 84 and price <= 89 and market_regime != 'Risk Off'",
+        "add_trigger": "price <= 82 and thesis_status == 'valid'",
+        "trim_trigger": "price >= 105 and no_software_earnings_revision_improvement == true",
+        "exit_trigger": "price < 76 or thesis_status == 'invalid'",
+        "alert_priority": "medium",
+        "review_frequency": "weekly",
+        "next_review_trigger": "price_zone_hit_or_software_earnings_or_10Y_yield_move"
+      },
+      "last_decision": {
+        "decision": "buy_on_pullback",
+        "reason": "IGV offers broad software-sector recovery exposure after a 2026 drawdown, but high valuation and AI monetization uncertainty require staged entries.",
+        "updated_at": "2026-05-12",
+        "decision_owner": "assistant"
+      }
+    }
+  ],
+  "portfolio_summary": {
+    "top_candidates": [
+      "IGV"
+    ],
+    "watchlist": [
+      "IGV"
+    ],
+    "avoid_list": [],
+    "ranking": [
+      {
+        "rank": 1,
+        "ticker": "IGV",
+        "total_score": 66,
+        "shufen_score": 74,
+        "action": "buy_on_pullback"
+      }
+    ],
+    "theme_exposure_limit_pct": 10,
+    "cash_required_pct": 20,
+    "max_single_position_pct": 5,
+    "suggested_allocation": [
+      {
+        "ticker": "IGV",
+        "target_position_pct": 1.5,
+        "max_position_pct": 5
+      }
+    ]
+  },
+  "risk_controls": {
+    "max_theme_exposure_pct": 10,
+    "max_single_stock_pct": 5,
+    "max_high_beta_total_pct": 8,
+    "max_loss_per_position_pct": 1.5,
+    "cash_buffer_pct": 20,
+    "hedge_required": true,
+    "hedge_tools": [
+      "cash",
+      "index_put_spread",
+      "reduce_single_name_software_beta_if_overexposed"
+    ],
+    "reduce_risk_if": [
+      "market_regime == 'Risk Off'",
+      "10Y_yield_rises_sharply",
+      "software_earnings_revisions_turn_negative",
+      "AI_software_monetization_disappoints",
+      "IGV_breaks_below_76",
+      "portfolio_software_beta_excessive"
+    ],
+    "alert_preferences_note": "User alert switches are not stored in this report. Platform should manage them separately in alert_config.json."
+  },
+  "next_validation": [
+    {
+      "ticker": "IGV",
+      "date_or_window": "weekly price/rate review and upcoming software earnings season",
+      "metrics_to_check": [
+        "IGV price and NAV",
+        "premium discount",
+        "10Y Treasury yield",
+        "software ETF fund flows",
+        "top 10 holdings performance",
+        "Microsoft Oracle Palantir Salesforce Palo Alto CrowdStrike Adobe Intuit earnings",
+        "weighted RPO and ARR",
+        "AI product revenue commentary",
+        "P/E and earnings revisions",
+        "IGV reclaim of 95-100"
+      ],
+      "decision_after_validation": "If software earnings and AI monetization improve and IGV reclaims 95-100, hold or add on pullbacks. If rates rise and software guide-downs broaden, trim or exit."
+    }
+  ],
+  "export_validation": {
+    "json_valid": true,
+    "required_fields_present": true,
+    "enum_values_valid": true,
+    "price_fields_valid": true,
+    "risk_rules_present": true,
+    "data_gaps_marked": true,
+    "ticker_analysis_is_array": true,
+    "tickers_are_uppercase": true,
+    "price_ranges_are_arrays": true,
+    "summary_card_present": true,
+    "analysis_text_embedded": false,
+    "alert_preferences_external": true,
+    "missing_required_fields": [],
+    "warnings": [
+      "IGV is a software sector ETF, not a single-company stock",
+      "Do not use company-specific EPS/EBITDA analysis for IGV",
+      "IGV has high P/E, rate sensitivity, and top 10 concentration risk",
+      "Options data missing; do not use options structure for execution",
+      "Full markdown analysis should remain in same-name .md file"
+    ]
+  }
+}

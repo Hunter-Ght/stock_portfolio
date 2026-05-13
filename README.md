@@ -18,6 +18,7 @@
 - 🌓 **主题切换** - 支持深色/浅色主题一键切换
 - 🎯 **期权识别** - 自动识别期权策略组合（价差、跨式等）
 - 💵 **现金支持** - 导入时自动提取现金余额，完整展示净资产
+- 🔎 **个股工作台** - 读取本地 JSON 研究报告，按“持仓 + 关注”展示个股分析、价格区间和页面内提醒
 - 📁 **本地存储** - 数据保存在本地 JSON 文件，隐私安全
 
 ## 🚀 快速开始
@@ -39,6 +40,77 @@ streamlit run app.py
 ```
 
 浏览器会自动打开 `http://localhost:8501`，即可看到 Dashboard。
+
+## 🔎 个股工作台
+
+个股工作台不会调用 AI，也不会消耗 token。你可以在网页版 AI 或其他地方生成研究报告，再把结果保存为本地 JSON / Markdown 文件，Dashboard 会自动读取。
+
+### 研究报告文件命名
+
+固定使用以下命名格式：
+
+```text
+YYYY-MM-DD_TICKER_skill1_skill2.json
+YYYY-MM-DD_TICKER_skill1_skill2.md
+```
+
+示例：
+
+```text
+data/2026-05-12_CRCL_xiaoyan_shufen.json
+data/2026-05-12_CRCL_xiaoyan_shufen.md
+```
+
+也可以放到更整洁的目录：
+
+```text
+data/research_reports/2026-05-12_CRCL_xiaoyan_shufen.json
+data/research_reports/2026-05-12_CRCL_xiaoyan_shufen.md
+```
+
+JSON 负责结构化数据，Markdown 负责完整阅读版正文。两者同名时，工作台会自动把 Markdown 作为“完整报告”展示。
+
+### 股票池规则
+
+工作台只维护两个股票池：
+
+- **持仓**：来自 `data/portfolio.json`
+- **关注**：来自 `data/watchlist.json`
+
+是否已有分析只是 ticker 的状态字段。如果某个 JSON 报告对应的 ticker 不在持仓或关注列表中，它会出现在“未归档分析”里，可以一键加入关注。
+
+### JSON 最小字段
+
+报告至少需要包含：
+
+```json
+{
+  "meta": {
+    "schema_version": "1.0.0",
+    "report_id": "2026-05-12_CRCL_xiaoyan_shufen",
+    "generated_at": "2026-05-12T10:10:00-07:00",
+    "tickers": ["CRCL"]
+  },
+  "ticker_analysis": [
+    {
+      "ticker": "CRCL",
+      "action": "buy_on_pullback",
+      "conclusion": "等回撤 / 小仓试错 / 不追高",
+      "scores": {"total_score": 63},
+      "price_plan": {
+        "current_price": 121.1,
+        "buy_zone": [105, 115],
+        "add_zone": [90, 100],
+        "trim_zone": [140, 150],
+        "invalid_price": 88,
+        "hard_stop": 80
+      }
+    }
+  ]
+}
+```
+
+价格区间请固定使用 `[low, high]` 数组，不要写成 `"105-115"` 字符串。
 
 ## 📥 数据导入 - 详细导出指南
 
@@ -280,11 +352,14 @@ Dashboard 会自动识别以下列名：
 local_account/
 ├── app.py                 # 主入口
 ├── requirements.txt       # 依赖
+├── pages/
+│   └── stock_analysis.py  # 个股工作台页面
 ├── components/            # UI 组件
 │   ├── overview.py       # 总览
 │   ├── charts.py         # 图表
 │   ├── positions_table.py # 持仓表格
-│   └── import_panel.py   # 导入面板
+│   ├── import_panel.py   # 导入面板
+│   └── stock_workbench.py # 个股工作台
 ├── importers/             # 导入器
 │   ├── base.py           # 基类
 │   ├── ibkr.py           # IBKR 导入
@@ -292,10 +367,16 @@ local_account/
 ├── services/              # 业务逻辑
 │   ├── portfolio.py      # 投资组合管理
 │   ├── market_data.py    # 行情获取
-│   └── spread_detector.py # 期权策略检测
+│   ├── spread_detector.py # 期权策略检测
+│   ├── research_store.py # 本地研究报告读取
+│   ├── alert_engine.py   # 价格区间提醒
+│   └── watchlist.py      # 关注列表与提醒配置
 ├── utils/                 # 工具函数
 ├── data/                  # 数据存储
-│   └── portfolio.json    # 持仓数据
+│   ├── portfolio.json    # 持仓数据
+│   ├── watchlist.json    # 关注列表
+│   ├── alert_config.json # 提醒配置
+│   └── research_reports/ # 可选：本地研究报告
 └── README.md             # 你正在看的这个文件
 ```
 
