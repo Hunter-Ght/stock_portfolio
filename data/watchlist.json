@@ -1,0 +1,53 @@
+{
+  "symbols": [
+    {
+      "symbol": "PL",
+      "tags": [],
+      "notes": "",
+      "created_at": "2026-05-12",
+      "alert_enabled": true
+    },
+    {
+      "symbol": "ATI",
+      "tags": [],
+      "notes": "",
+      "created_at": "2026-05-12",
+      "alert_enabled": true
+    },
+    {
+      "symbol": "COHR",
+      "tags": [],
+      "notes": "",
+      "created_at": "2026-05-12",
+      "alert_enabled": true
+    },
+    {
+      "symbol": "LEU",
+      "tags": [],
+      "notes": "",
+      "created_at": "2026-05-12",
+      "alert_enabled": true
+    },
+    {
+      "symbol": "VRT",
+      "tags": [],
+      "notes": "",
+      "created_at": "2026-05-12",
+      "alert_enabled": true
+    },
+    {
+      "symbol": "DRAM",
+      "tags": [],
+      "notes": "",
+      "created_at": "2026-05-12",
+      "alert_enabled": true
+    },
+    {
+      "symbol": "TSM",
+      "tags": [],
+      "notes": "",
+      "created_at": "2026-05-12",
+      "alert_enabled": true
+    }
+  ]
+}
