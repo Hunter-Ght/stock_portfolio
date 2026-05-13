@@ -10,10 +10,17 @@ from importers.ibkr import IBKRImporter, parse_ibkr_csv, extract_cash_from_ibkr
 from importers.schwab import SchwabImporter, preprocess_schwab_csv
 from importers.firstrade import FirstradeImporter, parse_firstrade_excel
 from services.ibkr_flex import IBKRFlexError, download_ibkr_flex_report
+from services.config import broker_index, load_app_config
 from services.portfolio import (
     add_positions, add_cash, remove_position,
     remove_broker_positions, load_positions,
 )
+
+
+def _request_price_refresh():
+    """Refresh prices on the next dashboard rerun after positions change."""
+    st.session_state["do_refresh"] = True
+    st.session_state.pop("prices_updated", None)
 
 
 def render_import_panel():
@@ -75,12 +82,11 @@ def _render_ibkr_flex_import():
                 return
 
             add_positions(positions + cash_positions, replace_broker=True)
+            _request_price_refresh()
             st.session_state["ibkr_flex_report"] = content
             st.session_state["ibkr_flex_report_name"] = (
                 f"ibkr-flex-{datetime.now().strftime('%Y%m%d-%H%M%S')}.csv"
             )
-            if 'prices_updated' in st.session_state:
-                del st.session_state['prices_updated']
 
             status = f"已从 IBKR 导入 {len(positions)} 个持仓"
             if cash_positions:
@@ -201,11 +207,10 @@ def _handle_file_upload(uploaded_file):
         if st.sidebar.button("📥 确认导入", type="primary", use_container_width=True):
             all_positions = positions + cash_positions
             add_positions(all_positions, replace_broker=replace)
+            _request_price_refresh()
             st.sidebar.success(f"🎉 成功导入 {len(positions)} 个持仓！")
             if cash_positions:
                 st.sidebar.success(f"💵 现金余额已更新")
-            if 'prices_updated' in st.session_state:
-                del st.session_state['prices_updated']
             st.rerun()
 
     except Exception as e:
@@ -255,8 +260,14 @@ def _auto_detect(content: bytes, filename: str) -> tuple:
 
 def _render_cash_form():
     """现金余额输入表单"""
+    config = load_app_config()
+    default_index = broker_index(
+        config.brokers,
+        default_broker=config.default_broker,
+        last_broker=st.session_state.get("last_cash_broker"),
+    )
     with st.sidebar.form("cash_form", clear_on_submit=False):
-        broker = st.selectbox("券商", ["IBKR", "Schwab", "Firstrade", "其他"], key="cash_broker")
+        broker = st.selectbox("券商", config.brokers, index=default_index, key="cash_broker")
         amount = st.number_input(
             "现金余额 ($)",
             min_value=0.0,
@@ -268,8 +279,8 @@ def _render_cash_form():
         submitted = st.form_submit_button("💵 更新现金", use_container_width=True)
 
         if submitted and amount > 0:
-            broker_name = broker if broker != "其他" else "Manual"
-            add_cash(broker_name, amount)
+            st.session_state["last_cash_broker"] = broker
+            add_cash(broker, amount)
             st.success(f"✅ 已更新 {broker} 现金余额: ${amount:,.2f}")
             if 'prices_updated' in st.session_state:
                 del st.session_state['prices_updated']
@@ -278,8 +289,14 @@ def _render_cash_form():
 
 def _render_manual_add_form():
     """手动添加持仓表单"""
+    config = load_app_config()
+    default_index = broker_index(
+        config.brokers,
+        default_broker=config.default_broker,
+        last_broker=st.session_state.get("last_manual_broker"),
+    )
     with st.sidebar.form("manual_add_form", clear_on_submit=True):
-        broker = st.selectbox("券商", ["IBKR", "Schwab", "Firstrade", "其他"], key="manual_broker")
+        broker = st.selectbox("券商", config.brokers, index=default_index, key="manual_broker")
         symbol = st.text_input("股票代码", placeholder="例: AAPL", key="manual_symbol")
         quantity = st.number_input("数量", min_value=0.0, step=1.0, key="manual_qty")
         avg_cost = st.number_input("买入均价 ($)", min_value=0.0, step=0.01, key="manual_cost")
@@ -288,17 +305,17 @@ def _render_manual_add_form():
 
         if submitted:
             if symbol and quantity > 0 and avg_cost > 0:
+                st.session_state["last_manual_broker"] = broker
                 pos = Position(
-                    broker=broker if broker != "其他" else "Manual",
+                    broker=broker,
                     symbol=symbol.upper().strip(),
                     quantity=quantity,
                     avg_cost=avg_cost,
                 )
                 pos.compute_derived()
                 add_positions([pos])
+                _request_price_refresh()
                 st.success(f"✅ 已添加 {symbol.upper()}")
-                if 'prices_updated' in st.session_state:
-                    del st.session_state['prices_updated']
                 st.rerun()
             else:
                 st.error("请填写完整信息")

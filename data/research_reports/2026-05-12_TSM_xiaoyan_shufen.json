@@ -1,0 +1,498 @@
+{
+  "meta": {
+    "schema_version": "1.1.0",
+    "report_id": "2026-05-12_TSM_xiaoyan_shufen",
+    "generated_at": "2026-05-12T15:45:00-07:00",
+    "timezone": "America/Los_Angeles",
+    "skill_used": [
+      "xiaoyan",
+      "shufen"
+    ],
+    "analysis_mode": "single",
+    "tickers": [
+      "TSM"
+    ],
+    "theme": "ai_semiconductor_foundry_advanced_nodes_cowos",
+    "base_currency": "USD",
+    "asset_type": "single_stock_adr",
+    "data_freshness": {
+      "market_data_date": "2026-05-12",
+      "financial_data_date": "2026-Q1 reported 2026-04-16",
+      "monthly_revenue_date": "2026-04 reported 2026-05-08",
+      "news_data_window": "last_30_to_90_days",
+      "option_data_status": "missing"
+    },
+    "source_files": [
+      "research_export_skill_v1_1.md",
+      "Shufen式美股产业资金流重定价选股_SKILL(1).md",
+      "xiaoyan_us_equity_trading_skill(1).md"
+    ],
+    "notes": [
+      "TSM is TSMC ADR and should be analyzed as AI semiconductor foundry infrastructure, not as a commodity semiconductor cyclical.",
+      "Current ADR price is close to MarketBeat consensus target, so new-entry risk/reward is thin despite excellent fundamentals.",
+      "Full analysis should remain in same-name Markdown file.",
+      "Alert preferences should be managed separately by platform alert_config.json.",
+      "Options structure is missing; do not use call wall, put wall, gamma flip, or IV-based execution."
+    ]
+  },
+  "market_context": {
+    "risk_regime": "Risk On but AI semiconductor core assets are crowded",
+    "macro_score": 8,
+    "equity_risk_budget": "balanced_attack",
+    "liquidity_risk": "low",
+    "credit_risk": "low",
+    "rate_risk": "high",
+    "inflation_risk": "medium",
+    "vix_state": "elevated_but_not_stress",
+    "hedge_required": true,
+    "recommended_hedges": [
+      "cash",
+      "index_put_spread",
+      "reduce_semiconductor_AI_hardware_beta_if_overexposed"
+    ],
+    "risk_on_allowed": true,
+    "high_beta_allowed": "position_limited",
+    "major_macro_risks": [
+      "AI capex expectation cools",
+      "hyperscaler capex slows",
+      "advanced node order pull-forward",
+      "CoWoS and advanced packaging expansion risk",
+      "Taiwan geopolitical risk",
+      "US China export control changes",
+      "high capex pressures free cash flow",
+      "current ADR price near average target"
+    ],
+    "macro_invalid_conditions": [
+      "AI or HPC demand slows materially",
+      "TSMC revenue or margin guidance is cut",
+      "CoWoS ramp has execution issues",
+      "Taiwan geopolitical risk rises sharply",
+      "stock breaks below invalid price and fails to reclaim"
+    ]
+  },
+  "portfolio_context": {
+    "theme": "ai_semiconductor_foundry_advanced_nodes_cowos",
+    "theme_exposure_limit_pct": 12,
+    "current_theme_exposure_pct": null,
+    "cash_buffer_required_pct": 20,
+    "max_single_position_pct": 6,
+    "max_high_beta_position_pct": 6,
+    "allow_short_term_options": false,
+    "position_layer_rules": {
+      "stabilizer": "0%-2%",
+      "core_attack": "2%-6%",
+      "high_convexity": "not_applicable",
+      "lottery": "not_applicable",
+      "hedge": "as_needed",
+      "cash": "dynamic"
+    }
+  },
+  "ticker_analysis": [
+    {
+      "ticker": "TSM",
+      "company": "Taiwan Semiconductor Manufacturing Company Limited",
+      "exchange": "NYSE ADR",
+      "sector": "Technology / Semiconductors / Foundry",
+      "industry_chain": "ai_semiconductor_foundry_advanced_nodes_cowos",
+      "archetype": "ai_infrastructure_core_platform",
+      "portfolio_layer": "core_attack",
+      "action": "hold_no_add",
+      "conclusion": "持有不加 / 等回撤 / AI 半导体核心仓但不追高",
+      "summary_card": {
+        "one_line": "TSM 是 AI 半导体代工核心平台，但当前 ADR 已接近平均目标价。",
+        "primary_action": "持有不加",
+        "why_now": "Q1 2026 revenue 359 亿美元，gross margin 66.2%，Q2 revenue 指引 390-402 亿美元，AI/HPC demand 极强。",
+        "biggest_risk": "台海地缘风险、capex 高位、CoWoS/先进制程执行风险、客户集中，以及当前新仓赔率不厚。",
+        "next_check": "4-6 月月度营收、Q2 revenue/gross margin、2026 capex、CoWoS capacity、2nm ramp、HPC mix 和客户订单。"
+      },
+      "main_thesis": "TSMC is the core global AI semiconductor foundry platform benefiting from advanced nodes, HPC, AI ASIC/GPU demand, CoWoS advanced packaging, and 2nm/3nm technology leadership.",
+      "bear_thesis": "The company is excellent, but current ADR price is near consensus target and already reflects much of the AI foundry demand story; geopolitical and capex risks remain.",
+      "market_narrative": {
+        "bull_case": "AI/HPC demand, 66%+ gross margin, Q2 guidance above $39B, CoWoS bottleneck, 2nm ramp, and AI ASIC customer expansion support a premium multiple.",
+        "bear_case": "The stock is a crowded core AI asset with limited near-term target upside, high capex, Taiwan risk, and dependence on hyperscaler AI capex.",
+        "current_market_story": "Market is treating TSM as the strategic manufacturing monopoly of the AI era.",
+        "counter_narrative": "TSM is one of the best companies in semis, but the current entry point lacks margin of safety.",
+        "narrative_confidence": "high",
+        "price_in_status": "mostly_priced_in",
+        "second_repricing_path": "Q2 beat, continued 66%+ margin, 2026 growth upgrades, faster CoWoS expansion, 2nm success, and lower geopolitics risk could justify target upgrades."
+      },
+      "scores": {
+        "macro_liquidity": 8,
+        "market_narrative_risk_budget": 8,
+        "industry_strength": 15,
+        "fundamental_quality": 20,
+        "financial_quality_management": 15,
+        "valuation_gap": 3,
+        "technical_options": 4,
+        "position_fit": 2,
+        "total_score": 75
+      },
+      "shufen_scores": {
+        "macro_risk_budget": 7,
+        "industry_capital_source": 15,
+        "institutional_flow": 18,
+        "catalyst_window": 13,
+        "verifiable_fundamentals": 15,
+        "second_repricing_path": 12,
+        "valuation_gap": 1,
+        "balance_sheet_risk": 5,
+        "total_score": 86
+      },
+      "probability": {
+        "win_rate_low": 0.53,
+        "win_rate_high": 0.61,
+        "base_win_rate": 0.57,
+        "confidence": "medium_high",
+        "confidence_reason": "Fundamentals and moat are exceptional, but current ADR price is close to consensus target and geopolitical/capex risks limit new-entry attractiveness."
+      },
+      "price_plan": {
+        "current_price": 397.28,
+        "buy_zone": [
+          350,
+          375
+        ],
+        "add_zone": [
+          300,
+          330
+        ],
+        "trim_zone": [
+          450,
+          480
+        ],
+        "bull_target": [
+          480,
+          520
+        ],
+        "base_target": 404.29,
+        "bear_price": 330.0,
+        "invalid_price": 300,
+        "hard_stop": 275,
+        "currency": "USD",
+        "price_updated_at": "2026-05-12"
+      },
+      "risk_reward": {
+        "upside_pct": 1.76,
+        "downside_pct": 16.94,
+        "risk_reward_ratio": 0.1,
+        "expected_value": -0.063,
+        "ev_formula": "win_rate * upside_pct - (1 - win_rate) * downside_pct",
+        "base_target_used": 404.29,
+        "bear_price_used": 330.0,
+        "win_rate_used": 0.57,
+        "note": "Consensus base target is only slightly above current ADR price, so new-entry risk/reward is weak."
+      },
+      "positioning": {
+        "initial_position_pct": 0,
+        "max_position_pct": 6,
+        "add_position_pct": 1.5,
+        "position_type": "ai_semiconductor_core_platform",
+        "preferred_instrument": "hold_stock_or_wait",
+        "allowed_instruments": [
+          "ADR",
+          "cash_secured_put",
+          "call_spread"
+        ],
+        "avoid_instruments": [
+          "short_term_calls",
+          "naked_calls",
+          "gamma_trade"
+        ],
+        "use_trailing_stop": true,
+        "hedge_required": true,
+        "max_portfolio_loss_pct": 1.5
+      },
+      "trade_rules": {
+        "entry_conditions": [
+          "Price enters 350-375 buy zone",
+          "Semiconductor and AI hardware regime is not Risk Off",
+          "Q2 revenue guidance of 39.0-40.2B has no negative revision",
+          "Gross margin remains above 65%",
+          "CoWoS expansion has no negative update",
+          "Taiwan geopolitical risk is not worsening"
+        ],
+        "add_conditions": [
+          "Price enters 300-330 add zone and thesis remains valid",
+          "Q2 actual revenue exceeds 40.2B high end",
+          "Gross margin remains above 66%",
+          "2026 revenue growth is revised upward again",
+          "CoWoS capacity expands faster than expected",
+          "2nm ramp remains on schedule",
+          "HPC revenue mix continues to rise",
+          "Geopolitical risk premium declines"
+        ],
+        "trim_conditions": [
+          "Price reaches 450-480 without further analyst target upgrades",
+          "Q2 or Q3 only meets midpoint guidance",
+          "Gross margin peaks or rolls over",
+          "AI capex expectations cool",
+          "Semiconductor valuations compress broadly",
+          "Taiwan geopolitical risk rises"
+        ],
+        "exit_conditions": [
+          "Price breaks below 300 and fails to reclaim",
+          "AI or HPC demand slows materially",
+          "Q2 or Q3 guidance is below market expectations",
+          "Gross margin declines materially",
+          "CoWoS or advanced node ramp has execution issue",
+          "Major customers cut orders",
+          "Geopolitical risk worsens materially"
+        ]
+      },
+      "catalysts": [
+        {
+          "event": "Q2 2026 earnings",
+          "expected_window": "2026-Q2",
+          "importance": "high",
+          "type": "earnings",
+          "watch_items": [
+            "revenue",
+            "gross margin",
+            "operating margin",
+            "HPC mix",
+            "3nm mix",
+            "AI demand commentary"
+          ]
+        },
+        {
+          "event": "Monthly revenue reports",
+          "expected_window": "monthly",
+          "importance": "high",
+          "type": "monthly_sales",
+          "watch_items": [
+            "April May June revenue",
+            "YoY growth",
+            "MoM trend",
+            "Q2 run-rate"
+          ]
+        },
+        {
+          "event": "CoWoS and advanced packaging capacity",
+          "expected_window": "2026-2027",
+          "importance": "high",
+          "type": "capacity_ramp",
+          "watch_items": [
+            "CoWoS capacity",
+            "CoPoS roadmap",
+            "customer allocation",
+            "yield",
+            "capex"
+          ]
+        },
+        {
+          "event": "2nm ramp and advanced node adoption",
+          "expected_window": "2026-2027",
+          "importance": "high",
+          "type": "technology",
+          "watch_items": [
+            "2nm customers",
+            "yield",
+            "pricing",
+            "Apple",
+            "HPC",
+            "AI ASIC"
+          ]
+        }
+      ],
+      "validation_metrics": [
+        "monthly revenue",
+        "Q2 revenue",
+        "gross margin",
+        "operating margin",
+        "net profit margin",
+        "EPS",
+        "HPC revenue mix",
+        "3nm revenue mix",
+        "2nm ramp",
+        "CoWoS capacity",
+        "capex",
+        "AI demand commentary",
+        "customer concentration",
+        "overseas fab cost",
+        "ADR premium discount",
+        "analyst target revisions",
+        "Taiwan geopolitical risk"
+      ],
+      "failure_conditions": [
+        "Breaks below 300 and cannot reclaim",
+        "AI or HPC demand decelerates materially",
+        "Q2 or Q3 revenue guidance disappoints",
+        "Gross margin falls below key trend",
+        "CoWoS capacity ramp disappoints",
+        "2nm ramp delays",
+        "Major AI customers reduce orders",
+        "Taiwan geopolitical risk increases sharply",
+        "Capex increases without revenue or margin support"
+      ],
+      "risk_exposures": {
+        "market_beta": "high",
+        "sector_beta": "very_high",
+        "interest_rate_sensitivity": "high",
+        "usd_sensitivity": "medium",
+        "commodity_sensitivity": "low",
+        "policy_sensitivity": "very_high",
+        "liquidity_risk": "low",
+        "valuation_risk": "high",
+        "earnings_event_risk": "high",
+        "dilution_risk": "low",
+        "single_name_risk": "medium_high",
+        "correlation_tags": [
+          "AI_semiconductors",
+          "foundry",
+          "advanced_nodes",
+          "3nm",
+          "2nm",
+          "CoWoS",
+          "HPC",
+          "AI_ASIC",
+          "Nvidia_supply_chain",
+          "Apple_supply_chain",
+          "Taiwan_geopolitics"
+        ]
+      },
+      "data_quality": {
+        "financials_status": "verified",
+        "monthly_revenue_status": "verified",
+        "market_price_status": "verified",
+        "options_status": "missing",
+        "institutional_flow_status": "partial",
+        "export_status": "complete",
+        "data_gaps": [
+          "option_chain_missing",
+          "call_wall_missing",
+          "put_wall_missing",
+          "gamma_flip_missing",
+          "atm_iv_missing",
+          "25D_risk_reversal_missing",
+          "CoWoS_exact_monthly_capacity_missing",
+          "2nm_customer_allocation_missing",
+          "HPC_customer_concentration_missing",
+          "AI_ASIC_customer_share_missing",
+          "overseas_fabs_cost_drag_detail_missing",
+          "capex_by_node_packaging_missing",
+          "real_time_ADR_premium_discount_missing"
+        ],
+        "confidence_penalty": [
+          "current_price_near_consensus_target",
+          "geopolitical_risk",
+          "high_capex_intensity",
+          "AI_semiconductor_crowded_trade",
+          "advanced_packaging_capacity_risk",
+          "option_structure_unavailable"
+        ],
+        "do_not_use_for": [
+          "call_wall_trade",
+          "gamma_squeeze_trade",
+          "low_valuation_cyclical_trade",
+          "short_term_options_chase"
+        ]
+      },
+      "decision_engine": {
+        "buy_trigger": "price >= 350 and price <= 375 and semiconductor_regime != 'Risk Off'",
+        "add_trigger": "price <= 330 and thesis_status == 'valid'",
+        "trim_trigger": "price >= 450 and no_further_estimate_revision == true",
+        "exit_trigger": "price < 300 or thesis_status == 'invalid'",
+        "alert_priority": "medium",
+        "review_frequency": "weekly",
+        "next_review_trigger": "price_zone_hit_or_monthly_revenue_or_Q2_results_or_CoWoS_update"
+      },
+      "last_decision": {
+        "decision": "hold_no_add",
+        "reason": "TSM has exceptional AI foundry fundamentals and margin, but ADR price is close to consensus target and offers limited new-entry risk/reward.",
+        "updated_at": "2026-05-12",
+        "decision_owner": "assistant"
+      }
+    }
+  ],
+  "portfolio_summary": {
+    "top_candidates": [],
+    "watchlist": [
+      "TSM"
+    ],
+    "avoid_list": [],
+    "ranking": [
+      {
+        "rank": 1,
+        "ticker": "TSM",
+        "total_score": 75,
+        "shufen_score": 86,
+        "action": "hold_no_add"
+      }
+    ],
+    "theme_exposure_limit_pct": 12,
+    "cash_required_pct": 20,
+    "max_single_position_pct": 6,
+    "suggested_allocation": [
+      {
+        "ticker": "TSM",
+        "target_position_pct": 0,
+        "max_position_pct": 6
+      }
+    ]
+  },
+  "risk_controls": {
+    "max_theme_exposure_pct": 12,
+    "max_single_stock_pct": 6,
+    "max_high_beta_total_pct": 12,
+    "max_loss_per_position_pct": 1.5,
+    "cash_buffer_pct": 20,
+    "hedge_required": true,
+    "hedge_tools": [
+      "cash",
+      "index_put_spread",
+      "reduce_semiconductor_AI_hardware_beta_if_overexposed"
+    ],
+    "reduce_risk_if": [
+      "market_regime == 'Risk Off'",
+      "AI_HPC_demand_slows",
+      "TSMC_gross_margin_rolls_over",
+      "CoWoS_capacity_ramp_disappoints",
+      "Taiwan_geopolitical_risk_increases",
+      "stock_breaks_below_300"
+    ],
+    "alert_preferences_note": "User alert switches are not stored in this report. Platform should manage them separately in alert_config.json."
+  },
+  "next_validation": [
+    {
+      "ticker": "TSM",
+      "date_or_window": "monthly revenue and Q2 2026 earnings",
+      "metrics_to_check": [
+        "April May June revenue",
+        "Q2 revenue",
+        "gross margin",
+        "operating margin",
+        "net profit margin",
+        "HPC revenue mix",
+        "3nm revenue mix",
+        "CoWoS capacity",
+        "2nm ramp",
+        "capex",
+        "AI demand commentary",
+        "analyst target revisions",
+        "Taiwan geopolitical risk"
+      ],
+      "decision_after_validation": "If Q2 exceeds guidance and estimates rise, hold and reassess higher target. If price stays near target without upgrades, maintain hold_no_add."
+    }
+  ],
+  "export_validation": {
+    "json_valid": true,
+    "required_fields_present": true,
+    "enum_values_valid": true,
+    "price_fields_valid": true,
+    "risk_rules_present": true,
+    "data_gaps_marked": true,
+    "ticker_analysis_is_array": true,
+    "tickers_are_uppercase": true,
+    "price_ranges_are_arrays": true,
+    "summary_card_present": true,
+    "analysis_text_embedded": false,
+    "alert_preferences_external": true,
+    "missing_required_fields": [],
+    "warnings": [
+      "Current ADR price is close to MarketBeat consensus target",
+      "TSM is a crowded core AI semiconductor asset",
+      "Taiwan geopolitical risk remains a structural valuation factor",
+      "Options data missing; do not use options structure for execution",
+      "Full markdown analysis should remain in same-name .md file"
+    ]
+  }
+}

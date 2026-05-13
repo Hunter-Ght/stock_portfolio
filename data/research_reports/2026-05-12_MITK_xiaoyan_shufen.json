@@ -1,0 +1,451 @@
+{
+  "meta": {
+    "schema_version": "1.1.0",
+    "report_id": "2026-05-12_MITK_xiaoyan_shufen",
+    "generated_at": "2026-05-12T15:00:00-07:00",
+    "timezone": "America/Los_Angeles",
+    "skill_used": [
+      "xiaoyan",
+      "shufen"
+    ],
+    "analysis_mode": "single",
+    "tickers": [
+      "MITK"
+    ],
+    "theme": "fintech_identity_verification_ai_fraud",
+    "base_currency": "USD",
+    "data_freshness": {
+      "market_data_date": "2026-05-12",
+      "financial_data_date": "2026-Q2 reported 2026-05-07",
+      "news_data_window": "last_30_to_90_days",
+      "option_data_status": "missing"
+    },
+    "source_files": [
+      "research_export_skill_v1_1.md",
+      "Shufen式美股产业资金流重定价选股_SKILL(1).md",
+      "xiaoyan_us_equity_trading_skill(1).md"
+    ],
+    "notes": [
+      "MITK is a small-cap fintech identity verification and mobile deposit software company.",
+      "Q2 FY2026 results were strong, but current price is close to consensus target.",
+      "Full analysis should remain in same-name Markdown file.",
+      "Alert preferences should be managed separately by platform alert_config.json.",
+      "Options structure is missing; do not use call wall, put wall, gamma flip, or IV-based execution."
+    ]
+  },
+  "market_context": {
+    "risk_regime": "Risk On but high volatility",
+    "macro_score": 8,
+    "equity_risk_budget": "balanced",
+    "liquidity_risk": "medium",
+    "credit_risk": "medium",
+    "rate_risk": "high",
+    "inflation_risk": "medium",
+    "vix_state": "elevated_but_not_stress",
+    "hedge_required": true,
+    "recommended_hedges": [
+      "cash",
+      "index_put_spread"
+    ],
+    "risk_on_allowed": true,
+    "high_beta_allowed": "small_position_only",
+    "major_macro_risks": [
+      "10Y yield breakout",
+      "small-cap software risk-off",
+      "financial institution IT budget slowdown",
+      "identity verification competition",
+      "contract timing volatility",
+      "limited sell-side coverage"
+    ],
+    "macro_invalid_conditions": [
+      "VIX > 25",
+      "small-cap software breaks down",
+      "fintech IT spending weakens",
+      "market de-risks smaller software names"
+    ]
+  },
+  "portfolio_context": {
+    "theme": "fintech_identity_verification_ai_fraud",
+    "theme_exposure_limit_pct": 4,
+    "current_theme_exposure_pct": null,
+    "cash_buffer_required_pct": 20,
+    "max_single_position_pct": 2,
+    "max_high_beta_position_pct": 2,
+    "allow_short_term_options": false,
+    "position_layer_rules": {
+      "stabilizer": "not_applicable",
+      "core_attack": "0%-2%",
+      "high_convexity": "0.5%-2%",
+      "lottery": "0%-1%",
+      "hedge": "as_needed",
+      "cash": "dynamic"
+    }
+  },
+  "ticker_analysis": [
+    {
+      "ticker": "MITK",
+      "company": "Mitek Systems, Inc.",
+      "exchange": "NASDAQ",
+      "sector": "Financial Technology",
+      "industry_chain": "fintech_identity_verification_ai_fraud",
+      "archetype": "profitability_inflection",
+      "portfolio_layer": "high_convexity",
+      "action": "small_probe",
+      "conclusion": "小仓观察 / 等回撤 / 不追高",
+      "summary_card": {
+        "one_line": "MITK Q2 业绩很强，但现价已接近目标价，适合小仓观察不追高。",
+        "primary_action": "小仓观察",
+        "why_now": "收入创纪录、Fraud & Identity +28%、SaaS +18%、EBITDA margin 40.7%，但均价目标仅 16 美元。",
+        "biggest_risk": "小盘流动性、合同 timing、身份验证竞争和历史执行/披露折价。",
+        "next_check": "Q3 验证 revenue、Fraud & Identity、SaaS、EBITDA margin、现金流和 FY2026 guidance。"
+      },
+      "main_thesis": "Mitek is shifting from legacy mobile deposit software toward identity verification, AI fraud prevention, and digital trust workflows, with Q2 FY2026 showing record revenue, SaaS growth, and strong EBITDA margin.",
+      "bear_thesis": "The stock is already close to consensus target, analyst coverage is limited, and growth remains exposed to contract timing, mature mobile deposit trends, competition, and small-cap liquidity risk.",
+      "market_narrative": {
+        "bull_case": "AI-generated fraud, digital onboarding, mobile deposit risk, and regulated financial workflows support demand for Mitek's identity and fraud prevention platform.",
+        "bear_case": "Upside is mostly priced in at current price, coverage is thin, mobile deposit is mature, and larger identity verification competitors could compress growth and multiples.",
+        "current_market_story": "Market is trading MITK as a small-cap AI fraud and identity verification profitability inflection story.",
+        "counter_narrative": "A high EBITDA margin quarter may be difficult to annualize, and consensus targets leave little room for near-term re-rating.",
+        "narrative_confidence": "medium",
+        "price_in_status": "mostly_priced_in",
+        "second_repricing_path": "Sustained 20%+ Fraud & Identity growth, double-digit SaaS growth, 30%+ EBITDA margin, and another guidance raise could re-rate MITK from legacy mobile deposit vendor to AI fraud platform."
+      },
+      "scores": {
+        "macro_liquidity": 8,
+        "market_narrative_risk_budget": 6,
+        "industry_strength": 12,
+        "fundamental_quality": 14,
+        "financial_quality_management": 11,
+        "valuation_gap": 4,
+        "technical_options": 4,
+        "position_fit": 2,
+        "total_score": 61
+      },
+      "shufen_scores": {
+        "macro_risk_budget": 7,
+        "industry_capital_source": 12,
+        "institutional_flow": 10,
+        "catalyst_window": 12,
+        "verifiable_fundamentals": 13,
+        "second_repricing_path": 9,
+        "valuation_gap": 1,
+        "balance_sheet_risk": 3,
+        "total_score": 67
+      },
+      "probability": {
+        "win_rate_low": 0.5,
+        "win_rate_high": 0.58,
+        "base_win_rate": 0.54,
+        "confidence": "medium",
+        "confidence_reason": "Q2 fundamentals and guidance raise are strong, but price is close to consensus target and small-cap/liquidity risks remain."
+      },
+      "price_plan": {
+        "current_price": 14.66,
+        "buy_zone": [
+          12.5,
+          13.5
+        ],
+        "add_zone": [
+          11,
+          12
+        ],
+        "trim_zone": [
+          16,
+          17
+        ],
+        "bull_target": [
+          18,
+          20
+        ],
+        "base_target": 16.0,
+        "bear_price": 11.5,
+        "invalid_price": 10.5,
+        "hard_stop": 9.5,
+        "currency": "USD",
+        "price_updated_at": "2026-05-12"
+      },
+      "risk_reward": {
+        "upside_pct": 9.14,
+        "downside_pct": 21.56,
+        "risk_reward_ratio": 0.42,
+        "expected_value": -0.05,
+        "ev_formula": "win_rate * upside_pct - (1 - win_rate) * downside_pct",
+        "base_target_used": 16.0,
+        "bear_price_used": 11.5,
+        "win_rate_used": 0.54,
+        "note": "At current price, risk/reward is weak because consensus target upside is limited. A 12.5-13.5 entry improves the profile."
+      },
+      "positioning": {
+        "initial_position_pct": 0.5,
+        "max_position_pct": 2,
+        "add_position_pct": 0.5,
+        "position_type": "high_beta_probe",
+        "preferred_instrument": "stock",
+        "allowed_instruments": [
+          "stock",
+          "call_spread"
+        ],
+        "avoid_instruments": [
+          "short_term_calls",
+          "naked_calls",
+          "gamma_trade"
+        ],
+        "use_trailing_stop": true,
+        "hedge_required": true,
+        "max_portfolio_loss_pct": 0.5
+      },
+      "trade_rules": {
+        "entry_conditions": [
+          "Price enters 12.5-13.5 buy zone",
+          "Or price is below 14 and position is limited to 0.5%",
+          "Market regime is not Risk Off",
+          "Fintech and small-cap software peers are not breaking down",
+          "Post-Q2 guidance is not being cut"
+        ],
+        "add_conditions": [
+          "Price enters 11-12 add zone and thesis remains valid",
+          "Q3 revenue is within or above 49-53M guidance range",
+          "Fraud & Identity revenue continues 20%+ growth",
+          "SaaS revenue continues double-digit growth",
+          "Adjusted EBITDA margin remains above 30%",
+          "Check Verification does not show major deterioration",
+          "Cash flow and GAAP profitability improve"
+        ],
+        "trim_conditions": [
+          "Price reaches 16-17 without further target or guidance upgrades",
+          "Q3 or Q4 revenue guide disappoints",
+          "Fraud & Identity growth slows",
+          "SaaS growth slows",
+          "High non-GAAP margin does not translate to revenue acceleration",
+          "Post-earnings momentum fades on low volume"
+        ],
+        "exit_conditions": [
+          "Price breaks below 10.5 and fails to reclaim",
+          "FY2026 revenue guidance is cut",
+          "Adjusted EBITDA margin guidance is cut",
+          "Fraud & Identity growth stalls",
+          "Mobile deposit or check verification suffers major customer loss",
+          "Material reporting, internal control, or filing delay issue reappears"
+        ]
+      },
+      "catalysts": [
+        {
+          "event": "Q3 FY2026 earnings",
+          "expected_window": "2026-Q3 / likely August 2026",
+          "importance": "high",
+          "type": "earnings",
+          "watch_items": [
+            "revenue",
+            "Fraud & Identity revenue",
+            "SaaS revenue",
+            "Check Verification revenue",
+            "non-GAAP gross margin",
+            "adjusted EBITDA margin",
+            "FY2026 guidance"
+          ]
+        },
+        {
+          "event": "AI fraud and identity demand",
+          "expected_window": "2026",
+          "importance": "medium",
+          "type": "customer_win",
+          "watch_items": [
+            "new financial institution wins",
+            "digital onboarding demand",
+            "deepfake and AI fraud detection demand",
+            "regulated industry adoption"
+          ]
+        },
+        {
+          "event": "Guidance update",
+          "expected_window": "2026-H2",
+          "importance": "medium",
+          "type": "guidance",
+          "watch_items": [
+            "FY2026 revenue guidance",
+            "adjusted EBITDA margin guidance",
+            "SaaS mix",
+            "Q4 revenue outlook"
+          ]
+        }
+      ],
+      "validation_metrics": [
+        "revenue",
+        "Fraud & Identity revenue",
+        "identity revenue",
+        "SaaS revenue",
+        "Check Verification revenue",
+        "Mobile Deposit revenue",
+        "non-GAAP gross margin",
+        "adjusted EBITDA",
+        "adjusted EBITDA margin",
+        "non-GAAP EPS",
+        "cash flow from operations",
+        "customer concentration",
+        "FY2026 revenue guidance",
+        "FY2026 adjusted EBITDA margin guidance"
+      ],
+      "failure_conditions": [
+        "Breaks below 10.5 and cannot reclaim",
+        "FY2026 revenue guidance is cut",
+        "Adjusted EBITDA margin guidance is cut",
+        "Fraud & Identity growth materially slows",
+        "SaaS growth falls to low single digits",
+        "Check Verification or Mobile Deposit suffers major customer loss",
+        "Reporting or internal control issues reappear"
+      ],
+      "risk_exposures": {
+        "market_beta": "medium_high",
+        "sector_beta": "medium_high",
+        "interest_rate_sensitivity": "high",
+        "usd_sensitivity": "low",
+        "commodity_sensitivity": "low",
+        "policy_sensitivity": "medium",
+        "liquidity_risk": "medium_high",
+        "valuation_risk": "medium_high",
+        "earnings_event_risk": "high",
+        "dilution_risk": "medium_low",
+        "single_name_risk": "high",
+        "correlation_tags": [
+          "small_cap_software",
+          "fintech",
+          "identity_verification",
+          "AI_fraud",
+          "mobile_deposit",
+          "SaaS",
+          "financial_institutions"
+        ]
+      },
+      "data_quality": {
+        "financials_status": "verified",
+        "news_status": "verified",
+        "market_price_status": "verified",
+        "options_status": "missing",
+        "institutional_flow_status": "partial",
+        "export_status": "complete",
+        "data_gaps": [
+          "option_chain_missing",
+          "call_wall_missing",
+          "put_wall_missing",
+          "gamma_flip_missing",
+          "atm_iv_missing",
+          "latest_full_10Q_cash_flow_details_missing",
+          "ARR_NRR_customer_retention_detail_missing",
+          "customer_concentration_detail_missing"
+        ],
+        "confidence_penalty": [
+          "option_structure_unavailable",
+          "limited_sell_side_coverage",
+          "small_cap_liquidity",
+          "historical_reporting_and_execution_discount"
+        ],
+        "do_not_use_for": [
+          "call_wall_trade",
+          "gamma_squeeze_trade",
+          "short_term_options_trade"
+        ]
+      },
+      "decision_engine": {
+        "buy_trigger": "price >= 12.5 and price <= 13.5 and market_regime != 'Risk Off'",
+        "add_trigger": "price <= 12 and thesis_status == 'valid'",
+        "trim_trigger": "price >= 16 and no_new_guidance_raise == true",
+        "exit_trigger": "price < 10.5 or thesis_status == 'invalid'",
+        "alert_priority": "medium",
+        "review_frequency": "weekly",
+        "next_review_trigger": "price_zone_hit_or_Q3_earnings_or_guidance_update"
+      },
+      "last_decision": {
+        "decision": "small_probe",
+        "reason": "Q2 FY2026 fundamentals are strong, but current price is close to consensus target and risk/reward is weak for a large new entry.",
+        "updated_at": "2026-05-12",
+        "decision_owner": "assistant"
+      }
+    }
+  ],
+  "portfolio_summary": {
+    "top_candidates": [],
+    "watchlist": [
+      "MITK"
+    ],
+    "avoid_list": [],
+    "ranking": [
+      {
+        "rank": 1,
+        "ticker": "MITK",
+        "total_score": 61,
+        "shufen_score": 67,
+        "action": "small_probe"
+      }
+    ],
+    "theme_exposure_limit_pct": 4,
+    "cash_required_pct": 20,
+    "max_single_position_pct": 2,
+    "suggested_allocation": [
+      {
+        "ticker": "MITK",
+        "target_position_pct": 0.5,
+        "max_position_pct": 2
+      }
+    ]
+  },
+  "risk_controls": {
+    "max_theme_exposure_pct": 4,
+    "max_single_stock_pct": 2,
+    "max_high_beta_total_pct": 4,
+    "max_loss_per_position_pct": 0.5,
+    "cash_buffer_pct": 20,
+    "hedge_required": true,
+    "hedge_tools": [
+      "cash",
+      "index_put_spread"
+    ],
+    "reduce_risk_if": [
+      "market_regime == 'Risk Off'",
+      "small_cap_software_breaks_down",
+      "MITK_guidance_cut",
+      "Fraud_and_Identity_growth_slows",
+      "reporting_or_internal_control_issue_appears"
+    ],
+    "alert_preferences_note": "User alert switches are not stored in this report. Platform should manage them separately in alert_config.json."
+  },
+  "next_validation": [
+    {
+      "ticker": "MITK",
+      "date_or_window": "2026-Q3 earnings and FY2026 guidance updates",
+      "metrics_to_check": [
+        "revenue",
+        "Fraud & Identity revenue",
+        "SaaS revenue",
+        "Check Verification revenue",
+        "non-GAAP gross margin",
+        "adjusted EBITDA margin",
+        "cash flow from operations",
+        "FY2026 revenue guidance",
+        "FY2026 adjusted EBITDA margin guidance",
+        "new financial institution wins"
+      ],
+      "decision_after_validation": "If Q3 confirms sustained Fraud & Identity and SaaS growth with 30%+ EBITDA margin and another guidance raise, upgrade to buy_on_pullback. If growth slows or guidance is cut, downgrade to watch or trim."
+    }
+  ],
+  "export_validation": {
+    "json_valid": true,
+    "required_fields_present": true,
+    "enum_values_valid": true,
+    "price_fields_valid": true,
+    "risk_rules_present": true,
+    "data_gaps_marked": true,
+    "ticker_analysis_is_array": true,
+    "tickers_are_uppercase": true,
+    "price_ranges_are_arrays": true,
+    "summary_card_present": true,
+    "analysis_text_embedded": false,
+    "alert_preferences_external": true,
+    "missing_required_fields": [],
+    "warnings": [
+      "MITK is a small-cap stock with limited analyst coverage and liquidity risk",
+      "Options data missing; do not use options structure for execution",
+      "Current price is close to consensus target, limiting fresh-entry risk/reward",
+      "Full markdown analysis should remain in same-name .md file"
+    ]
+  }
+}

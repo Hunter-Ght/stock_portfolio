@@ -1,0 +1,494 @@
+{
+  "meta": {
+    "schema_version": "1.1.0",
+    "report_id": "2026-05-12_XBI_xiaoyan_shufen",
+    "generated_at": "2026-05-12T20:00:00-07:00",
+    "timezone": "America/Los_Angeles",
+    "skill_used": [
+      "xiaoyan",
+      "shufen"
+    ],
+    "analysis_mode": "single",
+    "tickers": [
+      "XBI"
+    ],
+    "theme": "biotech_etf_mna_fda_clinical_risk",
+    "base_currency": "USD",
+    "asset_type": "equity_etf",
+    "data_freshness": {
+      "market_data_date": "2026-05-12",
+      "fund_data_date": "2026-05-11",
+      "news_data_window": "last_30_to_90_days",
+      "option_data_status": "missing"
+    },
+    "source_files": [
+      "research_export_skill_v1_1.md",
+      "Shufen式美股产业资金流重定价选股_SKILL(1).md",
+      "xiaoyan_us_equity_trading_skill(1).md"
+    ],
+    "notes": [
+      "XBI is SPDR S&P Biotech ETF, not a single-company stock.",
+      "XBI should be analyzed as a biotech sector beta and event-driven ETF, not through company-specific EPS/EBITDA.",
+      "Full analysis should remain in same-name Markdown file.",
+      "Alert preferences should be managed separately by platform alert_config.json.",
+      "Options structure is missing; do not use call wall, put wall, gamma flip, or IV-based execution."
+    ]
+  },
+  "market_context": {
+    "risk_regime": "Risk On but small/mid-cap biotech volatility high",
+    "macro_score": 8,
+    "equity_risk_budget": "balanced",
+    "liquidity_risk": "low",
+    "credit_risk": "medium",
+    "rate_risk": "high",
+    "inflation_risk": "medium",
+    "vix_state": "elevated_but_not_stress",
+    "hedge_required": true,
+    "recommended_hedges": [
+      "cash",
+      "index_put_spread",
+      "reduce_single_name_biotech_beta_if_overexposed"
+    ],
+    "risk_on_allowed": true,
+    "high_beta_allowed": "small_position_only",
+    "major_macro_risks": [
+      "10Y yield breakout",
+      "biotech IPO window closes",
+      "M&A slows",
+      "FDA or clinical failures cluster",
+      "drug pricing and reimbursement pressure",
+      "small-cap risk-off",
+      "financing dilution for cash-burning biotech companies"
+    ],
+    "macro_invalid_conditions": [
+      "XBI breaks below 108",
+      "10Y yield rises sharply",
+      "biotech M&A and IPO activity stalls",
+      "FDA or clinical sentiment deteriorates"
+    ]
+  },
+  "portfolio_context": {
+    "theme": "biotech_etf_mna_fda_clinical_risk",
+    "theme_exposure_limit_pct": 8,
+    "current_theme_exposure_pct": null,
+    "cash_buffer_required_pct": 20,
+    "max_single_position_pct": 5,
+    "max_high_beta_position_pct": 5,
+    "allow_short_term_options": false,
+    "position_layer_rules": {
+      "stabilizer": "not_applicable",
+      "core_attack": "1%-5%",
+      "high_convexity": "0%-3%",
+      "lottery": "not_applicable",
+      "hedge": "as_needed",
+      "cash": "dynamic"
+    }
+  },
+  "ticker_analysis": [
+    {
+      "ticker": "XBI",
+      "company": "SPDR S&P Biotech ETF",
+      "exchange": "NYSE Arca",
+      "sector": "Healthcare / Biotechnology ETF",
+      "industry_chain": "biotech_etf_mna_fda_clinical_risk",
+      "archetype": "sector_etf_beta",
+      "portfolio_layer": "core_attack",
+      "action": "hold",
+      "conclusion": "持有 / 回撤买入 / 不追高",
+      "summary_card": {
+        "one_line": "XBI 是等权 biotech beta 工具，受益于 M&A 和融资修复，但已接近 52 周高位。",
+        "primary_action": "持有等回撤",
+        "why_now": "2026 biotech IPO/M&A 窗口回暖，Big Pharma 专利悬崖支撑并购，XBI 等权结构利于小中盘扩散。",
+        "biggest_risk": "当前接近 52 周高位，且临床/FDA 失败、利率上行、融资窗口关闭会迅速压低板块。",
+        "next_check": "10Y 利率、biotech M&A/IPO、FDA/PDUFA、临床数据会议和 XBI 是否突破站稳 140。"
+      },
+      "main_thesis": "XBI offers diversified equal-weight exposure to the biotech sector, benefiting from improving capital markets, Big Pharma M&A urgency, FDA/clinical catalysts, and lower-rate sensitivity if the risk environment remains favorable.",
+      "bear_thesis": "XBI is near its 52-week high, highly exposed to small/mid-cap clinical and financing risk, and can de-rate sharply if rates rise or biotech events turn negative.",
+      "market_narrative": {
+        "bull_case": "Biotech M&A, IPO reopening, clinical catalysts, and equal-weight small/mid-cap beta support further upside if XBI breaks above 140.",
+        "bear_case": "A lot of optimism is already priced in near the 52-week high, while clinical failures and financing dilution remain persistent risks.",
+        "current_market_story": "Market is trading XBI as a biotech recovery and M&A-beta vehicle after improved 2026 financing conditions.",
+        "counter_narrative": "Biotech recovery is real, but XBI should be bought on pullbacks rather than chased near highs.",
+        "narrative_confidence": "medium",
+        "price_in_status": "partially_priced_in",
+        "second_repricing_path": "Continued M&A, upsized IPOs, positive FDA/clinical news, lower rates, and a breakout above 140 could push XBI toward 150-160."
+      },
+      "scores": {
+        "macro_liquidity": 8,
+        "market_narrative_risk_budget": 7,
+        "industry_strength": 13,
+        "fundamental_quality": 15,
+        "financial_quality_management": 8,
+        "valuation_gap": 4,
+        "technical_options": 5,
+        "position_fit": 3,
+        "total_score": 63
+      },
+      "shufen_scores": {
+        "macro_risk_budget": 7,
+        "industry_capital_source": 13,
+        "institutional_flow": 13,
+        "catalyst_window": 13,
+        "verifiable_fundamentals": 11,
+        "second_repricing_path": 10,
+        "valuation_gap": 2,
+        "balance_sheet_risk": 4,
+        "total_score": 73
+      },
+      "probability": {
+        "win_rate_low": 0.52,
+        "win_rate_high": 0.58,
+        "base_win_rate": 0.55,
+        "confidence": "medium",
+        "confidence_reason": "Biotech financing and M&A environment is supportive, but price is close to 52-week highs and biotech remains event-risk heavy."
+      },
+      "price_plan": {
+        "current_price": 134.91,
+        "buy_zone": [
+          124,
+          130
+        ],
+        "add_zone": [
+          112,
+          120
+        ],
+        "trim_zone": [
+          150,
+          160
+        ],
+        "bull_target": [
+          165,
+          180
+        ],
+        "base_target": 150.0,
+        "bear_price": 118.0,
+        "invalid_price": 108,
+        "hard_stop": 100,
+        "currency": "USD",
+        "price_updated_at": "2026-05-12"
+      },
+      "risk_reward": {
+        "upside_pct": 11.19,
+        "downside_pct": 12.53,
+        "risk_reward_ratio": 0.89,
+        "expected_value": 0.005,
+        "ev_formula": "win_rate * upside_pct - (1 - win_rate) * downside_pct",
+        "base_target_used": 150.0,
+        "bear_price_used": 118.0,
+        "win_rate_used": 0.55,
+        "note": "Current risk/reward is roughly balanced near the 52-week high. Pullback toward 124-130 is preferred."
+      },
+      "positioning": {
+        "initial_position_pct": 1.0,
+        "max_position_pct": 5,
+        "add_position_pct": 1,
+        "position_type": "sector_etf",
+        "preferred_instrument": "ETF",
+        "allowed_instruments": [
+          "ETF",
+          "call_spread"
+        ],
+        "avoid_instruments": [
+          "short_term_calls",
+          "naked_calls",
+          "gamma_trade",
+          "single_clinical_event_bet"
+        ],
+        "use_trailing_stop": true,
+        "hedge_required": true,
+        "max_portfolio_loss_pct": 1.5
+      },
+      "trade_rules": {
+        "entry_conditions": [
+          "Price enters 124-130 buy zone",
+          "Market regime is not Risk Off",
+          "10Y yield is not rising sharply",
+          "Biotech IPO and M&A window remains open",
+          "XBI has not failed at 140 and broken down on heavy volume",
+          "FDA and clinical news flow is not clustered negative"
+        ],
+        "add_conditions": [
+          "Price enters 112-120 add zone and thesis remains valid",
+          "Biotech M&A remains active",
+          "Biotech IPO and follow-on financing remain successful",
+          "FDA approval tone remains positive",
+          "10Y yield declines",
+          "ASCO ASH ESMO or other conferences produce strong data",
+          "XBI reclaims 130-140 after pullback"
+        ],
+        "trim_conditions": [
+          "Price reaches 150-160",
+          "M&A no longer accelerates",
+          "IPO window weakens",
+          "FDA negative events increase",
+          "10Y yield rises sharply",
+          "XBI breakout fails and reverses on heavy volume",
+          "Portfolio biotech beta becomes too high"
+        ],
+        "exit_conditions": [
+          "Price breaks below 108 and fails to reclaim",
+          "Biotech IPO market closes again",
+          "M&A expectations cool materially",
+          "10Y yield-driven de-rating hits small/mid-cap growth",
+          "FDA or clinical failures hurt sector risk appetite",
+          "XBI breaks major support and loses institutional bid"
+        ]
+      },
+      "catalysts": [
+        {
+          "event": "Big Pharma M&A cycle",
+          "expected_window": "2026",
+          "importance": "high",
+          "type": "m_and_a",
+          "watch_items": [
+            "deal value",
+            "deal count",
+            "premiums",
+            "late-stage pipeline acquisitions",
+            "patent cliff urgency",
+            "oncology immunology rare disease and cell therapy deals"
+          ]
+        },
+        {
+          "event": "Biotech IPO and financing window",
+          "expected_window": "2026",
+          "importance": "high",
+          "type": "financing",
+          "watch_items": [
+            "IPO pricing",
+            "upsized offerings",
+            "follow-on offerings",
+            "secondary market reaction",
+            "cash runway improvements",
+            "risk appetite"
+          ]
+        },
+        {
+          "event": "FDA / PDUFA / clinical readouts",
+          "expected_window": "ongoing",
+          "importance": "high",
+          "type": "regulatory_clinical",
+          "watch_items": [
+            "FDA approvals",
+            "CRLs",
+            "Phase 2 and Phase 3 readouts",
+            "ASCO",
+            "ASH",
+            "ESMO",
+            "AAN",
+            "rare disease data"
+          ]
+        },
+        {
+          "event": "Rate environment",
+          "expected_window": "ongoing",
+          "importance": "high",
+          "type": "macro",
+          "watch_items": [
+            "10Y Treasury yield",
+            "real yields",
+            "small-cap growth relative strength",
+            "healthcare risk appetite"
+          ]
+        }
+      ],
+      "validation_metrics": [
+        "XBI price",
+        "XBI NAV",
+        "premium discount",
+        "expense ratio",
+        "AUM",
+        "average daily volume",
+        "top holdings weights",
+        "M&A total value",
+        "biotech IPO proceeds",
+        "secondary offerings",
+        "FDA approvals",
+        "CRLs",
+        "clinical readout success rate",
+        "10Y Treasury yield",
+        "biotech ETF flows",
+        "cash runway distribution of holdings"
+      ],
+      "failure_conditions": [
+        "Breaks below 108 and cannot reclaim",
+        "Biotech IPO window shuts",
+        "M&A activity slows materially",
+        "FDA or clinical sentiment turns negative",
+        "10Y yield rises sharply",
+        "Small/mid-cap growth de-rates",
+        "Biotech financing dilution rises materially"
+      ],
+      "risk_exposures": {
+        "market_beta": "high",
+        "sector_beta": "very_high",
+        "interest_rate_sensitivity": "high",
+        "usd_sensitivity": "low",
+        "commodity_sensitivity": "low",
+        "policy_sensitivity": "high",
+        "liquidity_risk": "low",
+        "valuation_risk": "high",
+        "earnings_event_risk": "not_applicable",
+        "dilution_risk": "medium_high",
+        "single_name_risk": "low_to_medium",
+        "correlation_tags": [
+          "biotech",
+          "small_mid_cap_growth",
+          "FDA",
+          "clinical_trials",
+          "M&A",
+          "IPO_window",
+          "drug_pricing",
+          "rate_sensitive",
+          "cash_burn",
+          "equal_weight_ETF"
+        ]
+      },
+      "data_quality": {
+        "financials_status": "not_applicable_for_etf",
+        "fund_data_status": "verified",
+        "holdings_status": "verified_partial",
+        "market_price_status": "verified",
+        "options_status": "missing",
+        "institutional_flow_status": "partial",
+        "export_status": "complete",
+        "data_gaps": [
+          "option_chain_missing",
+          "call_wall_missing",
+          "put_wall_missing",
+          "gamma_flip_missing",
+          "atm_iv_missing",
+          "real_time_premium_discount_missing",
+          "latest_full_holdings_weights_missing",
+          "biotech_IPO_pipeline_realtime_missing",
+          "FDA_PDUFA_event_quality_calendar_missing",
+          "cash_runway_distribution_for_holdings_missing",
+          "biotech_ETF_fund_flow_missing",
+          "industry_short_interest_data_missing"
+        ],
+        "confidence_penalty": [
+          "option_structure_unavailable",
+          "near_52_week_high",
+          "biotech_clinical_event_risk",
+          "small_mid_cap_financing_risk",
+          "rate_sensitivity",
+          "ETF_not_defensive_healthcare"
+        ],
+        "do_not_use_for": [
+          "call_wall_trade",
+          "gamma_squeeze_trade",
+          "single_company_fundamental_analysis",
+          "defensive_healthcare_ETF_proxy",
+          "PE_only_valuation"
+        ]
+      },
+      "decision_engine": {
+        "buy_trigger": "price >= 124 and price <= 130 and market_regime != 'Risk Off'",
+        "add_trigger": "price <= 120 and thesis_status == 'valid'",
+        "trim_trigger": "price >= 150 or biotech_MA_IPO_momentum_fades == true",
+        "exit_trigger": "price < 108 or thesis_status == 'invalid'",
+        "alert_priority": "medium",
+        "review_frequency": "weekly",
+        "next_review_trigger": "price_zone_hit_or_MA_IPO_FDA_rate_update"
+      },
+      "last_decision": {
+        "decision": "hold",
+        "reason": "XBI benefits from improving biotech M&A and financing conditions, but current price is near 52-week highs, so pullback entry is preferred.",
+        "updated_at": "2026-05-12",
+        "decision_owner": "assistant"
+      }
+    }
+  ],
+  "portfolio_summary": {
+    "top_candidates": [],
+    "watchlist": [
+      "XBI"
+    ],
+    "avoid_list": [],
+    "ranking": [
+      {
+        "rank": 1,
+        "ticker": "XBI",
+        "total_score": 63,
+        "shufen_score": 73,
+        "action": "hold"
+      }
+    ],
+    "theme_exposure_limit_pct": 8,
+    "cash_required_pct": 20,
+    "max_single_position_pct": 5,
+    "suggested_allocation": [
+      {
+        "ticker": "XBI",
+        "target_position_pct": 1,
+        "max_position_pct": 5
+      }
+    ]
+  },
+  "risk_controls": {
+    "max_theme_exposure_pct": 8,
+    "max_single_stock_pct": 5,
+    "max_high_beta_total_pct": 8,
+    "max_loss_per_position_pct": 1.5,
+    "cash_buffer_pct": 20,
+    "hedge_required": true,
+    "hedge_tools": [
+      "cash",
+      "index_put_spread",
+      "reduce_single_name_biotech_beta_if_overexposed"
+    ],
+    "reduce_risk_if": [
+      "market_regime == 'Risk Off'",
+      "10Y_yield_rises_sharply",
+      "biotech_IPO_window_closes",
+      "M&A_activity_slows",
+      "FDA_clinical_sentiment_turns_negative",
+      "XBI_breaks_below_108"
+    ],
+    "alert_preferences_note": "User alert switches are not stored in this report. Platform should manage them separately in alert_config.json."
+  },
+  "next_validation": [
+    {
+      "ticker": "XBI",
+      "date_or_window": "weekly M&A/IPO/FDA/rate review",
+      "metrics_to_check": [
+        "XBI price and NAV",
+        "premium discount",
+        "AUM and volume",
+        "top holdings",
+        "Big Pharma M&A deal value",
+        "biotech IPO proceeds",
+        "follow-on financing",
+        "FDA approvals and CRLs",
+        "clinical data calendar",
+        "10Y Treasury yield",
+        "biotech ETF flows",
+        "XBI breakout above 140 or pullback to 124-130"
+      ],
+      "decision_after_validation": "If M&A and IPO momentum continues while XBI pulls back to 124-130, consider staged entry. If XBI fails near highs and rates rise, keep as hold or trim."
+    }
+  ],
+  "export_validation": {
+    "json_valid": true,
+    "required_fields_present": true,
+    "enum_values_valid": true,
+    "price_fields_valid": true,
+    "risk_rules_present": true,
+    "data_gaps_marked": true,
+    "ticker_analysis_is_array": true,
+    "tickers_are_uppercase": true,
+    "price_ranges_are_arrays": true,
+    "summary_card_present": true,
+    "analysis_text_embedded": false,
+    "alert_preferences_external": true,
+    "missing_required_fields": [],
+    "warnings": [
+      "XBI is a biotech sector ETF, not a single-company stock",
+      "Do not treat XBI as defensive healthcare exposure",
+      "Current price is near 52-week highs, so new-entry risk/reward is not ideal",
+      "Biotech has clinical/FDA/financing/dilution risk",
+      "Options data missing; do not use options structure for execution",
+      "Full markdown analysis should remain in same-name .md file"
+    ]
+  }
+}

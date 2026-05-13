@@ -1,0 +1,501 @@
+{
+  "meta": {
+    "schema_version": "1.1.0",
+    "report_id": "2026-05-12_CORN_xiaoyan_shufen",
+    "generated_at": "2026-05-12T19:20:00-07:00",
+    "timezone": "America/Los_Angeles",
+    "skill_used": [
+      "xiaoyan",
+      "shufen"
+    ],
+    "analysis_mode": "single",
+    "tickers": [
+      "CORN"
+    ],
+    "theme": "corn_futures_agriculture_weather_inflation",
+    "base_currency": "USD",
+    "asset_type": "commodity_etf",
+    "data_freshness": {
+      "market_data_date": "2026-05-12",
+      "fund_data_date": "2026-05-12",
+      "wasde_data_date": "2026-05-12",
+      "news_data_window": "last_30_days",
+      "option_data_status": "missing"
+    },
+    "source_files": [
+      "research_export_skill_v1_1.md",
+      "Shufen式美股产业资金流重定价选股_SKILL(1).md",
+      "xiaoyan_us_equity_trading_skill(1).md"
+    ],
+    "notes": [
+      "CORN is Teucrium Corn Fund, a futures-based commodity ETF, not a company stock.",
+      "Do not analyze CORN with PE, EPS, revenue, or EBITDA; use futures curve, roll yield, expense ratio, WASDE, weather, and corn supply-demand indicators.",
+      "Full analysis should remain in same-name Markdown file.",
+      "Alert preferences should be managed separately by platform alert_config.json.",
+      "Options structure is missing; do not use call wall, put wall, gamma flip, or IV-based execution."
+    ]
+  },
+  "market_context": {
+    "risk_regime": "Risk On but agriculture weather risk rising",
+    "macro_score": 8,
+    "equity_risk_budget": "balanced",
+    "commodity_risk_budget": "small_tactical",
+    "liquidity_risk": "medium",
+    "credit_risk": "not_applicable",
+    "rate_risk": "medium",
+    "inflation_risk": "medium_high",
+    "vix_state": "elevated_but_not_stress",
+    "hedge_required": true,
+    "recommended_hedges": [
+      "cash",
+      "reduce_agriculture_or_inflation_beta_if_overexposed"
+    ],
+    "risk_on_allowed": true,
+    "high_beta_allowed": "small_position_only",
+    "major_macro_risks": [
+      "US Corn Belt weather improves",
+      "US yield exceeds USDA trend",
+      "Brazil second-crop corn supply improves",
+      "China corn imports disappoint",
+      "US dollar strengthens",
+      "ethanol margins weaken",
+      "futures curve contango increases roll cost",
+      "ETF expense ratio drags long holding returns"
+    ],
+    "macro_invalid_conditions": [
+      "USDA raises corn ending stocks",
+      "CBOT corn trend breaks down",
+      "crop conditions improve materially",
+      "export sales weaken",
+      "corn futures curve deteriorates materially"
+    ]
+  },
+  "portfolio_context": {
+    "theme": "corn_futures_agriculture_weather_inflation",
+    "theme_exposure_limit_pct": 5,
+    "current_theme_exposure_pct": null,
+    "cash_buffer_required_pct": 20,
+    "max_single_position_pct": 3,
+    "max_high_beta_position_pct": 2,
+    "allow_short_term_options": false,
+    "position_layer_rules": {
+      "stabilizer": "0.5%-2%",
+      "core_attack": "0%-3%",
+      "high_convexity": "0%-1.5%",
+      "lottery": "not_applicable",
+      "hedge": "as_needed",
+      "cash": "dynamic"
+    }
+  },
+  "ticker_analysis": [
+    {
+      "ticker": "CORN",
+      "company": "Teucrium Corn Fund",
+      "exchange": "NYSE Arca",
+      "sector": "Commodity ETF / Agriculture",
+      "industry_chain": "corn_futures_agriculture_weather_inflation",
+      "archetype": "commodity_beta",
+      "portfolio_layer": "stabilizer",
+      "action": "hold",
+      "conclusion": "持有 / 小仓回撤买 / 不追高",
+      "summary_card": {
+        "one_line": "CORN 是玉米期货 ETF，受益于库存下降和天气风险，但已接近 52 周高位。",
+        "primary_action": "持有等回撤",
+        "why_now": "USDA 预计美国玉米供应和期末库存下降，全球玉米期末库存或降至 2013/14 以来最低。",
+        "biggest_risk": "天气改善、库存上调、巴西供给改善、期货展期成本和 1% 费用率。",
+        "next_check": "USDA Crop Progress、天气模型、6 月 WASDE、出口销售、乙醇需求和 CBOT futures curve。"
+      },
+      "main_thesis": "CORN provides direct futures-based exposure to corn prices, supported by falling U.S. and global ending stocks, higher USDA farm price expectations, and potential summer weather risk.",
+      "bear_thesis": "CORN is near its 52-week high, has futures roll and expense drag, and can reverse quickly if U.S. weather improves, yields surprise higher, or global supply improves.",
+      "market_narrative": {
+        "bull_case": "Lower U.S. production, lower ending stocks, higher season-average farm price, and global ending stocks projected at the lowest since 2013/14 support a tactical long corn setup.",
+        "bear_case": "The bullish WASDE is partially priced in; favorable weather or export weakness could remove risk premium, while ETF roll costs and expenses hurt long holds.",
+        "current_market_story": "Market is trading CORN as a corn inventory-tightening and summer weather risk vehicle.",
+        "counter_narrative": "The supply-demand setup is supportive, but CORN is a trading tool, not a compounding asset, and should not be chased at 52-week highs.",
+        "narrative_confidence": "medium",
+        "price_in_status": "partially_priced_in",
+        "second_repricing_path": "Further inventory cuts, poor crop ratings, heat/drought during pollination, strong exports, ethanol demand, or supply disruption in Brazil/Ukraine could push CORN above 20-21."
+      },
+      "scores": {
+        "macro_liquidity": 8,
+        "market_narrative_risk_budget": 7,
+        "industry_strength": 12,
+        "fundamental_quality": 13,
+        "financial_quality_management": 7,
+        "valuation_gap": 4,
+        "technical_options": 5,
+        "position_fit": 3,
+        "total_score": 59
+      },
+      "shufen_scores": {
+        "macro_risk_budget": 7,
+        "industry_capital_source": 12,
+        "institutional_flow": 10,
+        "catalyst_window": 13,
+        "verifiable_fundamentals": 10,
+        "second_repricing_path": 9,
+        "valuation_gap": 2,
+        "balance_sheet_risk": 4,
+        "total_score": 67
+      },
+      "probability": {
+        "win_rate_low": 0.5,
+        "win_rate_high": 0.58,
+        "base_win_rate": 0.54,
+        "confidence": "medium",
+        "confidence_reason": "USDA supply-demand is supportive, but price is near 52-week high and ETF/futures structure reduces long-hold attractiveness."
+      },
+      "price_plan": {
+        "current_price": 18.93,
+        "buy_zone": [
+          18.0,
+          18.5
+        ],
+        "add_zone": [
+          17.0,
+          17.6
+        ],
+        "trim_zone": [
+          20.0,
+          21.0
+        ],
+        "bull_target": [
+          21.5,
+          23.0
+        ],
+        "base_target": 20.5,
+        "bear_price": 17.2,
+        "invalid_price": 16.8,
+        "hard_stop": 16.2,
+        "currency": "USD",
+        "price_updated_at": "2026-05-12"
+      },
+      "risk_reward": {
+        "upside_pct": 8.29,
+        "downside_pct": 9.14,
+        "risk_reward_ratio": 0.91,
+        "expected_value": 0.003,
+        "ev_formula": "win_rate * upside_pct - (1 - win_rate) * downside_pct",
+        "base_target_used": 20.5,
+        "bear_price_used": 17.2,
+        "win_rate_used": 0.54,
+        "note": "At current price, risk/reward is roughly balanced. Pullback toward 18.0 improves setup."
+      },
+      "positioning": {
+        "initial_position_pct": 0.75,
+        "max_position_pct": 3,
+        "add_position_pct": 0.5,
+        "position_type": "tactical_commodity_etf",
+        "preferred_instrument": "ETF",
+        "allowed_instruments": [
+          "ETF",
+          "call_spread"
+        ],
+        "avoid_instruments": [
+          "short_term_calls",
+          "naked_calls",
+          "gamma_trade",
+          "long_term_buy_and_forget"
+        ],
+        "use_trailing_stop": true,
+        "hedge_required": true,
+        "max_portfolio_loss_pct": 0.6
+      },
+      "trade_rules": {
+        "entry_conditions": [
+          "Price enters 18.0-18.5 buy zone",
+          "USDA data has not turned bearish",
+          "US Corn Belt weather risk remains elevated",
+          "CBOT corn futures do not break key support",
+          "Futures curve has not materially deteriorated",
+          "Commodities are not in broad Risk Off"
+        ],
+        "add_conditions": [
+          "Price enters 17.0-17.6 add zone and thesis remains valid",
+          "June WASDE cuts inventories again",
+          "Corn crop ratings decline",
+          "Export sales beat expectations",
+          "Ethanol demand improves",
+          "Brazil second-crop corn or Ukraine exports face disruption",
+          "Roll cost remains manageable"
+        ],
+        "trim_conditions": [
+          "Price reaches 20.0-21.0",
+          "Weather risk fades",
+          "Crop ratings improve more than expected",
+          "USDA raises production or ending stocks",
+          "Brazil or Ukraine supply improves",
+          "US dollar strengthens and commodities pull back",
+          "Futures contango expands"
+        ],
+        "exit_conditions": [
+          "Price breaks below 16.8 and fails to reclaim",
+          "USDA raises U.S. or global ending stocks",
+          "U.S. summer weather materially improves",
+          "Corn export sales remain weak",
+          "Ethanol demand weakens",
+          "CBOT corn trend breaks down",
+          "ETF tracking or liquidity becomes abnormal"
+        ]
+      },
+      "catalysts": [
+        {
+          "event": "USDA Crop Progress weekly updates",
+          "expected_window": "weekly during growing season",
+          "importance": "high",
+          "type": "commodity",
+          "watch_items": [
+            "planting progress",
+            "emergence",
+            "good/excellent crop rating",
+            "soil moisture",
+            "Corn Belt weather"
+          ]
+        },
+        {
+          "event": "June WASDE",
+          "expected_window": "2026-06",
+          "importance": "high",
+          "type": "commodity",
+          "watch_items": [
+            "U.S. production",
+            "yield",
+            "ending stocks",
+            "exports",
+            "ethanol use",
+            "season-average farm price",
+            "global ending stocks"
+          ]
+        },
+        {
+          "event": "Summer pollination weather",
+          "expected_window": "2026-07 to 2026-08",
+          "importance": "high",
+          "type": "weather",
+          "watch_items": [
+            "heat dome risk",
+            "drought monitor",
+            "rainfall deficits",
+            "pollination stress",
+            "crop ratings"
+          ]
+        },
+        {
+          "event": "Brazil second-crop corn and Ukraine exports",
+          "expected_window": "2026-H2",
+          "importance": "medium",
+          "type": "supply",
+          "watch_items": [
+            "Brazil safrinha production",
+            "Brazil exports",
+            "Ukraine logistics",
+            "Black Sea risk",
+            "global trade shares"
+          ]
+        }
+      ],
+      "validation_metrics": [
+        "CBOT corn futures",
+        "CORN ETF NAV",
+        "CORN premium discount",
+        "expense ratio",
+        "futures curve structure",
+        "roll yield",
+        "AUM",
+        "average volume",
+        "bid ask spread",
+        "US corn production",
+        "US corn yield",
+        "US planted acres",
+        "US ending stocks",
+        "US stocks to use",
+        "season average farm price",
+        "global ending stocks",
+        "export sales",
+        "ethanol grind",
+        "crop ratings",
+        "weather models",
+        "CFTC managed money positioning"
+      ],
+      "failure_conditions": [
+        "Breaks below 16.8 and cannot reclaim",
+        "USDA raises ending stocks materially",
+        "U.S. crop ratings improve materially",
+        "Weather premium collapses",
+        "Export sales weaken",
+        "Ethanol demand weakens",
+        "Brazil second-crop supply improves materially",
+        "Futures curve contango creates large roll drag"
+      ],
+      "risk_exposures": {
+        "market_beta": "low_to_medium",
+        "sector_beta": "commodity_agriculture",
+        "interest_rate_sensitivity": "medium",
+        "usd_sensitivity": "medium_high",
+        "commodity_sensitivity": "very_high",
+        "policy_sensitivity": "medium",
+        "liquidity_risk": "medium",
+        "valuation_risk": "not_applicable",
+        "earnings_event_risk": "not_applicable",
+        "dilution_risk": "not_applicable",
+        "single_name_risk": "medium",
+        "correlation_tags": [
+          "corn_futures",
+          "agriculture",
+          "weather",
+          "USDA_WASDE",
+          "ethanol",
+          "feed_demand",
+          "export_sales",
+          "inflation_hedge",
+          "futures_roll"
+        ]
+      },
+      "data_quality": {
+        "financials_status": "not_applicable",
+        "fund_data_status": "verified",
+        "wasde_status": "verified",
+        "market_price_status": "verified",
+        "options_status": "missing",
+        "institutional_flow_status": "partial",
+        "export_status": "complete",
+        "data_gaps": [
+          "option_chain_missing",
+          "call_wall_missing",
+          "put_wall_missing",
+          "gamma_flip_missing",
+          "atm_iv_missing",
+          "real_time_CBOT_corn_futures_curve_missing",
+          "real_time_roll_yield_missing",
+          "latest_complete_holdings_missing",
+          "real_time_bid_ask_spread_missing",
+          "daily_creation_redemption_missing",
+          "CFTC_managed_money_positioning_missing",
+          "NOAA_weather_probability_latest_missing",
+          "USDA_Crop_Progress_latest_crop_rating_missing"
+        ],
+        "confidence_penalty": [
+          "option_structure_unavailable",
+          "futures_roll_and_expense_drag",
+          "near_52_week_high",
+          "weather_reversal_risk",
+          "ETF_not_spot_corn",
+          "commodity_no_cashflow_support"
+        ],
+        "do_not_use_for": [
+          "call_wall_trade",
+          "gamma_squeeze_trade",
+          "single_company_equity_analysis",
+          "PE_EPS_EBITDA_valuation",
+          "long_term_buy_and_forget"
+        ]
+      },
+      "decision_engine": {
+        "buy_trigger": "price >= 18.0 and price <= 18.5 and corn_thesis_status == 'valid'",
+        "add_trigger": "price <= 17.6 and thesis_status == 'valid'",
+        "trim_trigger": "price >= 20.0 or weather_risk_fades == true",
+        "exit_trigger": "price < 16.8 or thesis_status == 'invalid'",
+        "alert_priority": "medium",
+        "review_frequency": "weekly",
+        "next_review_trigger": "price_zone_hit_or_USDA_Crop_Progress_or_WASDE_update"
+      },
+      "last_decision": {
+        "decision": "hold",
+        "reason": "USDA corn supply-demand is supportive, but CORN is close to 52-week highs and futures ETF roll/expense risks argue against chasing.",
+        "updated_at": "2026-05-12",
+        "decision_owner": "assistant"
+      }
+    }
+  ],
+  "portfolio_summary": {
+    "top_candidates": [],
+    "watchlist": [
+      "CORN"
+    ],
+    "avoid_list": [],
+    "ranking": [
+      {
+        "rank": 1,
+        "ticker": "CORN",
+        "total_score": 59,
+        "shufen_score": 67,
+        "action": "hold"
+      }
+    ],
+    "theme_exposure_limit_pct": 5,
+    "cash_required_pct": 20,
+    "max_single_position_pct": 3,
+    "suggested_allocation": [
+      {
+        "ticker": "CORN",
+        "target_position_pct": 0.75,
+        "max_position_pct": 3
+      }
+    ]
+  },
+  "risk_controls": {
+    "max_theme_exposure_pct": 5,
+    "max_single_stock_pct": 3,
+    "max_high_beta_total_pct": 4,
+    "max_loss_per_position_pct": 0.6,
+    "cash_buffer_pct": 20,
+    "hedge_required": true,
+    "hedge_tools": [
+      "cash",
+      "reduce_agriculture_or_inflation_beta_if_overexposed"
+    ],
+    "reduce_risk_if": [
+      "weather_risk_fades",
+      "USDA_raises_ending_stocks",
+      "CBOT_corn_breaks_down",
+      "export_sales_weaken",
+      "ethanol_demand_weakens",
+      "futures_contango_expands"
+    ],
+    "alert_preferences_note": "User alert switches are not stored in this report. Platform should manage them separately in alert_config.json."
+  },
+  "next_validation": [
+    {
+      "ticker": "CORN",
+      "date_or_window": "weekly Crop Progress, June WASDE, and summer weather updates",
+      "metrics_to_check": [
+        "CBOT corn futures",
+        "CORN NAV and premium discount",
+        "USDA Crop Progress",
+        "good excellent crop ratings",
+        "weather models",
+        "June WASDE",
+        "U.S. ending stocks",
+        "global ending stocks",
+        "export sales",
+        "ethanol demand",
+        "Brazil second-crop corn",
+        "futures curve roll yield"
+      ],
+      "decision_after_validation": "If crop ratings weaken, weather risk rises, and WASDE stocks decline again, hold or add on pullbacks. If weather improves and stocks rise, trim or exit."
+    }
+  ],
+  "export_validation": {
+    "json_valid": true,
+    "required_fields_present": true,
+    "enum_values_valid": true,
+    "price_fields_valid": true,
+    "risk_rules_present": true,
+    "data_gaps_marked": true,
+    "ticker_analysis_is_array": true,
+    "tickers_are_uppercase": true,
+    "price_ranges_are_arrays": true,
+    "summary_card_present": true,
+    "analysis_text_embedded": false,
+    "alert_preferences_external": true,
+    "missing_required_fields": [],
+    "warnings": [
+      "CORN is a futures-based commodity ETF, not a company stock",
+      "Do not use PE/EPS/EBITDA valuation metrics for CORN",
+      "CORN is near 52-week highs, so new-entry risk/reward is only moderate",
+      "ETF has futures roll and expense ratio drag",
+      "Options data missing; do not use options structure for execution",
+      "Full markdown analysis should remain in same-name .md file"
+    ]
+  }
+}
