@@ -1,9 +1,10 @@
 """
 Research report storage helpers for the stock workbench.
 
-Reports are manually produced JSON files named:
+Reports are manually produced JSON or Markdown files named:
 YYYY-MM-DD_TICKER_skill1_skill2.json
-Optional full-text markdown reports can use the same stem with .md.
+YYYY-MM-DD_数字股票代码_字母代码_FLT_Ashare.json
+Markdown reports can either pair with JSON or include JSON front matter.
 """
 from __future__ import annotations
 
@@ -15,13 +16,18 @@ from pathlib import Path
 from typing import Iterable
 
 from importers.base import Position
+from services.a_share_names import normalize_a_share_code
 from services.spread_detector import detect_spreads
 
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
 DATA_DIR = ROOT_DIR / "data"
 RESEARCH_DIR = DATA_DIR / "research_reports"
-REPORT_NAME_RE = re.compile(r"^(?P<date>\d{4}-\d{2}-\d{2})_(?P<ticker>[A-Z0-9.\-]+)_.+\.json$")
+US_REPORT_NAME_RE = re.compile(r"^(?P<date>\d{4}-\d{2}-\d{2})_(?P<ticker>[A-Z0-9.\-]+)_(?P<skills>.+)\.(?:json|md)$", re.IGNORECASE)
+A_SHARE_REPORT_NAME_RE = re.compile(
+    r"^(?P<date>\d{4}-\d{2}-\d{2})_(?P<ticker>\d{6})_(?P<letter_code>[A-Z0-9.\-]+)_(?P<skills>.+)_Ashare\.(?:json|md)$",
+    re.IGNORECASE,
+)
 
 
 @dataclass(frozen=True)
@@ -33,7 +39,10 @@ class ResearchReport:
 
     @property
     def ticker(self) -> str:
-        return str(self.analysis.get("ticker") or "").upper().strip()
+        ticker = str(self.analysis.get("ticker") or "").upper().strip()
+        if (self.analysis.get("market") or self.meta.get("market")) == "Ashare":
+            return normalize_a_share_code(ticker) or normalize_a_share_code(self.meta.get("ticker", "")) or ticker
+        return ticker
 
     @property
     def generated_at(self) -> str:
@@ -42,7 +51,13 @@ class ResearchReport:
 
 def default_report_dirs() -> list[Path]:
     """Return report directories, keeping data/ root compatibility for existing samples."""
-    return [RESEARCH_DIR, DATA_DIR]
+    return [
+        RESEARCH_DIR / "us",
+        RESEARCH_DIR / "a_share",
+        RESEARCH_DIR / "ashare",
+        RESEARCH_DIR,
+        DATA_DIR,
+    ]
 
 
 def load_latest_reports_by_ticker(report_dirs: Iterable[Path] | None = None) -> dict[str, ResearchReport]:
@@ -65,7 +80,7 @@ def iter_reports(report_dirs: Iterable[Path] | None = None) -> list[ResearchRepo
         directory = Path(directory)
         if not directory.exists():
             continue
-        for path in sorted(directory.glob("*.json")):
+        for path in _report_candidates(directory):
             resolved = path.resolve()
             if resolved in seen_paths or not _looks_like_report_file(path):
                 continue
@@ -77,12 +92,23 @@ def iter_reports(report_dirs: Iterable[Path] | None = None) -> list[ResearchRepo
 
 
 def load_report(path: Path) -> ResearchReport | None:
+    name_info = _report_name_info(Path(path))
+    if Path(path).suffix.lower() == ".md":
+        return _load_markdown_report(Path(path), name_info)
+
     try:
         data = json.loads(Path(path).read_text(encoding="utf-8"))
     except Exception:
         return None
 
-    meta = data.get("meta") or {}
+    meta = dict(data.get("meta") or {})
+    if name_info:
+        meta.setdefault("report_date", name_info["date"])
+        meta.setdefault("ticker", name_info["ticker"])
+        meta.setdefault("market", name_info["market"])
+        meta.setdefault("skills", name_info["skills"])
+        if name_info.get("letter_code"):
+            meta.setdefault("letter_code", name_info["letter_code"])
     analyses = data.get("ticker_analysis") or []
     if not isinstance(analyses, list):
         return None
@@ -91,6 +117,17 @@ def load_report(path: Path) -> ResearchReport | None:
     for analysis in analyses:
         if not isinstance(analysis, dict):
             continue
+        analysis = dict(analysis)
+        if name_info:
+            if name_info["market"] == "Ashare":
+                analysis["ticker"] = normalize_a_share_code(analysis.get("ticker", "")) or name_info["ticker"]
+            else:
+                analysis.setdefault("ticker", name_info["ticker"])
+            analysis.setdefault("market", name_info["market"])
+            analysis.setdefault("skills", name_info["skills"])
+            if name_info.get("letter_code"):
+                analysis.setdefault("letter_code", name_info["letter_code"])
+        _normalize_score_fields(analysis)
         if not _has_minimum_analysis_fields(meta, analysis):
             continue
         reports.append(ResearchReport(
@@ -101,6 +138,27 @@ def load_report(path: Path) -> ResearchReport | None:
         ))
 
     return reports[0] if reports else None
+
+
+def _load_markdown_report(path: Path, name_info: dict | None) -> ResearchReport | None:
+    try:
+        content = path.read_text(encoding="utf-8")
+    except Exception:
+        return None
+    front_matter = _extract_json_front_matter(content)
+    if not front_matter:
+        return None
+
+    meta, analysis = _front_matter_to_report_parts(front_matter, name_info)
+    _normalize_score_fields(analysis)
+    if not _has_minimum_analysis_fields(meta, analysis):
+        return None
+    return ResearchReport(
+        path=path,
+        markdown_path=path,
+        meta=meta,
+        analysis=analysis,
+    )
 
 
 def build_stock_pool(
@@ -148,7 +206,7 @@ def build_stock_pool(
         sources = set(holding["sources"])
         if symbol in watchlist:
             sources.add("关注")
-        report = reports_by_ticker.get(symbol)
+        report = _report_for_symbol(symbol, reports_by_ticker)
         analysis = report.analysis if report else {}
         price_plan = analysis.get("price_plan") or {}
         rows.append({
@@ -176,18 +234,127 @@ def _dashboard_stock_positions(positions: list[Position]) -> list[Position]:
     return stock_positions
 
 
+def _report_for_symbol(symbol: str, reports_by_ticker: dict[str, ResearchReport]) -> ResearchReport | None:
+    direct = reports_by_ticker.get(symbol)
+    if direct is not None:
+        return direct
+    code = normalize_a_share_code(symbol)
+    return reports_by_ticker.get(code) if code else None
+
+
 def orphan_reports(reports_by_ticker: dict[str, ResearchReport], pool_rows: list[dict]) -> list[ResearchReport]:
     pool_symbols = {row["symbol"] for row in pool_rows}
-    return [report for ticker, report in sorted(reports_by_ticker.items()) if ticker not in pool_symbols]
+    normalized_pool_symbols = {
+        normalize_a_share_code(symbol) or symbol
+        for symbol in pool_symbols
+    }
+    return [
+        report for ticker, report in sorted(reports_by_ticker.items())
+        if ticker not in pool_symbols and ticker not in normalized_pool_symbols
+    ]
 
 
 def _looks_like_report_file(path: Path) -> bool:
-    return bool(REPORT_NAME_RE.match(path.name))
+    return _report_name_info(path) is not None
+
+
+def _report_candidates(directory: Path) -> list[Path]:
+    json_paths = sorted(directory.glob("*.json"))
+    json_stems = {path.stem for path in json_paths}
+    markdown_paths = [
+        path for path in sorted(directory.glob("*.md"))
+        if path.stem not in json_stems
+    ]
+    return json_paths + markdown_paths
+
+
+def _report_name_info(path: Path) -> dict | None:
+    name = path.name
+    a_share_match = A_SHARE_REPORT_NAME_RE.match(name)
+    if a_share_match:
+        skills = [part for part in a_share_match.group("skills").split("_") if part]
+        return {
+            "date": a_share_match.group("date"),
+            "ticker": a_share_match.group("ticker").upper(),
+            "letter_code": a_share_match.group("letter_code").upper(),
+            "skills": skills,
+            "market": "Ashare",
+        }
+
+    us_match = US_REPORT_NAME_RE.match(name)
+    if not us_match:
+        return None
+    skills = [part for part in us_match.group("skills").replace(".json", "").split("_") if part]
+    return {
+        "date": us_match.group("date"),
+        "ticker": us_match.group("ticker").upper(),
+        "letter_code": "",
+        "skills": skills,
+        "market": "US",
+    }
 
 
 def _matching_markdown_path(path: Path) -> Path | None:
     markdown = path.with_suffix(".md")
     return markdown if markdown.exists() else None
+
+
+def _extract_json_front_matter(content: str) -> dict | None:
+    if not content.startswith("---"):
+        return None
+    lines = content.splitlines()
+    if not lines or lines[0].strip() != "---":
+        return None
+    for index, line in enumerate(lines[1:], start=1):
+        if line.strip() == "---":
+            raw = "\n".join(lines[1:index]).strip()
+            if not raw:
+                return None
+            try:
+                parsed = json.loads(raw)
+            except json.JSONDecodeError:
+                return None
+            return parsed if isinstance(parsed, dict) else None
+    return None
+
+
+def _front_matter_to_report_parts(front_matter: dict, name_info: dict | None) -> tuple[dict, dict]:
+    meta_keys = {
+        "schema_version",
+        "report_id",
+        "generated_at",
+        "timezone",
+        "method_used",
+        "analysis_mode",
+        "tickers",
+        "report_date",
+        "market",
+        "skills",
+        "letter_code",
+        "base_currency",
+        "data_freshness",
+        "notes",
+    }
+    meta = {key: front_matter[key] for key in meta_keys if key in front_matter}
+    analysis = dict(front_matter)
+
+    if name_info:
+        meta.setdefault("report_date", name_info["date"])
+        meta.setdefault("ticker", name_info["ticker"])
+        meta.setdefault("market", name_info["market"])
+        meta.setdefault("skills", name_info["skills"])
+        if name_info.get("letter_code"):
+            meta.setdefault("letter_code", name_info["letter_code"])
+        if name_info["market"] == "Ashare":
+            analysis["ticker"] = normalize_a_share_code(analysis.get("ticker", "")) or name_info["ticker"]
+        else:
+            analysis.setdefault("ticker", name_info["ticker"])
+        analysis.setdefault("market", name_info["market"])
+        analysis.setdefault("skills", name_info["skills"])
+        if name_info.get("letter_code"):
+            analysis.setdefault("letter_code", name_info["letter_code"])
+
+    return meta, analysis
 
 
 def _has_minimum_analysis_fields(meta: dict, analysis: dict) -> bool:
@@ -196,6 +363,16 @@ def _has_minimum_analysis_fields(meta: dict, analysis: dict) -> bool:
     scores = analysis.get("scores") or {}
     price_plan = analysis.get("price_plan") or {}
     return "total_score" in scores and "current_price" in price_plan
+
+
+def _normalize_score_fields(analysis: dict) -> None:
+    if analysis.get("scores"):
+        return
+    for key in ("flt_scores", "xiaoyan_scores", "shufen_scores"):
+        scores = analysis.get(key)
+        if isinstance(scores, dict) and "total_score" in scores:
+            analysis["scores"] = scores
+            return
 
 
 def _report_sort_key(report: ResearchReport) -> tuple[str, str]:

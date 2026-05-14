@@ -2,11 +2,13 @@
 from __future__ import annotations
 
 from datetime import datetime
+import re
 
 import pandas as pd
 import streamlit as st
 
 from services.alert_engine import evaluate_price_alerts
+from services.a_share_names import get_a_share_name
 from services.market_data import get_quotes
 from services.portfolio import load_positions
 from services.research_store import (
@@ -57,10 +59,18 @@ def render_stock_workbench() -> None:
             ticker_alert_config(row["symbol"], alert_config),
         )
 
-    holdings_rows = [row for row in pool_rows if "持仓" in row["source"]]
-    watch_rows = [row for row in pool_rows if "关注" in row["source"]]
+    holdings_rows = _us_holding_rows(pool_rows)
+    watch_rows = _us_watch_rows(pool_rows)
+    a_share_holding_rows = _decorate_a_share_rows(_a_share_holding_rows(pool_rows))
+    a_share_watch_rows = _decorate_a_share_rows(_a_share_watch_rows(pool_rows))
 
-    tab_holdings, tab_watch, tab_orphans = st.tabs(["持仓", "关注", "未归档分析"])
+    tab_holdings, tab_watch, tab_a_share_holdings, tab_a_share_watch, tab_orphans = st.tabs([
+        "持仓",
+        "关注",
+        "A股持仓",
+        "A股关注",
+        "未归档分析",
+    ])
     with tab_holdings:
         _render_pool_table("持仓池", holdings_rows)
         _render_note_editor(holdings_rows, "holdings")
@@ -69,6 +79,14 @@ def render_stock_workbench() -> None:
         _render_pool_table("关注池", watch_rows)
         _render_note_editor(watch_rows, "watchlist")
         _render_pool_detail_selector(watch_rows, "watchlist")
+    with tab_a_share_holdings:
+        _render_pool_table("A股持仓池", a_share_holding_rows)
+        _render_note_editor(a_share_holding_rows, "a_share_holdings")
+        _render_pool_detail_selector(a_share_holding_rows, "a_share_holdings")
+    with tab_a_share_watch:
+        _render_pool_table("A股关注池", a_share_watch_rows)
+        _render_note_editor(a_share_watch_rows, "a_share_watchlist")
+        _render_pool_detail_selector(a_share_watch_rows, "a_share_watchlist")
     with tab_orphans:
         _render_orphan_reports(reports, pool_rows)
 
@@ -161,7 +179,7 @@ def _pool_table_rows(rows: list[dict]) -> list[dict]:
             else shufen_scores.get("total_score")
         )
         table.append({
-            "Ticker": row["symbol"],
+            "Ticker": _ticker_display(row),
             "来源": row["source"],
             "当前价": _fmt_price(row.get("current_price")),
             "最新分析": _short_date(row.get("analysis_updated_at")),
@@ -178,12 +196,66 @@ def _pool_table_rows(rows: list[dict]) -> list[dict]:
     return table
 
 
+def _ticker_display(row: dict) -> str:
+    symbol = row["symbol"]
+    company_name = str(row.get("company_name") or "").strip()
+    if row.get("is_a_share_view") and company_name:
+        return f"{symbol} · {company_name}"
+    return symbol
+
+
 def _style_pool_table(df: pd.DataFrame, rows: list[dict]):
     styles = []
     for row in rows:
         color = _current_price_color(row.get("current_price"), row.get("price_plan") or {})
         styles.append(["" if column != "当前价" else color for column in df.columns])
     return df.style.apply(lambda _: pd.DataFrame(styles, index=df.index, columns=df.columns), axis=None)
+
+
+def _us_holding_rows(rows: list[dict]) -> list[dict]:
+    return [
+        row for row in rows
+        if "持仓" in row.get("source", "") and not _is_a_share_symbol(row.get("symbol", ""))
+    ]
+
+
+def _us_watch_rows(rows: list[dict]) -> list[dict]:
+    return [
+        row for row in rows
+        if "关注" in row.get("source", "") and not _is_a_share_symbol(row.get("symbol", ""))
+    ]
+
+
+def _a_share_holding_rows(rows: list[dict]) -> list[dict]:
+    return [
+        row for row in rows
+        if "持仓" in row.get("source", "") and _is_a_share_symbol(row.get("symbol", ""))
+    ]
+
+
+def _a_share_watch_rows(rows: list[dict]) -> list[dict]:
+    return [
+        row for row in rows
+        if "关注" in row.get("source", "") and _is_a_share_symbol(row.get("symbol", ""))
+    ]
+
+
+def _decorate_a_share_rows(rows: list[dict]) -> list[dict]:
+    for row in rows:
+        report = row.get("report")
+        analysis = report.analysis if report else {}
+        row["is_a_share_view"] = True
+        row["company_name"] = get_a_share_name(row.get("symbol", ""), analysis.get("company") or "")
+    return rows
+
+
+def _is_a_share_symbol(symbol: str) -> bool:
+    symbol = str(symbol or "").upper().strip()
+    if not symbol:
+        return False
+    if symbol.endswith((".SS", ".SZ", ".SH", ".BJ")):
+        return bool(re.match(r"^\d{6}\.(SS|SZ|SH|BJ)$", symbol))
+    return bool(re.match(r"^\d{6}$", symbol))
 
 
 def _current_price_color(current_price, price_plan: dict) -> str:
@@ -265,7 +337,6 @@ def _render_detail(row: dict) -> None:
         return
 
     analysis = report.analysis
-    price_plan = analysis.get("price_plan") or {}
     xiaoyan_scores = analysis.get("scores") or {}
     shufen_scores = analysis.get("shufen_scores") or {}
     probability = analysis.get("probability") or {}
@@ -279,45 +350,11 @@ def _render_detail(row: dict) -> None:
     for alert in row.get("alerts") or []:
         st.warning(alert["message"])
 
-    detail_tabs = st.tabs(["决策摘要", "价格计划", "交易规则", "催化验证", "完整报告"])
-    with detail_tabs[0]:
-        st.markdown(f"**公司**：{analysis.get('company', '-')}")
-        st.markdown(f"**结论**：{analysis.get('conclusion', '-')}")
-        st.markdown(f"**主 thesis**：{analysis.get('main_thesis', '-')}")
-        st.markdown(f"**反 thesis**：{analysis.get('bear_thesis', '-')}")
-        narrative = analysis.get("market_narrative") or {}
-        if narrative:
-            st.markdown(f"**市场正在交易**：{narrative.get('current_market_story', '-')}")
-            st.markdown(f"**Price in 状态**：{narrative.get('price_in_status', '-')}")
-        _render_score_table(xiaoyan_scores, shufen_scores)
-
-    with detail_tabs[1]:
-        _render_price_plan(price_plan)
-        risk_reward = analysis.get("risk_reward") or {}
-        if risk_reward:
-            st.markdown("#### 风险收益")
-            st.json(risk_reward, expanded=False)
-
-    with detail_tabs[2]:
-        _render_list_section("买入条件", (analysis.get("trade_rules") or {}).get("entry_conditions"))
-        _render_list_section("加仓条件", (analysis.get("trade_rules") or {}).get("add_conditions"))
-        _render_list_section("减仓条件", (analysis.get("trade_rules") or {}).get("trim_conditions"))
-        _render_list_section("退出条件", (analysis.get("trade_rules") or {}).get("exit_conditions"))
-        decision_engine = analysis.get("decision_engine") or {}
-        if decision_engine:
-            st.markdown("#### 机器可读触发规则")
-            st.json(decision_engine, expanded=False)
-
-    with detail_tabs[3]:
-        _render_catalysts(analysis.get("catalysts") or [])
-        _render_list_section("后续验证指标", analysis.get("validation_metrics"))
-        _render_list_section("失败条件", analysis.get("failure_conditions"))
-
-    with detail_tabs[4]:
-        if report.markdown_path:
-            st.markdown(report.markdown_path.read_text(encoding="utf-8"))
-        else:
-            st.json({"meta": report.meta, "ticker_analysis": analysis}, expanded=False)
+    st.markdown("#### 完整报告")
+    if report.markdown_path:
+        st.markdown(report.markdown_path.read_text(encoding="utf-8"))
+    else:
+        st.json({"meta": report.meta, "ticker_analysis": analysis}, expanded=False)
 
 
 def _render_orphan_reports(reports: dict, pool_rows: list[dict]) -> None:

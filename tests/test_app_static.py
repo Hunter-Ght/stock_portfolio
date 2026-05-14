@@ -34,6 +34,26 @@ class AppStaticTest(unittest.TestCase):
             source.index("load_latest_reports_by_ticker()"),
         )
 
+    def test_stock_workbench_detail_only_keeps_full_report(self):
+        source = Path("components/stock_workbench.py").read_text(encoding="utf-8")
+        detail_source = source[source.index("def _render_detail"):source.index("def _render_orphan_reports")]
+
+        self.assertIn("完整报告", detail_source)
+        self.assertNotIn("决策摘要", detail_source)
+        self.assertNotIn("价格计划", detail_source)
+        self.assertNotIn("交易规则", detail_source)
+        self.assertNotIn("催化验证", detail_source)
+
+    def test_stock_workbench_has_a_share_holdings_tab(self):
+        source = Path("components/stock_workbench.py").read_text(encoding="utf-8")
+
+        self.assertIn("A股持仓", source)
+        self.assertIn("A股关注", source)
+        self.assertLess(source.index('"持仓"'), source.index('"关注"'))
+        self.assertLess(source.index('"关注"'), source.index('"A股持仓"'))
+        self.assertLess(source.index('"A股持仓"'), source.index('"A股关注"'))
+        self.assertLess(source.index('"A股关注"'), source.index('"未归档分析"'))
+
 
 if __name__ == "__main__":
     unittest.main()

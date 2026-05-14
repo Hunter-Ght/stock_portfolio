@@ -18,7 +18,7 @@
 - 🌓 **主题切换** - 支持深色/浅色主题一键切换
 - 🎯 **期权识别** - 自动识别期权策略组合（价差、跨式等）
 - 💵 **现金支持** - 导入时自动提取现金余额，完整展示净资产
-- 🔎 **个股工作台** - 读取本地 JSON/Markdown 研究报告，按“持仓 + 关注”展示个股分析、价格区间、手工备注和页面内提醒
+- 🔎 **个股工作台** - 读取本地 JSON/Markdown 研究报告，按美股/A股的“持仓 + 关注”展示个股分析、价格区间、手工备注和页面内提醒
 - 📁 **本地存储** - 数据保存在本地 JSON 文件，隐私安全
 
 ## 🚀 快速开始
@@ -58,7 +58,7 @@ DEFAULT_BROKER=Robinhood
 
 ### 研究报告文件命名
 
-固定使用以下命名格式：
+美股报告固定使用以下命名格式：
 
 ```text
 YYYY-MM-DD_TICKER_skill1_skill2.json
@@ -72,31 +72,79 @@ data/2026-05-12_CRCL_xiaoyan_shufen.json
 data/2026-05-12_CRCL_xiaoyan_shufen.md
 ```
 
-也可以放到更整洁的目录：
+推荐放到更整洁的美股目录：
 
 ```text
-data/research_reports/2026-05-12_CRCL_xiaoyan_shufen.json
-data/research_reports/2026-05-12_CRCL_xiaoyan_shufen.md
+data/research_reports/us/2026-05-12_CRCL_xiaoyan_shufen.json
+data/research_reports/us/2026-05-12_CRCL_xiaoyan_shufen.md
 ```
 
-JSON 负责结构化数据，Markdown 负责完整阅读版正文。两者同名时，工作台会自动把 Markdown 作为“完整报告”展示。
+A股报告固定使用以下命名格式：
+
+```text
+YYYY-MM-DD_数字股票代码_字母代码_skill_Ashare.json
+YYYY-MM-DD_数字股票代码_字母代码_skill_Ashare.md
+```
+
+示例：
+
+```text
+data/research_reports/a_share/2026-05-13_600519_MOUTAI_FLT_Ashare.json
+data/research_reports/a_share/2026-05-13_600519_MOUTAI_FLT_Ashare.md
+```
+
+其中 `FLT` 和 `xiaoyan`、`shufen` 一样，会被当作分析 skill / 分析人名；`Ashare` 是市场标记，用来告诉工作台这是 A 股报告。旧目录 `data/research_reports/` 和 `data/` 仍然兼容，但新文件建议按 `us/` 和 `a_share/` 分开。
+
+推荐新格式是 **只保留 Markdown**，并在文件顶部放一段 JSON front matter。这样一个 `.md` 同时负责表格字段和完整报告正文，不再需要单独维护 `.json`：
+
+```md
+---
+{
+  "schema_version": "1.0.0",
+  "generated_at": "2026-05-13T10:30:00-07:00",
+  "ticker": "688981.SH",
+  "market": "Ashare",
+  "company": "中芯国际",
+  "skills": ["FLT"],
+  "action": "hold_no_add / buy_on_pullback",
+  "flt_scores": {"total_score": 73},
+  "price_plan": {
+    "current_price": 121.86,
+    "buy_zone": [108, 116],
+    "trim_zone": [145, 160],
+    "invalid_price": 106,
+    "hard_stop": 100
+  }
+}
+---
+
+# 中芯国际完整报告
+
+这里开始写完整分析正文。
+```
+
+兼容规则：
+
+- 如果同名 `.json` 和 `.md` 都存在，优先读取 `.json` 作为结构化数据，`.md` 作为“完整报告”正文。
+- 如果只有 `.md`，工作台会读取顶部 JSON front matter 作为结构化数据。
+- 如果 `.md` 没有 front matter，它只会作为普通正文文件；没有结构化字段时不会进入表格分析状态。
 
 如果程序已经在运行，更新了 `.json` 或 `.md` 文件后，可以在个股工作台顶部点击 **刷新分析文件**，页面会重新扫描本地研究报告目录并读取最新文件。
 
 ### 股票池规则
 
-工作台只维护两个股票池：
+工作台底层只维护两个股票来源：
 
 - **持仓**：来自 `data/portfolio.json`
 - **关注**：来自 `data/watchlist.json`
 
-是否已有分析只是 ticker 的状态字段。如果某个 JSON 报告对应的 ticker 不在持仓或关注列表中，它会出现在“未归档分析”里，可以一键加入关注。
+页面按顺序展示五个区域：**持仓**、**关注**、**A股持仓**、**A股关注**、**未归档分析**。是否已有分析只是 ticker 的状态字段；没有分析时表格先空着对应分析列。如果某个 JSON 报告对应的 ticker 不在持仓或关注列表中，它会出现在“未归档分析”里，可以一键加入关注。
 
 持仓池的股票直接复用“持仓追踪”页中“股票 & ETF 持仓”的口径；如果某个正股被识别为 covered call 等组合腿，它不会在两个页面里出现不同口径。
 
 ### 表格、备注和提醒
 
-持仓池和关注池表格会展示：
+持仓池、关注池、A股持仓池和A股关注池表格会展示：
 
 - `Ticker`、`来源`、`当前价`、`最新分析`、`动作`
 - `xiaoyan总分`、`shufen总分`
@@ -389,7 +437,7 @@ Dashboard 会自动识别以下列名：
 > A: 不建议上传 `.env`、`data/portfolio.json`、`data/watchlist.json`、`data/stock_notes.json`、`data/alert_config.json`，以及包含个人持仓或交易计划的真实研究报告 JSON/Markdown。`tests/` 目录建议上传，它用于防止功能回归。
 
 **Q: 更新研究报告文件后页面没变化怎么办？**
-> A: 在个股工作台顶部点击 **刷新分析文件**。如果仍未变化，确认文件名符合 `YYYY-MM-DD_TICKER_skill1_skill2.json` / `.md`，并且 JSON 至少包含 `meta.generated_at`、`ticker_analysis[].ticker`、`scores.total_score` 和 `price_plan.current_price`。
+> A: 在个股工作台顶部点击 **刷新分析文件**。如果仍未变化，确认美股文件名符合 `YYYY-MM-DD_TICKER_skill1_skill2.json` / `.md`，A股文件名符合 `YYYY-MM-DD_数字股票代码_字母代码_skill_Ashare.json` / `.md`。如果只放 `.md`，顶部 JSON front matter 至少需要包含 `generated_at`、`ticker`、`scores.total_score` 或 `flt_scores.total_score`，以及 `price_plan.current_price`。
 
 ## 🧪 测试
 
@@ -439,6 +487,8 @@ stock_portfolio/
 │   ├── stock_notes.json  # 个股备注
 │   ├── alert_config.json # 提醒配置
 │   └── research_reports/ # 可选：本地研究报告
+│       ├── us/           # 美股研究报告
+│       └── a_share/      # A股研究报告
 └── README.md             # 你正在看的这个文件
 ```
 
