@@ -54,6 +54,21 @@ class AppStaticTest(unittest.TestCase):
         self.assertLess(source.index('"A股持仓"'), source.index('"A股关注"'))
         self.assertLess(source.index('"A股关注"'), source.index('"未归档分析"'))
 
+    def test_stock_workbench_does_not_auto_render_first_detail(self):
+        source = Path("components/stock_workbench.py").read_text(encoding="utf-8")
+        selector_source = source[source.index("def _render_pool_detail_selector"):source.index("def _render_detail")]
+
+        self.assertIn('[""] + [row["symbol"] for row in rows]', selector_source)
+        self.assertIn('if selected:', selector_source)
+        self.assertIn('placeholder="选择后加载详情"', selector_source)
+
+    def test_stock_workbench_uses_cached_quotes_with_manual_refresh(self):
+        source = Path("components/stock_workbench.py").read_text(encoding="utf-8")
+
+        self.assertIn("刷新行情", source)
+        self.assertIn("@st.cache_data(ttl=900", source)
+        self.assertIn("_current_prices.clear()", source)
+
 
 if __name__ == "__main__":
     unittest.main()

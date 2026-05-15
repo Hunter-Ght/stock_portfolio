@@ -8,7 +8,7 @@ import pandas as pd
 import streamlit as st
 
 from services.alert_engine import evaluate_price_alerts
-from services.a_share_names import get_a_share_name
+from services.a_share_names import load_a_share_names, normalize_a_share_code
 from services.market_data import get_quotes
 from services.portfolio import load_positions
 from services.research_store import (
@@ -45,7 +45,8 @@ def render_stock_workbench() -> None:
         _render_orphan_reports(reports, pool_rows)
         return
 
-    prices = _current_prices(pool_rows)
+    _render_market_price_refresh_control()
+    prices = _current_prices(tuple(row["symbol"] for row in pool_rows if row["symbol"]))
     for row in pool_rows:
         if prices.get(row["symbol"]):
             row["current_price"] = prices[row["symbol"]]
@@ -101,6 +102,18 @@ def _render_analysis_refresh_control() -> None:
     if refreshed_at:
         with col_status:
             st.caption(f"分析文件已于 {refreshed_at} 重新加载")
+
+
+def _render_market_price_refresh_control() -> None:
+    col_refresh, col_status = st.columns([1, 4])
+    with col_refresh:
+        if st.button("刷新行情", use_container_width=True):
+            _current_prices.clear()
+            st.session_state["market_prices_refreshed_at"] = datetime.now().strftime("%H:%M:%S")
+    refreshed_at = st.session_state.get("market_prices_refreshed_at")
+    if refreshed_at:
+        with col_status:
+            st.caption(f"行情已于 {refreshed_at} 重新刷新；平时会使用 15 分钟缓存")
 
 
 def _render_watchlist_controls(existing_symbols: list[str]) -> None:
@@ -241,11 +254,13 @@ def _a_share_watch_rows(rows: list[dict]) -> list[dict]:
 
 
 def _decorate_a_share_rows(rows: list[dict]) -> list[dict]:
+    cached_names = load_a_share_names()
     for row in rows:
         report = row.get("report")
         analysis = report.analysis if report else {}
         row["is_a_share_view"] = True
-        row["company_name"] = get_a_share_name(row.get("symbol", ""), analysis.get("company") or "")
+        code = normalize_a_share_code(row.get("symbol", ""))
+        row["company_name"] = (analysis.get("company") or cached_names.get(code, "")).strip()
     return rows
 
 
@@ -320,12 +335,13 @@ def _render_pool_detail_selector(rows: list[dict], key_prefix: str) -> None:
     st.markdown("---")
     selected = st.selectbox(
         "选择 ticker 查看详情",
-        [row["symbol"] for row in rows],
+        [""] + [row["symbol"] for row in rows],
         format_func=lambda symbol: _select_label(symbol, rows),
+        placeholder="选择后加载详情",
         key=f"{key_prefix}_detail_symbol",
     )
-    row = next((item for item in rows if item["symbol"] == selected), None)
-    if row:
+    if selected:
+        row = next((item for item in rows if item["symbol"] == selected), None)
         _render_detail(row)
 
 
@@ -373,9 +389,9 @@ def _render_orphan_reports(reports: dict, pool_rows: list[dict]) -> None:
             st.rerun()
 
 
-def _current_prices(rows: list[dict]) -> dict[str, float]:
-    symbols = [row["symbol"] for row in rows if row["symbol"]]
-    quotes = get_quotes(symbols)
+@st.cache_data(ttl=900, show_spinner=False)
+def _current_prices(symbols: tuple[str, ...]) -> dict[str, float]:
+    quotes = get_quotes(list(symbols))
     return {symbol: quote["price"] for symbol, quote in quotes.items() if quote.get("price")}
 
 
@@ -420,6 +436,8 @@ def _render_list_section(title: str, items) -> None:
 
 
 def _select_label(symbol: str, rows: list[dict]) -> str:
+    if not symbol:
+        return "选择后加载详情"
     row = next((item for item in rows if item["symbol"] == symbol), {})
     label = f"{symbol} · {row.get('source', '')}"
     if row.get("has_analysis"):

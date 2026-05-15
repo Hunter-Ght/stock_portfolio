@@ -163,6 +163,10 @@ data/research_reports/a_share/2026-05-13_600519_MOUTAI_FLT_Ashare.md
 - 当前价 `<= invalid_price`：显示 `跌破失效价`
 - 当前价 `<= hard_stop`：显示 `跌破 Hard Stop`，并优先于失效价提示
 
+为了加快页面打开速度，个股工作台默认只渲染四个池子的表格；完整报告不会自动展开。需要查看详情时，在对应池子下方的 `选择 ticker 查看详情` 里选择标的，页面才会读取并渲染该 ticker 的 Markdown 正文。
+
+行情会缓存 15 分钟，避免每次切换页面或编辑备注都重新请求 Yahoo Finance。需要立即更新价格时，点击个股工作台顶部的 **刷新行情**。
+
 手工备注保存在 `data/stock_notes.json`，不会写回持仓文件，也不会修改 AI 分析 JSON/Markdown。备注为空时会删除该 ticker 的备注。持仓池和关注池表格会自动展开显示全部行，不在表格内部滚动。
 
 ### JSON 最小字段
