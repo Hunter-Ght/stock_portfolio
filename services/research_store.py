@@ -101,6 +101,10 @@ def load_report(path: Path) -> ResearchReport | None:
     except Exception:
         return None
 
+    # New flat format: top-level ticker with no ticker_analysis wrapper
+    if data.get("ticker") and "ticker_analysis" not in data:
+        return _load_flat_json_report(Path(path), data, name_info)
+
     meta = dict(data.get("meta") or {})
     if name_info:
         meta.setdefault("report_date", name_info["date"])
@@ -140,6 +144,39 @@ def load_report(path: Path) -> ResearchReport | None:
     return reports[0] if reports else None
 
 
+def _load_flat_json_report(path: Path, data: dict, name_info: dict | None) -> ResearchReport | None:
+    """Load a new-style flat JSON report (schema v1.1+ without meta/ticker_analysis wrappers)."""
+    meta_keys = {"schema_version", "generated_at", "market", "skills", "company"}
+    meta = {k: data[k] for k in meta_keys if k in data}
+    if name_info:
+        meta.setdefault("report_date", name_info["date"])
+        meta.setdefault("market", name_info["market"])
+        meta.setdefault("skills", name_info["skills"])
+        if name_info.get("letter_code"):
+            meta.setdefault("letter_code", name_info["letter_code"])
+
+    analysis = dict(data)
+    if name_info:
+        if name_info["market"] == "Ashare":
+            analysis["ticker"] = normalize_a_share_code(analysis.get("ticker", "")) or name_info["ticker"]
+        else:
+            analysis.setdefault("ticker", name_info["ticker"])
+        analysis.setdefault("market", name_info["market"])
+        analysis.setdefault("skills", name_info["skills"])
+        if name_info.get("letter_code"):
+            analysis.setdefault("letter_code", name_info["letter_code"])
+
+    _normalize_score_fields(analysis)
+    if not _has_minimum_analysis_fields(meta, analysis):
+        return None
+    return ResearchReport(
+        path=path,
+        markdown_path=_matching_markdown_path(path),
+        meta=meta,
+        analysis=analysis,
+    )
+
+
 def _load_markdown_report(path: Path, name_info: dict | None) -> ResearchReport | None:
     try:
         content = path.read_text(encoding="utf-8")
@@ -165,8 +202,9 @@ def build_stock_pool(
     positions: list[Position],
     watchlist_symbols: list[str],
     reports_by_ticker: dict[str, ResearchReport],
+    closed_items: list[dict] | None = None,
 ) -> list[dict]:
-    """Build the workbench pool from holdings + watchlist only."""
+    """Build the workbench pool from holdings + watchlist + closed review items."""
     holdings: dict[str, dict] = {}
     for position in _dashboard_stock_positions(positions):
         symbol = position.symbol.upper().strip()
@@ -193,7 +231,15 @@ def build_stock_pool(
         if symbol:
             watchlist.append(symbol)
 
-    symbols = sorted(set(holdings) | set(watchlist))
+    closed = []
+    for item in closed_items or []:
+        symbol = str(item.get("symbol") or "").upper().strip()
+        if symbol:
+            closed.append({**item, "symbol": symbol})
+
+    active_symbols = set(holdings) | set(watchlist)
+    closed_symbols = [item["symbol"] for item in closed if item["symbol"] not in active_symbols]
+    symbols = sorted(active_symbols) + sorted(set(closed_symbols))
     rows = []
     for symbol in symbols:
         holding = holdings.get(symbol, {
@@ -206,6 +252,9 @@ def build_stock_pool(
         sources = set(holding["sources"])
         if symbol in watchlist:
             sources.add("关注")
+        closed_item = next((item for item in closed if item["symbol"] == symbol), {})
+        if symbol not in active_symbols:
+            sources.add("已平仓复盘")
         report = _report_for_symbol(symbol, reports_by_ticker)
         analysis = report.analysis if report else {}
         price_plan = analysis.get("price_plan") or {}
@@ -224,6 +273,8 @@ def build_stock_pool(
             "total_score": (analysis.get("scores") or {}).get("total_score"),
             "shufen_score": (analysis.get("shufen_scores") or {}).get("total_score"),
             "price_plan": price_plan,
+            "note": closed_item.get("notes") or "",
+            "closed_at": closed_item.get("closed_at") or "",
         })
     return rows
 
@@ -366,12 +417,16 @@ def _has_minimum_analysis_fields(meta: dict, analysis: dict) -> bool:
 
 
 def _normalize_score_fields(analysis: dict) -> None:
-    if analysis.get("scores"):
+    scores = analysis.get("scores")
+    if isinstance(scores, dict) and "total_score" in scores:
+        # New flat format: scores may contain xiaoyan/shufen sub-keys
+        if "shufen" in scores and not analysis.get("shufen_scores"):
+            analysis["shufen_scores"] = {"total_score": scores["shufen"]}
         return
     for key in ("flt_scores", "xiaoyan_scores", "shufen_scores"):
-        scores = analysis.get(key)
-        if isinstance(scores, dict) and "total_score" in scores:
-            analysis["scores"] = scores
+        fallback = analysis.get(key)
+        if isinstance(fallback, dict) and "total_score" in fallback:
+            analysis["scores"] = fallback
             return
 
 

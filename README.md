@@ -18,7 +18,7 @@
 - 🌓 **主题切换** - 支持深色/浅色主题一键切换
 - 🎯 **期权识别** - 自动识别期权策略组合（价差、跨式等）
 - 💵 **现金支持** - 导入时自动提取现金余额，完整展示净资产
-- 🔎 **个股工作台** - 读取本地 JSON/Markdown 研究报告，按美股/A股的“持仓 + 关注”展示个股分析、价格区间、手工备注和页面内提醒
+- 🔎 **美股/A股工作台** - 读取本地 JSON/Markdown 研究报告，分别展示美股和 A股的持仓、关注、复盘和未归档分析
 - 📁 **本地存储** - 数据保存在本地 JSON 文件，隐私安全
 
 ## 🚀 快速开始
@@ -52,9 +52,16 @@ DEFAULT_BROKER=Robinhood
 
 如果不配置，会使用默认值 `IBKR, Schwab, Firstrade, Manual`。手动录入后，下一次继续录入会默认使用上一次选择的券商。
 
-## 🔎 个股工作台
+## 🔎 美股/A股工作台
 
-个股工作台不会调用 AI，也不会消耗 token。你可以在网页版 AI 或其他地方生成研究报告，再把结果保存为本地 JSON / Markdown 文件，Dashboard 会自动读取。
+美股工作台和 A股工作台不会调用 AI，也不会消耗 token。你可以在网页版 AI 或其他地方生成研究报告，再把结果保存为本地 JSON / Markdown 文件，Dashboard 会自动读取。
+
+当前导航包含四个主要页面：
+
+- **持仓追踪**：多券商美股持仓追踪，继续使用 `data/portfolio.json`
+- **美股工作台**：只展示美股的持仓、关注、已平仓复盘和未归档分析
+- **A股持仓追踪**：手动录入 A股数字代码、数量和成本，展示总览、图表和持仓明细，独立保存到 `data/a_share_positions.json`
+- **A股工作台**：只展示 A股持仓、A股关注、已平仓复盘和未归档分析
 
 ### 研究报告文件命名
 
@@ -129,49 +136,110 @@ data/research_reports/a_share/2026-05-13_600519_MOUTAI_FLT_Ashare.md
 - 如果只有 `.md`，工作台会读取顶部 JSON front matter 作为结构化数据。
 - 如果 `.md` 没有 front matter，它只会作为普通正文文件；没有结构化字段时不会进入表格分析状态。
 
-如果程序已经在运行，更新了 `.json` 或 `.md` 文件后，可以在个股工作台顶部点击 **刷新分析文件**，页面会重新扫描本地研究报告目录并读取最新文件。
+如果程序已经在运行，更新了 `.json` 或 `.md` 文件后，可以在对应工作台顶部点击 **刷新分析文件**，页面会重新扫描本地研究报告目录并读取最新文件。
 
 ### 股票池规则
 
-工作台底层只维护两个股票来源：
+美股工作台底层维护三个股票来源：
 
 - **持仓**：来自 `data/portfolio.json`
 - **关注**：来自 `data/watchlist.json`
+- **已平仓复盘**：来自 `data/closed_positions.json`，用于保存已经卖出、不想继续放关注列表、但还想跟踪复盘的 ticker
 
-页面按顺序展示五个区域：**持仓**、**关注**、**A股持仓**、**A股关注**、**未归档分析**。是否已有分析只是 ticker 的状态字段；没有分析时表格先空着对应分析列。如果某个 JSON 报告对应的 ticker 不在持仓或关注列表中，它会出现在“未归档分析”里，可以一键加入关注。
+A股工作台底层维护三个独立来源：
 
-持仓池的股票直接复用“持仓追踪”页中“股票 & ETF 持仓”的口径；如果某个正股被识别为 covered call 等组合腿，它不会在两个页面里出现不同口径。
+- **A股持仓**：来自 `data/a_share_positions.json`
+- **A股关注**：来自 `data/a_share_watchlist.json`
+- **A股已平仓复盘**：来自 `data/a_share_closed_positions.json`
 
-### 表格、备注和提醒
+首次打开 A股工作台时，程序会自动把旧 `data/watchlist.json` 和 `data/closed_positions.json` 里的 A股代码迁移到新的 A股独立文件，并从美股文件里移除，避免重复显示。
 
-持仓池、关注池、A股持仓池和A股关注池表格会展示：
+美股工作台按顺序展示四个区域：**持仓**、**关注**、**已平仓复盘**、**未归档分析**。A股工作台按顺序展示四个区域：**A股持仓**、**A股关注**、**已平仓复盘**、**未归档分析**。是否已有分析只是 ticker 的状态字段；没有分析时表格先空着对应分析列。如果某个 JSON 报告对应的 ticker 不在持仓、关注或复盘列表中，它会出现在“未归档分析”里，可以一键加入关注或加入复盘。
 
-- `Ticker`、`来源`、`当前价`、`最新分析`、`动作`
-- `xiaoyan总分`、`shufen总分`
-- `买入区`、`减仓区`、`失效价`、`Hard Stop`
-- `提醒`、`备注`
+美股持仓池的股票直接复用“持仓追踪”页中“股票 & ETF 持仓”的口径；如果某个正股被识别为 covered call 等组合腿，它不会在两个页面里出现不同口径。A股持仓池直接读取“A股持仓追踪”页里的数字代码持仓。
 
-`当前价` 会根据分析价格区间自动上色：
+关注池里可以把 ticker **移入复盘**；未归档分析里可以直接 **加入复盘**。已平仓复盘池里可以把 ticker **移回关注** 或 **移出复盘**。如果复盘池里的 ticker 重新出现在持仓或关注里，它会优先显示在持仓/关注池，不会重复显示在复盘池。
 
-- 当前价 `<= 买入区` 上限：红色加粗
-- 当前价 `>= 减仓区` 下限：绿色加粗
-- 如果两个条件同时命中，绿色优先
+### 美股工作台：板块分组视图
 
-`提醒` 列会根据当前价和 `price_plan` 触发提示：
+美股持仓和关注池按 **板块** 分组，每个板块是一个可折叠 expander，标题显示板块名称和 ETF 代码。
 
-- 进入或接近买入区、加仓区、减仓区
-- 当前价 `<= invalid_price`：显示 `跌破失效价`
-- 当前价 `<= hard_stop`：显示 `跌破 Hard Stop`，并优先于失效价提示
+展开后显示两部分：
+1. **板块触发点**：预设的板块级别逃顶/关注信号，比如 `XBI 单周 < −6% → 全板块逃顶分析`
+2. **个股表格**：该板块内所有股票，每行包含以下字段：
 
-为了加快页面打开速度，个股工作台默认只渲染四个池子的表格；完整报告不会自动展开。需要查看详情时，在对应池子下方的 `选择 ticker 查看详情` 里选择标的，页面才会读取并渲染该 ticker 的 Markdown 正文。
+| 列 | 说明 |
+|----|------|
+| **Ticker** | 股票代码 + 公司名 + 来源标签（持仓/关注/复盘） |
+| **动作** | 彩色徽标：🟢立即买入 / 🔵持有 / 🟡减仓/回调买入 / 🔴回避 / 🟣其他 |
+| **价格区间** | 可视化进度条 + 买入区/减仓区数字注释（如 `买 105–115 减 140–150 失效 88`） |
+| **下次财报** | 精确日期显示为 `May 27 / N天后`；季度估计显示为 `~2026 Q3`；月份估计显示为 `~Aug` |
+| **状态** | 价格位置状态徽标：买入区/接近买入/持有区/接近减仓/减仓区 |
+| **评分** | xiaoyan / shufen 总分 |
+| **关注触发** | 个股自定义 watch_triggers 列表 |
+
+**状态颜色说明**：
+- 🟢 **买入区** / 接近买入：当前价在或接近 `buy_zone`
+- 🟠 **接近减仓** / 减仓区：当前价在或接近 `trim_zone`
+- ⚫ **失效** / **止损**：当前价跌破 `invalid_price` 或 `hard_stop`
+
+板块分类来源于报告中的 `sector` 字段（直接使用短键如 `"tech"`），或从旧格式自由文本通过关键词自动推断（如 `"Industrials / Aerospace"` → `ind`）。
+
+板块定义保存在 `services/sector_config.py`，当前支持：`bio`（生物医药）、`nuc`（核能/清洁能源）、`tech`（科技/AI）、`mat`（材料/大宗商品）、`ind`（工业/国防）、`oth`（其他）。
+
+A股工作台沿用原始平铺表格，不分板块。
+
+### 备注与刷新
+
+为了加快页面打开速度，工作台默认只渲染各个池子的表格；完整报告不会自动展开。需要查看详情时，在对应池子下方的 `选择 ticker 查看详情` 里选择标的，页面才会读取并渲染该 ticker 的 Markdown 正文。
 
 行情会缓存 15 分钟，避免每次切换页面或编辑备注都重新请求 Yahoo Finance。需要立即更新价格时，点击个股工作台顶部的 **刷新行情**。
 
-手工备注保存在 `data/stock_notes.json`，不会写回持仓文件，也不会修改 AI 分析 JSON/Markdown。备注为空时会删除该 ticker 的备注。持仓池和关注池表格会自动展开显示全部行，不在表格内部滚动。
+手工备注保存在 `data/stock_notes.json`，不会写回持仓文件，也不会修改 AI 分析 JSON/Markdown。复盘池的初始备注保存在 `data/closed_positions.json`。备注为空时会删除该 ticker 的备注。持仓池和关注池表格会自动展开显示全部行，不在表格内部滚动。
 
 ### JSON 最小字段
 
-报告至少需要包含：
+#### 新版 flat 格式（schema v1.1.0，推荐）
+
+所有字段位于顶层，无需 `meta` / `ticker_analysis` 嵌套：
+
+```json
+{
+  "schema_version": "1.1.0",
+  "generated_at": "2026-05-20T10:00:00-07:00",
+  "ticker": "CRCL",
+  "market": "US",
+  "company": "Circle Internet Financial",
+  "action": "buy_on_pullback",
+  "sector": "tech",
+  "conclusion": "等回撤 / 小仓试错 / 不追高",
+  "scores": {"total_score": 63, "xiaoyan": 32, "shufen": 31},
+  "watch_triggers": [
+    "NVDA 财报收跌 > 5% → 重新评估",
+    "当前价跌破 90 → 重新检视失效逻辑"
+  ],
+  "price_plan": {
+    "current_price": 28.5,
+    "buy_zone": [25, 28],
+    "trim_zone": [38, 42],
+    "invalid_price": 22,
+    "hard_stop": 20,
+    "earnings_date": "2026-Q3 / likely August 2026"
+  }
+}
+```
+
+`sector` 直接使用短键（`bio` / `nuc` / `tech` / `mat` / `ind` / `oth`）；若留空或填写旧格式自由文本（如 `"Industrials / Aerospace"`），工作台会自动通过关键词推断。
+
+`scores.xiaoyan` 和 `scores.shufen` 是各自的子分，工作台会自动同步到评分列。
+
+`watch_triggers` 是字符串数组，显示在板块视图的个股行中，用于提示个股独立监控信号。
+
+`earnings_date` 支持三种写法：精确 ISO 日期（`"2026-08-15"`）、季度估计（`"2026-Q3 / likely August"`）、月份估计（`"likely August 2026"`）。
+
+#### 旧版嵌套格式（向后兼容）
+
+旧版 `meta` + `ticker_analysis` 格式仍然完全支持：
 
 ```json
 {
@@ -191,7 +259,6 @@ data/research_reports/a_share/2026-05-13_600519_MOUTAI_FLT_Ashare.md
       "price_plan": {
         "current_price": 121.1,
         "buy_zone": [105, 115],
-        "add_zone": [90, 100],
         "trim_zone": [140, 150],
         "invalid_price": 88,
         "hard_stop": 80
@@ -200,6 +267,8 @@ data/research_reports/a_share/2026-05-13_600519_MOUTAI_FLT_Ashare.md
   ]
 }
 ```
+
+两种格式可以在同一目录混用；工作台会自动识别，取同一 ticker 最新的那份报告。
 
 价格区间请固定使用 `[low, high]` 数组，不要写成 `"105-115"` 字符串。
 
@@ -429,7 +498,7 @@ Dashboard 会自动识别以下列名：
 > A: 如果 CSV 中没有提供价格，Dashboard 会在刷新行情时自动从 Yahoo Finance 获取。如果 Yahoo Finance 识别不了这个代码（比如某些小众OTC股票），就会显示 0。请确认你的代码是 Yahoo Finance 认可的标准代码。
 
 **Q: 支持港股/A股吗？**
-> A: 目前主要为美股设计。如果需要港股，代码要加后缀 `.HK`（如 `0700.HK`），Yahoo Finance 能识别就能出价格。
+> A: 港股目前按美股/海外行情逻辑处理，代码要加后缀 `.HK`（如 `0700.HK`），Yahoo Finance 能识别就能出价格。A股已经独立成 **A股持仓追踪** 和 **A股工作台**，录入数字代码即可，行情和中文名通过 A股专用逻辑补齐。
 
 **Q: 可以手动添加持仓吗？**
 > A: 可以！左侧边栏有 ✏️ 手动添加功能，输入代码、数量、成本即可添加。适合添加其他券商的少量持仓。
@@ -438,10 +507,10 @@ Dashboard 会自动识别以下列名：
 > A: 左侧边栏底部 🗂️ 管理持仓，可以删除整个券商的所有持仓，也可以删除单个持仓。
 
 **Q: 哪些文件不建议上传 GitHub？**
-> A: 不建议上传 `.env`、`data/portfolio.json`、`data/watchlist.json`、`data/stock_notes.json`、`data/alert_config.json`，以及包含个人持仓或交易计划的真实研究报告 JSON/Markdown。`tests/` 目录建议上传，它用于防止功能回归。
+> A: 不建议上传 `.env`、`data/portfolio.json`、`data/a_share_positions.json`、`data/watchlist.json`、`data/a_share_watchlist.json`、`data/closed_positions.json`、`data/a_share_closed_positions.json`、`data/stock_notes.json`、`data/alert_config.json`，以及包含个人持仓或交易计划的真实研究报告 JSON/Markdown。`tests/` 目录建议上传，它用于防止功能回归。
 
 **Q: 更新研究报告文件后页面没变化怎么办？**
-> A: 在个股工作台顶部点击 **刷新分析文件**。如果仍未变化，确认美股文件名符合 `YYYY-MM-DD_TICKER_skill1_skill2.json` / `.md`，A股文件名符合 `YYYY-MM-DD_数字股票代码_字母代码_skill_Ashare.json` / `.md`。如果只放 `.md`，顶部 JSON front matter 至少需要包含 `generated_at`、`ticker`、`scores.total_score` 或 `flt_scores.total_score`，以及 `price_plan.current_price`。
+> A: 在对应工作台顶部点击 **刷新分析文件**。如果仍未变化，确认美股文件名符合 `YYYY-MM-DD_TICKER_skill1_skill2.json` / `.md`，A股文件名符合 `YYYY-MM-DD_数字股票代码_字母代码_skill_Ashare.json` / `.md`。报告（新旧格式均可）至少需要包含 `generated_at`、`ticker`、`scores.total_score`（或 `flt_scores.total_score`）以及 `price_plan.current_price`。
 
 ## 🧪 测试
 
@@ -462,13 +531,16 @@ stock_portfolio/
 ├── .env.example           # 可选配置示例
 ├── pages/
 │   ├── holdings_tracker.py # 持仓追踪页面
-│   └── stock_analysis.py   # 个股工作台页面
+│   ├── stock_analysis.py   # 美股工作台页面
+│   ├── a_share_holdings.py # A股持仓追踪页面
+│   └── a_share_analysis.py # A股工作台页面
 ├── components/            # UI 组件
 │   ├── overview.py       # 总览
 │   ├── charts.py         # 图表
 │   ├── positions_table.py # 持仓表格
 │   ├── import_panel.py   # 导入面板
-│   └── stock_workbench.py # 个股工作台
+│   ├── a_share_holdings.py # A股持仓追踪组件
+│   └── stock_workbench.py # 美股/A股工作台
 ├── importers/             # 导入器
 │   ├── base.py           # 基类
 │   ├── ibkr.py           # IBKR 导入
@@ -477,17 +549,26 @@ stock_portfolio/
 ├── services/              # 业务逻辑
 │   ├── portfolio.py      # 投资组合管理
 │   ├── market_data.py    # 行情获取
+│   ├── a_share_market_data.py # A股行情获取
+│   ├── a_share_portfolio.py # A股持仓管理
+│   ├── a_share_lists.py  # A股关注/复盘列表与自动迁移
 │   ├── spread_detector.py # 期权策略检测
 │   ├── config.py         # .env 配置读取
-│   ├── research_store.py # 本地研究报告读取
+│   ├── research_store.py # 本地研究报告读取（支持新旧两种 JSON 格式）
+│   ├── sector_config.py  # 板块定义、关键词推断、板块视图构建
 │   ├── alert_engine.py   # 价格区间提醒
+│   ├── closed_positions.py # 已平仓复盘池
 │   ├── stock_notes.py    # 个股手工备注
 │   └── watchlist.py      # 关注列表与提醒配置
 ├── tests/                 # 回归测试
 ├── utils/                 # 工具函数
 ├── data/                  # 数据存储
 │   ├── portfolio.json    # 持仓数据
+│   ├── a_share_positions.json # A股持仓数据
 │   ├── watchlist.json    # 关注列表
+│   ├── a_share_watchlist.json # A股关注列表
+│   ├── closed_positions.json # 已平仓复盘池
+│   ├── a_share_closed_positions.json # A股已平仓复盘池
 │   ├── stock_notes.json  # 个股备注
 │   ├── alert_config.json # 提醒配置
 │   └── research_reports/ # 可选：本地研究报告

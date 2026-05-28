@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import re
 import urllib.parse
 import urllib.request
 from pathlib import Path
@@ -76,7 +77,7 @@ def get_a_share_name(symbol: str, fallback_name: str = "") -> str:
     if cached:
         return cached
 
-    fetched = _fetch_eastmoney_name(code)
+    fetched = _fetch_eastmoney_name(code) or _fetch_sina_name(code)
     if fetched:
         set_a_share_name(code, fetched)
     return fetched
@@ -97,6 +98,44 @@ def _fetch_eastmoney_name(code: str) -> str:
     if not isinstance(data, dict):
         return ""
     return str(data.get("f58") or "").strip()
+
+
+def _fetch_sina_name(code: str) -> str:
+    symbol = _sina_symbol(code)
+    if not symbol:
+        return ""
+    url = f"https://hq.sinajs.cn/list={urllib.parse.quote(symbol)}"
+    request = urllib.request.Request(
+        url,
+        headers={
+            "User-Agent": "Mozilla/5.0",
+            "Referer": "https://finance.sina.com.cn/",
+        },
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=3) as response:
+            text = response.read().decode("gb18030", errors="ignore")
+    except Exception:
+        return ""
+    return _parse_sina_name_response(text)
+
+
+def _parse_sina_name_response(text: str) -> str:
+    match = re.search(r'="(.*)"', text or "")
+    if not match:
+        return ""
+    fields = match.group(1).split(",")
+    return fields[0].strip() if fields else ""
+
+
+def _sina_symbol(code: str) -> str:
+    if code.startswith(("5", "6", "9")):
+        return f"sh{code}"
+    if code.startswith(("0", "2", "3")):
+        return f"sz{code}"
+    if code.startswith(("4", "8")):
+        return f"bj{code}"
+    return ""
 
 
 def _eastmoney_secid(code: str) -> str:

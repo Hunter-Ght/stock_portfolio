@@ -47,12 +47,58 @@ class AppStaticTest(unittest.TestCase):
     def test_stock_workbench_has_a_share_holdings_tab(self):
         source = Path("components/stock_workbench.py").read_text(encoding="utf-8")
 
-        self.assertIn("A股持仓", source)
-        self.assertIn("A股关注", source)
-        self.assertLess(source.index('"持仓"'), source.index('"关注"'))
-        self.assertLess(source.index('"关注"'), source.index('"A股持仓"'))
-        self.assertLess(source.index('"A股持仓"'), source.index('"A股关注"'))
-        self.assertLess(source.index('"A股关注"'), source.index('"未归档分析"'))
+        self.assertIn("已平仓复盘", source)
+        self.assertIn("market == \"Ashare\"", source)
+        self.assertIn('st.tabs(["A股持仓", "A股关注", "已平仓复盘", "未归档分析"])', source)
+        self.assertIn('st.tabs(["持仓", "关注", "已平仓复盘", "未归档分析"])', source)
+
+    def test_navigation_splits_us_and_a_share_pages(self):
+        source = Path("app.py").read_text(encoding="utf-8")
+
+        self.assertIn('title="持仓追踪"', source)
+        self.assertIn('title="美股工作台"', source)
+        self.assertIn('title="A股持仓追踪"', source)
+        self.assertIn('title="A股工作台"', source)
+        self.assertIn("pages/a_share_holdings.py", source)
+        self.assertIn("pages/a_share_analysis.py", source)
+
+    def test_a_share_pages_call_a_share_components(self):
+        holdings = Path("pages/a_share_holdings.py").read_text(encoding="utf-8")
+        analysis = Path("pages/a_share_analysis.py").read_text(encoding="utf-8")
+
+        self.assertIn("render_a_share_holdings", holdings)
+        self.assertIn('render_stock_workbench(market="Ashare")', analysis)
+
+    def test_a_share_holdings_page_is_dashboard_style(self):
+        source = Path("components/a_share_holdings.py").read_text(encoding="utf-8")
+
+        self.assertIn('st.title("A股持仓追踪")', source)
+        self.assertIn("get_a_share_portfolio_summary", source)
+        self.assertIn("render_a_share_overview", source)
+        self.assertIn("render_a_share_allocation_chart", source)
+        self.assertIn("render_a_share_pnl_chart", source)
+        self.assertIn("render_a_share_positions_table", source)
+        self.assertIn("管理 A股持仓", source)
+
+    def test_a_share_pnl_chart_matches_us_horizontal_bar_style(self):
+        source = Path("components/a_share_holdings.py").read_text(encoding="utf-8")
+        chart_source = source[source.index("def render_a_share_pnl_chart"):source.index("def render_a_share_positions_table")]
+
+        self.assertIn("go.Figure()", chart_source)
+        self.assertIn("orientation=\"h\"", chart_source)
+        self.assertIn("sort_values(\"pnl\", ascending=True)", chart_source)
+        self.assertIn("'#ef4444' if value < 0 else '#22c55e'", chart_source)
+        self.assertIn("盈亏金额 (CNY)", chart_source)
+
+    def test_stock_workbench_has_closed_review_actions(self):
+        source = Path("components/stock_workbench.py").read_text(encoding="utf-8")
+
+        self.assertIn("load_closed_positions", source)
+        self.assertIn("add_closed_position", source)
+        self.assertIn("remove_closed_position", source)
+        self.assertIn("移入复盘", source)
+        self.assertIn("移回关注", source)
+        self.assertIn("移出复盘", source)
 
     def test_stock_workbench_does_not_auto_render_first_detail(self):
         source = Path("components/stock_workbench.py").read_text(encoding="utf-8")
