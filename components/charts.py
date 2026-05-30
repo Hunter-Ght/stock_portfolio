@@ -8,6 +8,11 @@ import re
 from typing import List
 from importers.base import Position
 from services.spread_detector import detect_spreads, SpreadPosition
+from utils.theme_colors import (
+    CHART_COLORS, BROKER_COLORS, BROKER_DEFAULT,
+    TEXT_PRIMARY, TEXT_SECONDARY, TEXT_MUTED, BORDER, PROFIT, LOSS,
+    FONT_FAMILY,
+)
 
 # GICS 行业中文映射
 SECTOR_CN = {
@@ -135,27 +140,42 @@ def _resolve_sector(symbol: str, gics_sector: str) -> str:
     return SECTOR_CN.get(gics_sector, gics_sector) if gics_sector else '其他'
 
 
-# 颜色主题
-LIGHT_COLORS = [
-    '#6366f1', '#8b5cf6', '#a78bfa', '#c084fc',
-    '#f472b6', '#fb7185', '#f97316', '#f59e0b',
-    '#10b981', '#34d399', '#0ea5e9', '#3b82f6',
-    '#818cf8', '#e879f9', '#38bdf8', '#2dd4bf',
-]
-
-DARK_COLORS = [
-    '#6366f1', '#8b5cf6', '#a78bfa', '#c084fc',
-    '#f472b6', '#fb7185', '#f97316', '#facc15',
-    '#4ade80', '#34d399', '#22d3ee', '#60a5fa',
-    '#818cf8', '#e879f9', '#38bdf8', '#2dd4bf',
-]
-
-
 def _get_colors():
-    """根据主题获取颜色序列"""
-    import streamlit as st
-    is_light = st.session_state.get('theme', 'dark') == 'light'
-    return LIGHT_COLORS if is_light else DARK_COLORS
+    return CHART_COLORS
+
+
+# Plotly 浅色主题模板
+_LIGHT_TEMPLATE = dict(
+    layout=dict(
+        paper_bgcolor='rgba(0,0,0,0)',
+        plot_bgcolor='rgba(0,0,0,0)',
+        font=dict(family=FONT_FAMILY, color=TEXT_SECONDARY, size=12),
+        title=dict(
+            font=dict(color=TEXT_PRIMARY, size=16, family=FONT_FAMILY),
+            x=0.02, xanchor='left',
+        ),
+        legend=dict(
+            font=dict(color=TEXT_SECONDARY, size=11, family=FONT_FAMILY),
+            bgcolor='rgba(0,0,0,0)',
+            borderwidth=0,
+        ),
+        xaxis=dict(
+            gridcolor=BORDER, gridwidth=1, zerolinecolor='#d6d3d1',
+            tickfont=dict(color=TEXT_MUTED, family=FONT_FAMILY),
+            title=dict(font=dict(color=TEXT_MUTED, size=11)),
+        ),
+        yaxis=dict(
+            gridcolor=BORDER, gridwidth=1, zerolinecolor='#d6d3d1',
+            tickfont=dict(color=TEXT_MUTED, family=FONT_FAMILY),
+            title=dict(font=dict(color=TEXT_MUTED, size=11)),
+        ),
+        hoverlabel=dict(
+            bgcolor=TEXT_PRIMARY,
+            font=dict(color='#ffffff', size=12, family=FONT_FAMILY),
+            bordercolor='rgba(0,0,0,0)',
+        ),
+    )
+)
 
 
 def _build_display_data(positions: List[Position]):
@@ -197,7 +217,7 @@ def _build_display_data(positions: List[Position]):
     for p in cash_positions:
         if p.quantity > 0:
             items.append({
-                'name': f"💵 {p.broker} Cash",
+                'name': f"{p.broker} Cash",
                 'market_value': p.quantity,
                 'pnl': 0,
                 'pnl_pct': 0,
@@ -234,13 +254,14 @@ def render_allocation_pie(positions: List[Position]):
     )
 
     fig.update_layout(
+        template=_LIGHT_TEMPLATE,
         legend=dict(
             orientation='v',
             yanchor='middle',
             y=0.5,
             xanchor='left',
             x=1.05,
-            font=dict(size=11),
+            font=dict(size=11, color='#57534e'),
         ),
         margin=dict(l=20, r=20, t=30, b=20),
         height=450,
@@ -307,13 +328,14 @@ def render_sector_pie(positions: List[Position]):
     )])
 
     fig.update_layout(
+        template=_LIGHT_TEMPLATE,
         legend=dict(
             orientation='v',
             yanchor='middle',
             y=0.5,
             xanchor='left',
             x=1.05,
-            font=dict(size=11),
+            font=dict(size=11, color='#57534e'),
         ),
         margin=dict(l=20, r=20, t=30, b=20),
         height=450,
@@ -354,6 +376,7 @@ def render_treemap(positions: List[Position]):
     )
 
     fig.update_layout(
+        template=_LIGHT_TEMPLATE,
         margin=dict(l=10, r=10, t=30, b=10),
         height=420,
         coloraxis_colorbar=dict(
@@ -379,7 +402,7 @@ def render_pnl_bar(positions: List[Position]):
     df = pd.DataFrame(items)
     df = df.sort_values('pnl', ascending=True)
 
-    colors = ['#ef4444' if v < 0 else '#22c55e' for v in df['pnl']]
+    colors = [LOSS if v < 0 else PROFIT for v in df['pnl']]
 
     fig = go.Figure()
 
@@ -399,6 +422,7 @@ def render_pnl_bar(positions: List[Position]):
     ))
 
     fig.update_layout(
+        template=_LIGHT_TEMPLATE,
         xaxis=dict(
             title='盈亏金额 (USD)',
         ),
@@ -417,12 +441,7 @@ def render_broker_allocation_donut(summary: dict):
     brokers = list(broker_data.keys())
     values = [broker_data[b]['market_value'] for b in brokers]
 
-    broker_colors = {
-        'IBKR': '#f97316',
-        'Schwab': '#3b82f6',
-        'Manual': '#8b5cf6',
-    }
-    colors = [broker_colors.get(b, '#64748b') for b in brokers]
+    colors = [BROKER_COLORS.get(b, BROKER_DEFAULT) for b in brokers]
 
     fig = go.Figure(data=[go.Pie(
         labels=brokers,
@@ -435,6 +454,7 @@ def render_broker_allocation_donut(summary: dict):
     )])
 
     fig.update_layout(
+        template=_LIGHT_TEMPLATE,
         showlegend=True,
         legend=dict(
             orientation='h',
@@ -442,6 +462,7 @@ def render_broker_allocation_donut(summary: dict):
             y=-0.15,
             xanchor='center',
             x=0.5,
+            font=dict(color='#57534e'),
         ),
         margin=dict(l=20, r=20, t=20, b=40),
         height=320,
@@ -449,6 +470,7 @@ def render_broker_allocation_donut(summary: dict):
             text='<b>券商占比</b>',
             x=0.5, y=0.5,
             font_size=14,
+            font_color='#292524',
             showarrow=False,
         )],
     )

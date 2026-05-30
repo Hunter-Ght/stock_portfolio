@@ -1,5 +1,6 @@
 """Portfolio Tracker navigation entrypoint."""
 import streamlit as st
+import os
 
 
 st.set_page_config(
@@ -8,6 +9,12 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded",
 )
+
+# Inject global theme CSS (available on all pages)
+_theme_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'theme.css')
+if os.path.exists(_theme_path):
+    with open(_theme_path, 'r') as _f:
+        st.markdown(f'<style>{_f.read()}</style>', unsafe_allow_html=True)
 
 pages = [
     st.Page("pages/holdings_tracker.py", title="持仓追踪", icon="📊"),

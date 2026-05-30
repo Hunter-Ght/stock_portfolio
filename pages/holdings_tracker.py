@@ -1,7 +1,7 @@
 """
-📊 多券商美股持仓追踪 Dashboard
+多券商美股持仓追踪 Dashboard
 -------------------------------
-整合 IBKR (盈透) 和 Schwab (嘉信) 的持仓数据，
+整合 IBKR、Schwab、Firstrade 的持仓数据，
 实时追踪总市值、盈亏、资产配置。
 """
 import streamlit as st
@@ -49,22 +49,12 @@ def _load_sample(broker: str):
         st.session_state['do_refresh'] = True
         st.session_state.pop('prices_updated', None)
 
-is_light = st.session_state.get('theme', 'dark') == 'light'
-
-
 # ─── 侧边栏 ─────────────────────────────────────────────
 with st.sidebar:
     st.markdown("""
-    <div style="text-align: center; padding: 20px 0 10px 0;">
-        <div style="font-size: 40px;">📊</div>
-        <div style="
-            font-size: 20px;
-            font-weight: 700;
-            background: linear-gradient(90deg, #6366f1, #a78bfa);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        ">Portfolio Tracker</div>
-        <div style="color: #64748b; font-size: 12px; margin-top: 4px;">多券商持仓追踪</div>
+    <div class="sidebar-brand">
+        <div class="sidebar-brand-title">Portfolio Tracker</div>
+        <div class="sidebar-brand-sub">多券商持仓追踪</div>
     </div>
     """, unsafe_allow_html=True)
 
@@ -72,7 +62,7 @@ with st.sidebar:
 
     # 刷新行情按钮
     st.markdown("---")
-    if st.button("🔄 刷新实时行情", use_container_width=True, type="primary"):
+    if st.button("刷新实时行情", use_container_width=True, type="primary"):
         st.session_state['do_refresh'] = True
         st.rerun()
 
@@ -83,11 +73,9 @@ with st.sidebar:
 
 # 标题
 st.markdown("""
-<div style="padding: 0 0 10px 0;">
-    <h1 style="margin: 0; font-size: 32px;">Portfolio Dashboard</h1>
-    <p style="margin: 4px 0 0 0; font-size: 14px; opacity: 0.8;">
-        实时追踪你的多券商美股持仓
-    </p>
+<div class="page-header" style="padding: 0 0 12px 0;">
+    <h1>Dashboard</h1>
+    <p>实时追踪你的多券商美股持仓</p>
 </div>
 """, unsafe_allow_html=True)
 
@@ -101,7 +89,7 @@ if positions:
 
     # 如果用户点了刷新按钮，后台更新行情
     if st.session_state.get('do_refresh', False):
-        with st.spinner("📡 正在获取实时行情..."):
+        with st.spinner("正在获取实时行情..."):
             positions = update_prices(positions)
             st.session_state['do_refresh'] = False
             import datetime
@@ -111,9 +99,9 @@ if positions:
     # 显示上次更新状态
     last_refresh = st.session_state.get('last_refresh', None)
     if last_refresh:
-        st.caption(f"✅ 行情已于 {last_refresh} 更新 · 点击左侧「刷新实时行情」获取最新价格")
+        st.caption(f"行情已于 {last_refresh} 更新")
     else:
-        st.caption("💡 当前显示上次导入/刷新的价格 · 点击左侧「🔄 刷新实时行情」获取最新价格")
+        st.caption("当前显示上次导入/刷新的价格，点击左侧「刷新实时行情」获取最新价格")
 
     # 计算汇总
     summary = get_portfolio_summary(positions)
@@ -124,23 +112,33 @@ if positions:
     st.markdown("---")
 
     # ─── 券商汇总 ────────────────────────
-    st.markdown("### 🏦 券商概览")
+    st.markdown("""
+    <div class="section-header">
+        <div class="eyebrow">BROKERS</div>
+        <h3>券商概览</h3>
+    </div>
+    """, unsafe_allow_html=True)
     render_broker_summary(summary)
 
     st.markdown("---")
 
     # ─── 图表区域 ────────────────────────
-    st.markdown("### 📈 资产分析")
+    st.markdown("""
+    <div class="section-header">
+        <div class="eyebrow">ANALYSIS</div>
+        <h3>资产分析</h3>
+    </div>
+    """, unsafe_allow_html=True)
 
     tab1, tab2, tab3, tab4 = st.tabs([
-        "🍩 持仓占比",
-        "🗺️ 资产地图",
-        "📊 盈亏对比",
-        "🏦 券商占比",
+        "持仓占比",
+        "资产地图",
+        "盈亏对比",
+        "券商占比",
     ])
 
     with tab1:
-        col1, col2 = st.columns(2)
+        col1, col2 = st.columns([3, 2])
         with col1:
             render_allocation_pie(positions)
         with col2:
@@ -158,64 +156,43 @@ if positions:
     st.markdown("---")
 
     # ─── 持仓明细 ────────────────────────
-    st.markdown("### 📋 持仓明细")
+    st.markdown("""
+    <div class="section-header">
+        <div class="eyebrow">POSITIONS</div>
+        <h3>持仓明细</h3>
+    </div>
+    """, unsafe_allow_html=True)
     render_positions_table(positions)
 
 else:
     # 空状态
-    if is_light:
-        bg_start = "rgba(99, 102, 241, 0.05)"
-        bg_end = "rgba(139, 92, 246, 0.02)"
-        border_color = "rgba(99, 102, 241, 0.3)"
-        title_color = "#1e293b"
-    else:
-        bg_start = "rgba(99, 102, 241, 0.08)"
-        bg_end = "rgba(139, 92, 246, 0.05)"
-        border_color = "rgba(99, 102, 241, 0.3)"
-        title_color = "#c7d2fe"
-
-    st.markdown(f"""
-    <div style="
-        text-align: center;
-        padding: 80px 20px;
-        background: linear-gradient(135deg, {bg_start}, {bg_end});
-        border: 1px dashed {border_color};
-        border-radius: 20px;
-        margin: 40px 0;
-    ">
-        <div style="font-size: 60px; margin-bottom: 20px;">📂</div>
-        <h2 style="margin-bottom: 12px;">欢迎使用 Portfolio Tracker</h2>
-        <p style="font-size: 16px; max-width: 500px; margin: 0 auto; line-height: 1.8; opacity: 0.8;">
+    st.markdown("""
+    <div class="empty-state">
+        <h2>欢迎使用 Portfolio Tracker</h2>
+        <p>
             开始追踪你的投资组合：<br>
-            ① 通过左侧面板上传 <strong>IBKR</strong> 或 <strong>Schwab</strong> 的 CSV 导出文件<br>
-            ② 或者手动添加持仓<br>
-            ③ Dashboard 将自动获取实时行情并展示分析
+            通过左侧面板上传券商的持仓文件，或手动添加持仓
         </p>
     </div>
     """, unsafe_allow_html=True)
 
     # 快速示例导入
-    st.markdown("### 🚀 快速体验")
+    st.markdown("### 快速体验")
     st.markdown("点击下方按钮导入示例数据，快速预览 Dashboard 效果：")
 
     col1, col2 = st.columns(2)
     with col1:
-        if st.button("🟠 导入 IBKR 示例数据", use_container_width=True):
+        if st.button("导入 IBKR 示例数据", use_container_width=True):
             _load_sample('ibkr')
             st.rerun()
     with col2:
-        if st.button("🔵 导入 Schwab 示例数据", use_container_width=True):
+        if st.button("导入 Schwab 示例数据", use_container_width=True):
             _load_sample('schwab')
             st.rerun()
 
 # ─── 页脚 ────────────────────────────────────────────────
 st.markdown("""
-<div style="
-    text-align: center;
-    padding: 30px 0 10px 0;
-    color: #4a4a6a;
-    font-size: 12px;
-">
-    Portfolio Tracker v1.0 · 数据来源: Yahoo Finance · 仅供个人投资参考
+<div class="page-footer">
+    数据来源: Yahoo Finance / 仅供个人投资参考
 </div>
 """, unsafe_allow_html=True)

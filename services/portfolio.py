@@ -3,13 +3,63 @@
 """
 import json
 import os
+import re
 from typing import List, Optional, Dict
 from importers.base import Position
 from services.market_data import get_quotes, get_sectors
-from services.spread_detector import is_option
+from services.spread_detector import is_option, parse_option_symbol
 
 DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data')
 PORTFOLIO_FILE = os.path.join(DATA_DIR, 'portfolio.json')
+
+
+def _occ_to_yf_symbol(option_symbol: str) -> Optional[str]:
+    """将 IBKR OCC 期权代码转为 yfinance 格式
+    'ASTS  260918C00110000' → 'ASTS260918C00110000'
+    """
+    info = parse_option_symbol(option_symbol)
+    if not info:
+        return None
+    yy = info.expiry[:2]
+    mm = info.expiry[2:4]
+    dd = info.expiry[4:6]
+    strike_int = int(info.strike * 1000)
+    return f"{info.underlying}{yy}{mm}{dd}{info.option_type}{strike_int:08d}"
+
+
+def _fetch_option_prices(option_positions: List[Position]) -> Dict[str, float]:
+    """通过 yfinance 获取期权最新收盘价（per-share，即期权报价单位）
+    返回 {occ_symbol: latest_close}
+    """
+    import yfinance as yf
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+
+    result = {}
+
+    def _fetch(sym: str):
+        yf_sym = _occ_to_yf_symbol(sym)
+        if not yf_sym:
+            return sym, 0.0
+        try:
+            hist = yf.Ticker(yf_sym).history(period='2d')
+            if hist.empty:
+                return sym, 0.0
+            closes = hist['Close'].dropna()
+            return sym, float(closes.iloc[-1]) if len(closes) > 0 else 0.0
+        except Exception:
+            return sym, 0.0
+
+    symbols = [p.symbol for p in option_positions if p.symbol]
+    with ThreadPoolExecutor(max_workers=5) as ex:
+        futures = [ex.submit(_fetch, s) for s in symbols]
+        for f in as_completed(futures):
+            try:
+                sym, price = f.result()
+                if price > 0:
+                    result[sym] = price
+            except Exception:
+                continue
+    return result
 
 
 def ensure_data_dir():
@@ -26,7 +76,11 @@ def load_positions() -> List[Position]:
     try:
         with open(PORTFOLIO_FILE, 'r', encoding='utf-8') as f:
             data = json.load(f)
-        return [Position.from_dict(d) for d in data]
+        positions = [Position.from_dict(d) for d in data]
+        # 重新计算衍生字段，确保价格乘数等逻辑生效
+        for p in positions:
+            p.compute_derived()
+        return positions
     except (json.JSONDecodeError, Exception):
         return []
 
@@ -140,8 +194,14 @@ def update_prices(positions: List[Position]) -> List[Position]:
         if p.symbol and p.asset_type != 'cash' and not is_option(p.symbol)
     ))
 
-    # 批量获取行情
+    # 收集期权持仓（单独处理）
+    option_positions = [p for p in positions if is_option(p.symbol)]
+
+    # 批量获取正股行情
     quotes = get_quotes(symbols_to_fetch)
+
+    # 批量获取期权行情（通过 yfinance Ticker 逐个查询）
+    option_quotes = _fetch_option_prices(option_positions)
 
     # 更新每个持仓
     updated_count = 0
@@ -159,6 +219,10 @@ def update_prices(positions: List[Position]) -> List[Position]:
                 updated_count += 1
             pos.compute_derived()
         elif is_option(pos.symbol):
+            # 用 yfinance 获取期权最新价格（per-share）
+            if pos.symbol in option_quotes:
+                pos.current_price = option_quotes[pos.symbol]
+                updated_count += 1
             pos.compute_derived()
 
     # 更新后保存到 JSON，下次打开直接用新价格

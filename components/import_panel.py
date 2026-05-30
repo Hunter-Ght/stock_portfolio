@@ -27,7 +27,7 @@ def render_import_panel():
     """渲染导入面板（侧边栏）"""
 
     st.sidebar.markdown("---")
-    st.sidebar.markdown("## 📥 导入持仓")
+    st.sidebar.markdown("## 导入持仓")
 
     _render_ibkr_flex_import()
 
@@ -47,19 +47,19 @@ def render_import_panel():
     st.sidebar.markdown("---")
 
     # 现金余额
-    st.sidebar.markdown("## 💵 现金余额")
+    st.sidebar.markdown("## 现金余额")
     _render_cash_form()
 
     st.sidebar.markdown("---")
 
     # 手动添加
-    st.sidebar.markdown("## ✏️ 手动添加")
+    st.sidebar.markdown("## 手动添加")
     _render_manual_add_form()
 
     st.sidebar.markdown("---")
 
     # 管理
-    st.sidebar.markdown("## 🗂️ 管理持仓")
+    st.sidebar.markdown("## 管理持仓")
     _render_manage_section()
 
 
@@ -71,7 +71,7 @@ def _render_ibkr_flex_import():
         st.sidebar.success(st.session_state["ibkr_flex_status"])
         del st.session_state["ibkr_flex_status"]
 
-    if st.sidebar.button("🟠 下载并导入 IBKR Flex Query", use_container_width=True):
+    if st.sidebar.button("下载并导入 IBKR Flex Query", use_container_width=True):
         try:
             with st.spinner("正在从 IBKR 下载 Flex Query 报表..."):
                 content = download_ibkr_flex_report()
@@ -131,24 +131,24 @@ def _handle_file_upload(uploaded_file):
 
         broker_choice = st.sidebar.radio(
             "选择券商",
-            ["🔍 自动检测", "🟠 IBKR (盈透)", "🔵 Schwab (嘉信)", "🟢 Firstrade"],
+            ["自动检测", "IBKR (盈透)", "Schwab (嘉信)", "Firstrade"],
             key="broker_choice",
         )
 
-        if broker_choice == "🟠 IBKR (盈透)":
+        if broker_choice == "IBKR (盈透)":
             df = parse_ibkr_csv(content)
             importer = IBKRImporter()
-        elif broker_choice == "🔵 Schwab (嘉信)":
+        elif broker_choice == "Schwab (嘉信)":
             df = preprocess_schwab_csv(content.decode('utf-8', errors='ignore'))
             importer = SchwabImporter()
-        elif broker_choice == "🟢 Firstrade":
+        elif broker_choice == "Firstrade":
             df = parse_firstrade_excel(content)
             importer = FirstradeImporter()
         else:
             df, importer = _auto_detect(content, filename)
 
         if df is None or importer is None:
-            st.sidebar.error("❌ 无法识别 CSV 格式，请手动选择券商。")
+            st.sidebar.error("无法识别 CSV 格式，请手动选择券商。")
             return
 
         positions = importer.parse(df)
@@ -162,14 +162,14 @@ def _handle_file_upload(uploaded_file):
                 pass
 
         if not positions and not cash_positions:
-            st.sidebar.warning("⚠️ CSV 中未找到有效持仓数据。请检查文件格式。")
+            st.sidebar.warning("CSV 中未找到有效持仓数据。请检查文件格式。")
             st.sidebar.markdown("**原始数据预览:**")
             st.sidebar.dataframe(df.head(5), use_container_width=True)
             return
 
         # 显示解析预览
         total_count = len(positions) + len(cash_positions)
-        st.sidebar.success(f"✅ 检测到 **{importer.BROKER_NAME}** 格式，解析出 **{len(positions)}** 个持仓")
+        st.sidebar.success(f"检测到 **{importer.BROKER_NAME}** 格式，解析出 **{len(positions)}** 个持仓")
 
         # 统计: 股票 vs 期权
         stock_count = sum(1 for p in positions if p.asset_type != 'option')
@@ -179,7 +179,7 @@ def _handle_file_upload(uploaded_file):
 
         if cash_positions:
             for cp in cash_positions:
-                st.sidebar.info(f"💵 检测到现金余额: ${cp.quantity:,.2f}")
+                st.sidebar.info(f"检测到现金余额: ${cp.quantity:,.2f}")
 
         preview_data = []
         for p in positions[:15]:  # 最多预览15个
@@ -204,17 +204,17 @@ def _handle_file_upload(uploaded_file):
             key="replace_broker",
         )
 
-        if st.sidebar.button("📥 确认导入", type="primary", use_container_width=True):
+        if st.sidebar.button("确认导入", type="primary", use_container_width=True):
             all_positions = positions + cash_positions
             add_positions(all_positions, replace_broker=replace)
             _request_price_refresh()
-            st.sidebar.success(f"🎉 成功导入 {len(positions)} 个持仓！")
+            st.sidebar.success(f"成功导入 {len(positions)} 个持仓")
             if cash_positions:
-                st.sidebar.success(f"💵 现金余额已更新")
+                st.sidebar.success("现金余额已更新")
             st.rerun()
 
     except Exception as e:
-        st.sidebar.error(f"❌ 解析文件时出错: {str(e)}")
+        st.sidebar.error(f"解析文件时出错: {str(e)}")
 
 
 def _auto_detect(content: bytes, filename: str) -> tuple:
@@ -276,12 +276,12 @@ def _render_cash_form():
             help="输入该券商账户中的现金/购买力余额",
         )
 
-        submitted = st.form_submit_button("💵 更新现金", use_container_width=True)
+        submitted = st.form_submit_button("更新现金", use_container_width=True)
 
         if submitted and amount > 0:
             st.session_state["last_cash_broker"] = broker
             add_cash(broker, amount)
-            st.success(f"✅ 已更新 {broker} 现金余额: ${amount:,.2f}")
+            st.success(f"已更新 {broker} 现金余额: ${amount:,.2f}")
             if 'prices_updated' in st.session_state:
                 del st.session_state['prices_updated']
             st.rerun()
@@ -301,7 +301,7 @@ def _render_manual_add_form():
         quantity = st.number_input("数量", min_value=0.0, step=1.0, key="manual_qty")
         avg_cost = st.number_input("买入均价 ($)", min_value=0.0, step=0.01, key="manual_cost")
 
-        submitted = st.form_submit_button("➕ 添加", use_container_width=True)
+        submitted = st.form_submit_button("添加", use_container_width=True)
 
         if submitted:
             if symbol and quantity > 0 and avg_cost > 0:
@@ -315,7 +315,7 @@ def _render_manual_add_form():
                 pos.compute_derived()
                 add_positions([pos])
                 _request_price_refresh()
-                st.success(f"✅ 已添加 {symbol.upper()}")
+                st.success(f"已添加 {symbol.upper()}")
                 st.rerun()
             else:
                 st.error("请填写完整信息")
@@ -334,7 +334,7 @@ def _render_manage_section():
     for broker in brokers:
         broker_positions = [p for p in positions if p.broker == broker]
         if st.sidebar.button(
-            f"🗑️ 清除 {broker} 所有持仓 ({len(broker_positions)}个)",
+            f"清除 {broker} 所有持仓 ({len(broker_positions)}个)",
             key=f"del_broker_{broker}",
         ):
             remove_broker_positions(broker)
@@ -352,11 +352,11 @@ def _render_manage_section():
         col1, col2 = st.sidebar.columns([3, 1])
         with col1:
             if p.asset_type == 'cash':
-                st.markdown(f"💵 `{p.broker}` **{p.currency}** ${p.quantity:,.0f}")
+                st.markdown(f"`{p.broker}` **{p.currency}** ${p.quantity:,.0f}")
             else:
-                st.markdown(f"`{p.broker}` **{p.symbol}** ×{p.quantity:.0f}")
+                st.markdown(f"`{p.broker}` **{p.symbol}** x{p.quantity:.0f}")
         with col2:
-            if st.button("🗑️", key=f"del_{p.id}"):
+            if st.button("删除", key=f"del_{p.id}"):
                 remove_position(p.id)
                 if 'prices_updated' in st.session_state:
                     del st.session_state['prices_updated']

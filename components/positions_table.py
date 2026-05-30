@@ -7,12 +7,13 @@ from typing import List
 from importers.base import Position
 from services.spread_detector import detect_spreads, SpreadPosition
 from utils.formatters import format_currency, format_percentage
+from utils.theme_colors import pnl_color
 
 
 def render_positions_table(positions: List[Position], show_broker_filter: bool = True):
     """渲染持仓明细表 - 自动识别 Spread 并分组展示"""
     if not positions:
-        st.info("📭 暂无持仓数据，请通过左侧面板导入 CSV 或手动添加持仓。")
+        st.info("暂无持仓数据，请通过左侧面板导入 CSV 或手动添加持仓。")
         return
 
     # 识别 spreads
@@ -24,7 +25,7 @@ def render_positions_table(positions: List[Position], show_broker_filter: bool =
         brokers = sorted(set(p.broker for p in all_items))
         if len(brokers) > 1:
             selected_broker = st.selectbox(
-                "🏦 按券商筛选",
+                "按券商筛选",
                 ["全部"] + brokers,
                 key="broker_filter",
             )
@@ -35,17 +36,17 @@ def render_positions_table(positions: List[Position], show_broker_filter: bool =
 
     # === 正股持仓表 ===
     if stock_positions:
-        st.markdown("#### 📊 股票 & ETF 持仓")
+        st.markdown("#### 股票 & ETF")
         _render_stock_table(stock_positions)
 
     # === 期权组合表 ===
     if spreads:
-        st.markdown("#### 🎯 期权策略组合")
+        st.markdown("#### 期权策略组合")
         _render_spread_table(spreads)
 
     # === 现金 ===
     if cash_positions:
-        st.markdown("#### 💵 现金余额")
+        st.markdown("#### 现金余额")
         _render_cash_table(cash_positions)
 
     # 总计
@@ -63,8 +64,8 @@ def render_positions_table(positions: List[Position], show_broker_filter: bool =
     with col1:
         st.markdown(f"**总资产:** {format_currency(total_mv)}")
     with col2:
-        pnl_color = "green" if total_pnl >= 0 else "red"
-        st.markdown(f"**投资盈亏:** <span style='color:{pnl_color}'>{format_currency(total_pnl)}</span>", unsafe_allow_html=True)
+        pnl_color_hex = pnl_color(total_pnl)
+        st.markdown(f"**投资盈亏:** <span style='color:{pnl_color_hex}'>{format_currency(total_pnl)}</span>", unsafe_allow_html=True)
     with col3:
         st.markdown(f"**现金:** {format_currency(total_cash)}")
     with col4:
@@ -75,7 +76,6 @@ def _render_stock_table(positions: List[Position]):
     """渲染正股明细表"""
     table_data = []
     for p in positions:
-        pnl_emoji = "🟢" if p.unrealized_pnl >= 0 else "🔴"
         table_data.append({
             '券商': p.broker,
             '代码': p.symbol,
@@ -84,7 +84,7 @@ def _render_stock_table(positions: List[Position]):
             '买入均价': f"${p.avg_cost:,.2f}",
             '现价': f"${p.current_price:,.2f}",
             '市值': f"${p.market_value:,.2f}",
-            '盈亏': f"{pnl_emoji} ${p.unrealized_pnl:+,.2f}",
+            '盈亏': f"${p.unrealized_pnl:+,.2f}",
             '盈亏%': f"{p.unrealized_pnl_pct:+.2f}%",
             '_pnl_sort': p.unrealized_pnl,
             '_mv_sort': p.market_value,
@@ -93,7 +93,7 @@ def _render_stock_table(positions: List[Position]):
     df = pd.DataFrame(table_data)
 
     sort_col = st.selectbox(
-        "📊 排序方式",
+        "排序方式",
         ["按市值 (大→小)", "按盈亏金额 (大→小)", "按盈亏% (大→小)", "按代码 (A→Z)"],
         key="stock_sort_option",
     )
@@ -121,27 +121,25 @@ def _render_spread_table(spreads: List[SpreadPosition]):
     """渲染期权组合表"""
     table_data = []
     for s in spreads:
-        pnl_emoji = "🟢" if s.unrealized_pnl >= 0 else "🔴"
-
-        # 策略类型图标
-        type_icons = {
-            "Bull Call Spread": "📈",
-            "Bear Call Spread": "📉",
-            "Bear Put Spread": "📉",
-            "Bull Put Spread": "📈",
-            "Covered Call": "🛡️",
-            "Naked Option": "🎲",
+        # 策略类型标签
+        type_labels = {
+            "Bull Call Spread": "Bull Call",
+            "Bear Call Spread": "Bear Call",
+            "Bear Put Spread": "Bear Put",
+            "Bull Put Spread": "Bull Put",
+            "Covered Call": "Covered Call",
+            "Naked Option": "Naked",
         }
-        icon = type_icons.get(s.spread_type, "📋")
+        label = type_labels.get(s.spread_type, s.spread_type)
 
         table_data.append({
             '券商': s.broker,
-            '策略': f"{icon} {s.spread_type}",
+            '策略': label,
             '组合': s.display_name,
             '组数': f"{s.quantity}",
             '净成本': f"${s.total_cost:,.2f}",
             '当前价值': f"${s.current_value:,.2f}",
-            '盈亏': f"{pnl_emoji} ${s.unrealized_pnl:+,.2f}",
+            '盈亏': f"${s.unrealized_pnl:+,.2f}",
             '盈亏%': f"{s.unrealized_pnl_pct:+.2f}%",
             '_pnl_sort': s.unrealized_pnl,
             '_mv_sort': abs(s.current_value),
@@ -160,13 +158,13 @@ def _render_spread_table(spreads: List[SpreadPosition]):
     )
 
     # 展开/折叠显示各腿明细
-    with st.expander("🔍 展开期权各腿明细"):
+    with st.expander("展开期权各腿明细"):
         for s in spreads:
-            st.markdown(f"**{s.display_name}** × {s.quantity}")
+            st.markdown(f"**{s.display_name}** x {s.quantity}")
             legs = []
             if s.long_leg:
                 legs.append({
-                    '方向': '🟢 买入',
+                    '方向': '买入',
                     'Symbol': s.long_leg.symbol,
                     '描述': s.long_leg.description,
                     '数量': s.long_leg.quantity,
@@ -175,7 +173,7 @@ def _render_spread_table(spreads: List[SpreadPosition]):
                 })
             if s.short_leg:
                 legs.append({
-                    '方向': '🔴 卖出',
+                    '方向': '卖出',
                     'Symbol': s.short_leg.symbol,
                     '描述': s.short_leg.description,
                     '数量': s.short_leg.quantity,
@@ -184,7 +182,7 @@ def _render_spread_table(spreads: List[SpreadPosition]):
                 })
             if s.stock_leg:
                 legs.append({
-                    '方向': '📊 正股',
+                    '方向': '正股',
                     'Symbol': s.stock_leg.symbol,
                     '描述': s.stock_leg.description,
                     '数量': s.stock_leg.quantity,

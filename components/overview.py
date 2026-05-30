@@ -3,54 +3,64 @@
 """
 import streamlit as st
 from utils.formatters import format_currency, format_percentage, format_pnl
+from utils.theme_colors import pnl_color, BROKER_COLORS, BROKER_DEFAULT
 
 
 def render_overview(summary: dict):
-    """渲染总览面板 - 5个关键指标卡片"""
+    """渲染总览面板 - 关键指标卡片，总资产突出显示"""
 
-    col1, col2, col3, col4, col5 = st.columns(5)
+    # 总资产大卡片
+    total_mv = summary['total_market_value']
+    pnl = summary['total_pnl']
+    pnl_pct = summary['total_pnl_pct']
+    day_change = summary['total_day_change']
+
+    pnl_cls = "pnl-positive" if pnl >= 0 else "pnl-negative"
+    day_cls = "pnl-positive" if day_change >= 0 else "pnl-negative"
+
+    st.markdown(f"""
+    <div class="card-hero">
+        <div>
+            <div class="label-muted">总资产</div>
+            <div class="value-hero">{format_currency(total_mv)}</div>
+        </div>
+        <div style="text-align: right;">
+            <div class="label-muted">总盈亏</div>
+            <div class="value-medium {pnl_cls}">
+                {format_pnl(pnl)} ({format_percentage(pnl_pct)})
+            </div>
+            <div class="label-muted" style="margin-top: 4px;">今日</div>
+            <div class="value-small {day_cls}">
+                {format_pnl(day_change)}
+            </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # 次要指标
+    col1, col2, col3 = st.columns(3)
 
     with col1:
         st.metric(
-            label="📊 总资产",
-            value=format_currency(summary['total_market_value']),
-            delta=None,
+            label="投资成本",
+            value=format_currency(summary['total_cost_basis']),
         )
 
     with col2:
         st.metric(
-            label="💰 投资成本",
-            value=format_currency(summary['total_cost_basis']),
+            label="现金余额",
+            value=format_currency(summary.get('total_cash', 0)),
         )
 
     with col3:
-        pnl = summary['total_pnl']
-        pnl_pct = summary['total_pnl_pct']
         st.metric(
-            label="📈 总盈亏",
-            value=format_currency(pnl),
-            delta=f"{format_percentage(pnl_pct)}",
-        )
-
-    with col4:
-        day_change = summary['total_day_change']
-        st.metric(
-            label="📅 今日变动",
-            value=format_currency(day_change),
-            delta=format_pnl(day_change),
-        )
-
-    with col5:
-        total_cash = summary.get('total_cash', 0)
-        st.metric(
-            label="💵 现金",
-            value=format_currency(total_cash),
+            label="持仓数量",
+            value=f"{summary['position_count']} 只",
         )
 
 
 def render_broker_summary(summary: dict):
     """渲染券商维度汇总"""
-    import streamlit as st
     broker_data = summary.get('broker_summary', {})
     if not broker_data:
         st.info("暂无持仓数据")
@@ -59,35 +69,28 @@ def render_broker_summary(summary: dict):
     cols = st.columns(len(broker_data))
     for i, (broker, data) in enumerate(broker_data.items()):
         with cols[i]:
-            # 券商图标
-            icon = "🟠" if broker == "IBKR" else "🔵" if broker == "Schwab" else "🟢" if broker == "Firstrade" else "⚪"
-            st.markdown(f"### {icon} {broker}")
-
-            # 使用 Streamlit 原生 container，自动适配浅色/深色主题
-            pnl_color = "green" if data['pnl'] >= 0 else "red"
+            accent = BROKER_COLORS.get(broker, BROKER_DEFAULT)
+            pnl = data['pnl']
+            pnl_pct = data['pnl_pct']
+            pnl_cls = "pnl-positive" if pnl >= 0 else "pnl-negative"
             cash_amount = data.get('cash', 0)
 
-            with st.container(border=True):
-                st.metric("总资产", format_currency(data["market_value"]))
-                
-                # 财务明细
-                st.markdown(
-                    f"<div style='margin-bottom: 4px; font-size: 14px; opacity: 0.8;'>投资盈亏</div>"
-                    f"<div style='color: {pnl_color}; font-size: 18px; font-weight: 500;'>{format_pnl(data['pnl'])} ({format_percentage(data['pnl_pct'])})</div>", 
-                    unsafe_allow_html=True
-                )
-
-                if cash_amount != 0:
-                    st.markdown(
-                        f"<div style='margin-top: 8px; margin-bottom: 4px; font-size: 14px; opacity: 0.8;'>现金</div>"
-                        f"<div style='font-size: 16px; font-weight: 500;'>{format_currency(cash_amount)}</div>", 
-                        unsafe_allow_html=True
-                    )
-
-                st.markdown(
-                    f"<div style='margin-top: 8px; margin-bottom: 4px; font-size: 14px; opacity: 0.8;'>占总资产</div>"
-                    f"<div style='font-size: 16px; font-weight: 500;'>{data['allocation_pct']:.1f}%</div>",
-                    unsafe_allow_html=True
-                )
-                
-                st.caption(f"{data['position_count']} 个持仓")
+            st.markdown(f"""
+            <div class="card-broker" style="border-top: 3px solid {accent};">
+                <div style="font-weight: 600; color: var(--color-text-primary); margin-bottom: 12px; font-size: 15px;">
+                    {broker}
+                </div>
+                <div class="label-muted">总资产</div>
+                <div class="value-medium" style="margin-bottom: 10px;">
+                    {format_currency(data['market_value'])}
+                </div>
+                <div class="label-muted">投资盈亏</div>
+                <div class="value-small {pnl_cls}" style="margin-bottom: 10px;">
+                    {format_pnl(pnl)} ({format_percentage(pnl_pct)})
+                </div>
+                {f'<div class="label-muted">现金</div><div class="value-small" style="margin-bottom: 10px;">{format_currency(cash_amount)}</div>' if cash_amount != 0 else ''}
+                <div class="label-muted">占比</div>
+                <div class="value-small">{data['allocation_pct']:.1f}%</div>
+                <div class="label-faint" style="margin-top: 8px;">{data['position_count']} 个持仓</div>
+            </div>
+            """, unsafe_allow_html=True)

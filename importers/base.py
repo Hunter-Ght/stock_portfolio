@@ -55,8 +55,11 @@ class Position:
             self.unrealized_pnl_pct = 0.0
             return
 
-        self.cost_basis = self.quantity * self.avg_cost * self.fx_rate
-        self.market_value = self.quantity * self.current_price * self.fx_rate
+        # 期权合约乘数: 1张合约 = 100股
+        multiplier = 100 if self.asset_type == "option" else 1
+
+        self.cost_basis = self.quantity * self.avg_cost * multiplier * self.fx_rate
+        self.market_value = self.quantity * self.current_price * multiplier * self.fx_rate
 
         if self.quantity > 0:
             # 多头: 盈亏 = 市值 - 成本
@@ -67,10 +70,9 @@ class Position:
                 self.unrealized_pnl = 0.0
                 self.unrealized_pnl_pct = 0.0
         elif self.quantity < 0:
-            # 空头: 盈亏 = 收到的权利金 - 当前回购成本
-            # cost_basis 为负值(代表收到的钱), market_value 为负值(代表需要回购的成本)
-            # PnL = -(market_value - cost_basis) = cost_basis的绝对值 - market_value的绝对值
-            self.unrealized_pnl = -(self.market_value - self.cost_basis)
+            # 空头 (股票/期权): 盈亏 = 市值 - 成本
+            # 空头时两者均为负值，期权已含 100x 乘数
+            self.unrealized_pnl = self.market_value - self.cost_basis
             abs_cost = abs(self.cost_basis)
             if abs_cost > 0:
                 self.unrealized_pnl_pct = (self.unrealized_pnl / abs_cost) * 100

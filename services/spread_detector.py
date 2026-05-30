@@ -110,18 +110,18 @@ class SpreadPosition:
             return f"{self.underlying} {self.long_strike:.0f}/{self.short_strike:.0f}{self.option_type}"
 
     def compute(self):
-        """计算价差组合的价值和盈亏"""
-        # 期权合约乘数 (标准美股期权 = 100)
-        multiplier = 100
-
+        """计算价差组合的价值和盈亏
+        注意: Position.compute_derived() 已对期权应用 100x 乘数，
+        因此此处直接使用 market_value / cost_basis，无需再乘。
+        """
         if self.spread_type == "Covered Call":
             # Covered call: 正股价值 + 卖出期权价值
             if self.stock_leg and self.short_leg:
-                stock_mv = abs(self.stock_leg.market_value)
-                stock_cost = abs(self.stock_leg.cost_basis)
-                # 卖出期权: 收到权利金 (quantity 为负, market_value 为负)
-                opt_mv = self.short_leg.market_value * multiplier  # 负值 (空头)
-                opt_cost = self.short_leg.cost_basis * multiplier  # 负值
+                stock_mv = self.stock_leg.market_value
+                stock_cost = self.stock_leg.cost_basis
+                # short_leg 的 market_value / cost_basis 已含 100x 乘数（空头为负值）
+                opt_mv = self.short_leg.market_value
+                opt_cost = self.short_leg.cost_basis
 
                 self.current_value = stock_mv + opt_mv  # stock - option 价值
                 self.total_cost = stock_cost + opt_cost  # stock - premium received
@@ -130,10 +130,10 @@ class SpreadPosition:
                     self.unrealized_pnl_pct = (self.unrealized_pnl / abs(self.total_cost)) * 100
 
         elif self.spread_type == "Naked Option":
-            # 裸期权
+            # 裸期权 — market_value 已含 100x 乘数
             if self.long_leg:
-                self.current_value = abs(self.long_leg.market_value) * multiplier
-                self.total_cost = abs(self.long_leg.cost_basis) * multiplier
+                self.current_value = abs(self.long_leg.market_value)
+                self.total_cost = abs(self.long_leg.cost_basis)
                 self.unrealized_pnl = self.current_value - self.total_cost
                 if self.total_cost != 0:
                     self.unrealized_pnl_pct = (self.unrealized_pnl / abs(self.total_cost)) * 100
@@ -141,32 +141,29 @@ class SpreadPosition:
         else:
             # 垂直价差
             if self.long_leg and self.short_leg:
-                # IBKR 的 avg_cost 和 current_price 是每股(每份合约)的价格
-                # 要乘以 multiplier (100) 得到每份合约的实际价值
-                long_cost_per_spread = abs(self.long_leg.avg_cost) * multiplier
-                short_cost_per_spread = abs(self.short_leg.avg_cost) * multiplier
-                long_price_per_spread = abs(self.long_leg.current_price) * multiplier
-                short_price_per_spread = abs(self.short_leg.current_price) * multiplier
+                # Position 的 cost_basis / market_value 已含 100x 乘数，直接使用
+                long_cost = abs(self.long_leg.cost_basis)
+                short_cost = abs(self.short_leg.cost_basis)
+                long_mv = abs(self.long_leg.market_value)
+                short_mv = abs(self.short_leg.market_value)
 
-                # 净支出 (per spread)
-                self.net_debit = long_cost_per_spread - short_cost_per_spread
-
-                # 总成本 = 净支出 × 组数
+                # 净支出（总）
+                self.net_debit = long_cost - short_cost
                 self.total_cost = self.net_debit * self.quantity
 
                 # 当前价值
-                current_value_per = long_price_per_spread - short_price_per_spread
-                self.current_value = current_value_per * self.quantity
+                current_value = long_mv - short_mv
+                self.current_value = current_value * self.quantity
 
                 # 盈亏
                 self.unrealized_pnl = self.current_value - self.total_cost
                 if self.total_cost != 0:
                     self.unrealized_pnl_pct = (self.unrealized_pnl / abs(self.total_cost)) * 100
 
-                # 最大利润/亏损 (per spread, for bull call spread)
-                spread_width = abs(self.short_strike - self.long_strike) * multiplier
-                self.max_profit = spread_width - self.net_debit  # per spread
-                self.max_loss = self.net_debit  # per spread
+                # 最大利润/亏损（每组）
+                spread_width = abs(self.short_strike - self.long_strike) * 100  # 每组最大宽度
+                self.max_profit = spread_width - (self.net_debit / self.quantity)  # 每组最大利润
+                self.max_loss = self.net_debit / self.quantity  # 每组最大亏损
 
 
 def detect_spreads(positions: List[Position]) -> Tuple[List[SpreadPosition], List[Position], List[Position]]:
