@@ -10,13 +10,13 @@ class FirstradeImporter(BaseImporter):
     """
     BROKER_NAME = "Firstrade"
 
-    # 标准化列名映射
+    # 标准化列名映射 (支持中英文表头)
     COLUMN_MAPPINGS = {
-        'symbol': ['Symbol'],
-        'quantity': ['Quantity'],
-        'avg_cost': ['Unit Cost', 'Adj. Unit Cost', 'Cost'],
-        'current_price': ['Last Price', 'Current Price', 'Price'],
-        'market_value': ['Market Value', 'Value'],
+        'symbol': ['Symbol', '代号'],
+        'quantity': ['Quantity', '数量'],
+        'avg_cost': ['Unit Cost', 'Adj. Unit Cost', 'Cost', '单位成本'],
+        'current_price': ['Last Price', 'Current Price', 'Price', '价格'],
+        'market_value': ['Market Value', 'Value', '市值'],
     }
 
     def _row_to_position(self, row: pd.Series) -> Optional[Position]:

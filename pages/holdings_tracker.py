@@ -17,6 +17,7 @@ from services.portfolio import load_positions, update_prices, get_portfolio_summ
 from components.overview import render_overview, render_broker_summary
 from components.charts import (
     render_allocation_pie,
+    render_sector_pie,
     render_treemap,
     render_pnl_bar,
     render_broker_allocation_donut,
@@ -139,7 +140,11 @@ if positions:
     ])
 
     with tab1:
-        render_allocation_pie(positions)
+        col1, col2 = st.columns(2)
+        with col1:
+            render_allocation_pie(positions)
+        with col2:
+            render_sector_pie(positions)
 
     with tab2:
         render_treemap(positions)

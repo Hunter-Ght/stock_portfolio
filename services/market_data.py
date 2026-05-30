@@ -3,7 +3,7 @@
 """
 import yfinance as yf
 from typing import Dict, List
-import pandas as pd
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 
 def get_quotes(symbols: List[str]) -> Dict[str, dict]:
@@ -104,6 +104,39 @@ def get_quotes(symbols: List[str]) -> Dict[str, dict]:
                     'name': symbol,
                 }
 
+            except Exception:
+                continue
+
+    return result
+
+
+def get_sectors(symbols: List[str]) -> Dict[str, str]:
+    """
+    批量获取股票的行业分类 (GICS Sector)
+    使用 ThreadPoolExecutor 并发请求，单个失败不影响其他
+
+    返回: {'AAPL': 'Technology', 'LEGN': 'Healthcare', ...}
+    """
+    if not symbols:
+        return {}
+
+    result = {}
+
+    def _fetch_one(sym: str):
+        try:
+            info = yf.Ticker(sym).info
+            sector = info.get('sector', '')
+            return sym, sector
+        except Exception:
+            return sym, ''
+
+    with ThreadPoolExecutor(max_workers=8) as executor:
+        futures = {executor.submit(_fetch_one, s): s for s in symbols}
+        for future in as_completed(futures):
+            try:
+                sym, sector = future.result()
+                if sector:
+                    result[sym] = sector
             except Exception:
                 continue
 

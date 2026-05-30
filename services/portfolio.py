@@ -5,7 +5,7 @@ import json
 import os
 from typing import List, Optional, Dict
 from importers.base import Position
-from services.market_data import get_quotes
+from services.market_data import get_quotes, get_sectors
 from services.spread_detector import is_option
 
 DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data')
@@ -163,6 +163,17 @@ def update_prices(positions: List[Position]) -> List[Position]:
 
     # 更新后保存到 JSON，下次打开直接用新价格
     if updated_count > 0:
+        # 补全缺失的行业数据
+        missing_sector = list(set(
+            p.symbol for p in positions
+            if p.asset_type != 'cash' and not p.sector and not is_option(p.symbol)
+        ))
+        if missing_sector:
+            sectors = get_sectors(missing_sector)
+            for pos in positions:
+                if pos.symbol in sectors and not pos.sector:
+                    pos.sector = sectors[pos.symbol]
+
         save_positions(positions)
 
     return positions

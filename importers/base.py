@@ -20,6 +20,7 @@ class Position:
     currency: str = "USD"       # 货币
     fx_rate: float = 1.0        # 汇率到基础货币(通常为USD)
     asset_type: str = "stock"   # 资产类型: stock, option, cash
+    sector: str = ""            # 行业板块 (来自 yfinance)
 
     # 以下字段由实时行情填充
     current_price: float = 0.0
