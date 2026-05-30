@@ -125,7 +125,7 @@ if positions:
     # ─── 图表区域 ────────────────────────
     st.markdown("""
     <div class="section-header">
-        <div class="eyebrow">ANALYSIS</div>
+        <div class="section-accent-line"></div>
         <h3>资产分析</h3>
     </div>
     """, unsafe_allow_html=True)
@@ -158,7 +158,7 @@ if positions:
     # ─── 持仓明细 ────────────────────────
     st.markdown("""
     <div class="section-header">
-        <div class="eyebrow">POSITIONS</div>
+        <div class="section-accent-line"></div>
         <h3>持仓明细</h3>
     </div>
     """, unsafe_allow_html=True)

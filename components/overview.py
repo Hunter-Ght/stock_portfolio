@@ -17,22 +17,21 @@ def render_overview(summary: dict):
 
     pnl_cls = "pnl-positive" if pnl >= 0 else "pnl-negative"
     day_cls = "pnl-positive" if day_change >= 0 else "pnl-negative"
+    hero_cls = "card-hero" if pnl >= 0 else "card-hero card-loss"
 
     st.markdown(f"""
-    <div class="card-hero">
+    <div class="{hero_cls}">
         <div>
-            <div class="label-muted">总资产</div>
+            <div class="label-muted" style="margin-bottom: 6px;">总资产</div>
             <div class="value-hero">{format_currency(total_mv)}</div>
         </div>
         <div style="text-align: right;">
-            <div class="label-muted">总盈亏</div>
-            <div class="value-medium {pnl_cls}">
-                {format_pnl(pnl)} ({format_percentage(pnl_pct)})
+            <div class="label-muted" style="margin-bottom: 6px;">总盈亏</div>
+            <div style="margin-bottom: 8px;">
+                <span class="pnl-pill {pnl_cls}">{format_pnl(pnl)} ({format_percentage(pnl_pct)})</span>
             </div>
-            <div class="label-muted" style="margin-top: 4px;">今日</div>
-            <div class="value-small {day_cls}">
-                {format_pnl(day_change)}
-            </div>
+            <div class="label-muted" style="margin-bottom: 2px;">今日</div>
+            <span class="pnl-pill {day_cls}" style="font-size: 12px; padding: 2px 10px;">{format_pnl(day_change)}</span>
         </div>
     </div>
     """, unsafe_allow_html=True)

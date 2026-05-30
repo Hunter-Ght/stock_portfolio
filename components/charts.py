@@ -337,8 +337,8 @@ def render_sector_pie(positions: List[Position]):
             x=1.05,
             font=dict(size=11, color='#57534e'),
         ),
-        margin=dict(l=20, r=20, t=30, b=20),
-        height=450,
+        margin=dict(l=20, r=20, t=30, b=100),
+        height=500,
     )
 
     st.plotly_chart(fig, use_container_width=True)

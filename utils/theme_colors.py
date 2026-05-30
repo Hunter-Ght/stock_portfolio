@@ -34,12 +34,24 @@ BROKER_COLORS = {
 }
 BROKER_DEFAULT = "#6b7280"
 
-# Chart palette (16 colors, distinct on cream background)
+# Chart palette (16 colors, no AI-purple, distinct on cream background)
 CHART_COLORS = [
-    "#4f46e5", "#7c3aed", "#2563eb", "#0891b2",
-    "#059669", "#65a30d", "#ca8a04", "#ea580c",
-    "#dc2626", "#e11d48", "#9333ea", "#6366f1",
-    "#14b8a6", "#f59e0b", "#3b82f6", "#8b5cf6",
+    "#4f46e5",  # Indigo (primary accent)
+    "#2563eb",  # Blue
+    "#0891b2",  # Cyan
+    "#059669",  # Emerald
+    "#65a30d",  # Lime
+    "#ca8a04",  # Amber
+    "#ea580c",  # Orange
+    "#dc2626",  # Red
+    "#e11d48",  # Rose
+    "#14b8a6",  # Teal
+    "#0d9488",  # Teal-dark
+    "#b45309",  # Bronze
+    "#78716c",  # Stone (neutral)
+    "#3b82f6",  # Sky
+    "#6366f1",  # Indigo-light
+    "#f59e0b",  # Amber-light
 ]
 
 # Font family (matches CSS --font-sans)

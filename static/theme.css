@@ -68,6 +68,19 @@
     font-family: var(--font-sans);
 }
 
+/* Subtle grain/noise overlay for paper-like texture */
+.stApp::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    pointer-events: none;
+    opacity: 0.018;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 256px 256px;
+}
+
 
 /* ═══════════════════════════════════════
    SIDEBAR
@@ -86,6 +99,7 @@
 [data-testid="stMetric"] {
     background: var(--color-surface);
     border: 1px solid var(--color-border);
+    border-left: 3px solid rgba(79, 70, 229, 0.2);
     border-radius: var(--card-radius);
     padding: 16px 20px;
     box-shadow: var(--shadow-sm);
@@ -171,6 +185,11 @@ hr {
 /* ═══════════════════════════════════════
    DATAFRAME
    ═══════════════════════════════════════ */
+
+/* Let Plotly hover labels overflow the chart container */
+.stPlotlyChart {
+    overflow: visible !important;
+}
 
 [data-testid="stDataFrame"] {
     border: 1px solid var(--color-border);
@@ -279,20 +298,57 @@ hr {
     background: var(--color-surface);
     border: 1px solid var(--color-border);
     border-radius: var(--card-radius);
-    padding: 24px 28px;
-    box-shadow: var(--shadow-md);
+    padding: 28px 32px;
+    box-shadow: var(--shadow-lg);
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
     gap: 16px;
+    position: relative;
+    overflow: hidden;
     transition: box-shadow var(--duration-normal) var(--ease-out),
                 transform var(--duration-normal) var(--ease-out);
+}
+
+.card-hero::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--color-profit), var(--color-accent));
+}
+
+.card-hero.card-loss::before {
+    background: linear-gradient(90deg, var(--color-loss), var(--color-accent));
 }
 
 .card-hero:hover {
     box-shadow: var(--shadow-lg);
     transform: translateY(-2px);
+}
+
+/* P&L pill badge */
+.pnl-pill {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+}
+
+.pnl-pill.pnl-positive {
+    color: var(--color-profit);
+    background: var(--color-profit-bg);
+}
+
+.pnl-pill.pnl-negative {
+    color: var(--color-loss);
+    background: var(--color-loss-bg);
 }
 
 .card-broker {
@@ -335,11 +391,12 @@ hr {
 }
 
 .value-hero {
-    font-size: 32px;
+    font-size: 40px;
     font-weight: 700;
     color: var(--color-text-primary);
-    letter-spacing: -0.02em;
+    letter-spacing: -0.03em;
     font-variant-numeric: tabular-nums;
+    line-height: 1.1;
 }
 
 .value-medium {
@@ -414,6 +471,14 @@ hr {
     font-weight: 700;
     color: var(--color-text-primary);
     letter-spacing: -0.01em;
+}
+
+.section-accent-line {
+    width: 24px;
+    height: 3px;
+    background: var(--color-accent);
+    border-radius: 2px;
+    margin-bottom: 12px;
 }
 
 .empty-state {
